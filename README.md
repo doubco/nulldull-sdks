@@ -23,33 +23,16 @@ Memory and Locale calls also need your **workspace ID**, because a key cannot lo
 
 ## Languages
 
-| Language | Directory | Package | Status |
+| Language | Directory | Package | Install |
 | --- | --- | --- | --- |
-| Node.js / TypeScript | [`node/`](node) | `@nulldull/sdk` | Reference implementation |
-| React | `react/` | `@nulldull/react` (planned) | Planned |
-| Python | `python/` | `nulldull` (planned) | Planned |
-| Go | `go/` | `github.com/doubco/nulldull-sdks/go` (planned) | Planned |
-| Swift | `swift/` | `NullDull` (SwiftPM, planned) | Planned |
-| Kotlin | `kotlin/` | `com.nulldull:nulldull-sdk` (planned) | Planned |
+| Node.js / TypeScript | [`node/`](node) | `@nulldull/sdk` | `npm install @nulldull/sdk` |
+| React | [`react/`](react) | `@nulldull/react` | `npm install @nulldull/react @nulldull/sdk` |
+| Python | [`python/`](python) | `nulldull` | `pip install nulldull` |
+| Go | [`go/`](go) | `github.com/doubco/nulldull-sdks/go` | `go get github.com/doubco/nulldull-sdks/go@latest` |
+| Swift | [`swift/`](swift) | `NullDull` (Swift Package Manager) | `.package(url: "https://github.com/doubco/nulldull-sdks", from: "0.1.0")` |
+| Kotlin / Android | [`kotlin/`](kotlin) | `com.nulldull:nulldull-sdk` | `implementation("com.nulldull:nulldull-sdk:0.1.0")` |
 
-### Install
-
-```sh
-# Node.js / TypeScript
-npm install @nulldull/sdk
-
-# Python (planned)
-pip install nulldull
-
-# Go (planned)
-go get github.com/doubco/nulldull-sdks/go
-
-# Swift (planned): Package.swift
-# .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.1.0")
-
-# Kotlin (planned): build.gradle.kts
-# implementation("com.nulldull:nulldull-sdk:0.1.0")
-```
+Each directory has its own README with a quick start for Grid, Memory and Locale, errors and pagination. All six implement [`SPEC.md`](SPEC.md) and pass the same conformance fixtures.
 
 ### Quick look (Node)
 
