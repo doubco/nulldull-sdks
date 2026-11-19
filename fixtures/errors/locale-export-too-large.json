@@ -1,0 +1,5 @@
+{
+  "code": "INVALID_INPUT",
+  "message": "This export exceeds 2,000 keys or 2 million characters. Export page by page from the client.",
+  "detail": "LOCALE_EXPORT_TOO_LARGE"
+}

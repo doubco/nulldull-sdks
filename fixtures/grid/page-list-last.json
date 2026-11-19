@@ -1,0 +1,22 @@
+{
+  "pool": {
+    "key": "nulldull-blog",
+    "name": "The Void"
+  },
+  "items": [
+    {
+      "id": "nulldull-void-welcome-to-the-void",
+      "pool": "nulldull-blog",
+      "slug": "welcome-to-the-void",
+      "locale": "en",
+      "title": "Welcome to the Void.",
+      "summary": "What we write about here, and why.",
+      "version": 2,
+      "sourceVersion": 3,
+      "publishedAt": 1794300000000,
+      "folderId": "nulldull-void-blog",
+      "cover": null
+    }
+  ],
+  "nextCursor": null
+}

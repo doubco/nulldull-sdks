@@ -1,0 +1,13 @@
+{
+  "items": [
+    {
+      "tag": "maintained",
+      "count": 12
+    },
+    {
+      "tag": "rules",
+      "count": 5
+    }
+  ],
+  "nextCursor": "5:rules"
+}

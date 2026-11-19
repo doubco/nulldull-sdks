@@ -1,0 +1,7 @@
+{
+  "code": "INVALID_INPUT",
+  "message": "Plural values cannot be written to this format.",
+  "detail": "LOCALE_FORMAT_UNREPRESENTABLE",
+  "key": "cart.items",
+  "language": "tr"
+}

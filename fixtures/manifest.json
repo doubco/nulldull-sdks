@@ -1,0 +1,1578 @@
+{
+  "version": 1,
+  "description": "Shared conformance cases for every NullDull SDK. See SPEC.md, section Conformance.",
+  "config": {
+    "baseUrl": "https://nulldull.com",
+    "publicKey": "nd_pub_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef",
+    "privateKey": "nd_sec_fedcba9876543210fedcba9876543210fedcba9876543210fedcba9876543210",
+    "workspaceId": "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f"
+  },
+  "cases": [
+    {
+      "id": "grid.listPages",
+      "key": "public",
+      "call": {
+        "method": "grid.listPages",
+        "args": [
+          "nulldull-blog",
+          {
+            "limit": 2
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ],
+              "limit": [
+                "2"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "grid/page-list.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "grid/page-list.json",
+        "except": [
+          "items.0.cover.url"
+        ],
+        "checks": [
+          {
+            "path": "items.0.cover.url",
+            "equals": "https://nulldull.com/api/grid/v1/pools/nulldull-blog/pages/context-that-survives-the-chat/assets/grid-asset-context-cover?locale=en&version=11&key=nd_pub_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+          },
+          {
+            "path": "items.1.cover",
+            "equals": null
+          },
+          {
+            "path": "nextCursor",
+            "equals": "eyJrZXkiOiJudWxsZHVsbC1ibG9nIiwibG9jYWxlIjoiZW4iLCJxIjoiIiwiZm9sZGVySWQiOm51bGwsImF0IjoxNzk0NTc3NDM4NDAzLCJpZCI6Im51bGxkdWxsLXZvaWQtZHJhZnRzLWFyZS1ub3QtcHVibGljYXRpb25zIn0="
+          }
+        ]
+      }
+    },
+    {
+      "id": "grid.listPages.filters",
+      "key": "public",
+      "call": {
+        "method": "grid.listPages",
+        "args": [
+          "nulldull-roadmap",
+          {
+            "locale": "pt-br",
+            "q": "agents",
+            "folderId": "nulldull-void-roadmap-next",
+            "limit": 50,
+            "after": "abc"
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-roadmap/pages",
+            "query": {
+              "locale": [
+                "pt-br"
+              ],
+              "q": [
+                "agents"
+              ],
+              "folderId": [
+                "nulldull-void-roadmap-next"
+              ],
+              "limit": [
+                "50"
+              ],
+              "after": [
+                "abc"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "grid/page-list-last.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "grid/page-list-last.json"
+      }
+    },
+    {
+      "id": "grid.iteratePages",
+      "key": "public",
+      "call": {
+        "method": "grid.iteratePages",
+        "args": [
+          "nulldull-blog",
+          {
+            "limit": 2
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ],
+              "limit": [
+                "2"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "grid/page-list.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ],
+              "limit": [
+                "2"
+              ],
+              "after": [
+                "eyJrZXkiOiJudWxsZHVsbC1ibG9nIiwibG9jYWxlIjoiZW4iLCJxIjoiIiwiZm9sZGVySWQiOm51bGwsImF0IjoxNzk0NTc3NDM4NDAzLCJpZCI6Im51bGxkdWxsLXZvaWQtZHJhZnRzLWFyZS1ub3QtcHVibGljYXRpb25zIn0="
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "grid/page-list-empty-with-cursor.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ],
+              "limit": [
+                "2"
+              ],
+              "after": [
+                "eyJrZXkiOiJudWxsZHVsbC1ibG9nIiwibG9jYWxlIjoiZW4iLCJxIjoiIiwiZm9sZGVySWQiOm51bGwsImF0IjoxNzk0NDAwMDAwMDAwLCJpZCI6Im51bGxkdWxsLXZvaWQtenoifQ=="
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "grid/page-list-last.json"
+          }
+        }
+      ],
+      "expect": {
+        "itemCount": 3,
+        "checks": [
+          {
+            "path": "2.slug",
+            "equals": "welcome-to-the-void"
+          }
+        ],
+        "note": "An empty page with a non-null nextCursor is not the end."
+      }
+    },
+    {
+      "id": "grid.getPage",
+      "key": "public",
+      "call": {
+        "method": "grid.getPage",
+        "args": [
+          "nulldull-blog",
+          "context-that-survives-the-chat"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages/context-that-survives-the-chat",
+            "query": {
+              "locale": [
+                "en"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json",
+              "etag": "\"grid-nulldull-void-context-that-survives-the-chat-11\""
+            },
+            "bodyFile": "grid/page.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "grid/page.json",
+        "except": [
+          "cover.url",
+          "assets.0.url",
+          "assets.1.url"
+        ],
+        "checks": [
+          {
+            "path": "assets.1.url",
+            "equals": "https://nulldull.com/api/grid/v1/pools/nulldull-blog/pages/context-that-survives-the-chat/assets/grid-asset-inter-font?locale=en&version=11&key=nd_pub_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+          },
+          {
+            "path": "cover.url",
+            "equals": "https://nulldull.com/api/grid/v1/pools/nulldull-blog/pages/context-that-survives-the-chat/assets/grid-asset-context-cover?locale=en&version=11&key=nd_pub_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+          }
+        ]
+      }
+    },
+    {
+      "id": "grid.getPage.notFound",
+      "key": "public",
+      "call": {
+        "method": "grid.getPage",
+        "args": [
+          "nulldull-blog",
+          "missing-page"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages/missing-page",
+            "query": {
+              "locale": [
+                "en"
+              ]
+            }
+          },
+          "response": {
+            "status": 404,
+            "headers": {
+              "content-type": "application/json",
+              "cf-ray": "8f1e2d3c4b5a6978-AMS"
+            },
+            "bodyFile": "errors/not-found.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 404,
+          "code": "NOT_FOUND",
+          "message": "Resource not found.",
+          "requestId": "8f1e2d3c4b5a6978-AMS",
+          "retryAfter": null
+        }
+      }
+    },
+    {
+      "id": "grid.listPages.invalidKey",
+      "key": "public",
+      "call": {
+        "method": "grid.listPages",
+        "args": [
+          "nulldull-blog"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ]
+            }
+          },
+          "response": {
+            "status": 401,
+            "headers": {
+              "content-type": "application/json",
+              "www-authenticate": "Bearer realm=\"nulldull-grid\""
+            },
+            "bodyFile": "errors/invalid-key.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 401,
+          "code": "INVALID_KEY"
+        },
+        "attempts": 1
+      }
+    },
+    {
+      "id": "memory.listScopes",
+      "key": "private",
+      "call": {
+        "method": "memory.listScopes",
+        "args": [
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/scopes.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/scopes.json"
+      }
+    },
+    {
+      "id": "memory.listFolders",
+      "key": "private",
+      "call": {
+        "method": "memory.listFolders",
+        "args": [
+          {
+            "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+            "parentId": null
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/folders",
+            "query": {
+              "scopeId": [
+                "a3e4b5c6-d7e8-4f90-8123-456789abcdef"
+              ],
+              "parentId": [
+                "root"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/folders.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/folders.json"
+      }
+    },
+    {
+      "id": "memory.getFolder",
+      "key": "private",
+      "call": {
+        "method": "memory.getFolder",
+        "args": [
+          "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/folders/7c9e6679-7425-40de-944b-e07fc1f90ae7",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/folder.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/folder.json"
+      }
+    },
+    {
+      "id": "memory.listDocuments",
+      "key": "private",
+      "call": {
+        "method": "memory.listDocuments",
+        "args": [
+          {
+            "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+            "folderId": null,
+            "tags": [
+              "rules",
+              "maintained"
+            ],
+            "kind": "rules",
+            "lifecycle": "maintained"
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/documents",
+            "query": {
+              "scopeId": [
+                "a3e4b5c6-d7e8-4f90-8123-456789abcdef"
+              ],
+              "folderId": [
+                "root"
+              ],
+              "tag": [
+                "rules",
+                "maintained"
+              ],
+              "kind": [
+                "rules"
+              ],
+              "lifecycle": [
+                "maintained"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/documents-page-1.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/documents-page-1.json"
+      }
+    },
+    {
+      "id": "memory.iterateDocuments",
+      "key": "private",
+      "call": {
+        "method": "memory.iterateDocuments",
+        "args": [
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/documents",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/documents-page-1.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/documents",
+            "query": {
+              "after": [
+                "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/documents-page-2.json"
+          }
+        }
+      ],
+      "expect": {
+        "itemCount": 3
+      }
+    },
+    {
+      "id": "memory.getDocument",
+      "key": "private",
+      "call": {
+        "method": "memory.getDocument",
+        "args": [
+          "1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/documents/1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/document.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/document.json"
+      }
+    },
+    {
+      "id": "memory.resolveLink",
+      "key": "private",
+      "call": {
+        "method": "memory.resolveLink",
+        "args": [
+          "1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f",
+          "decisions/release-checklist.md#before-you-ship"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/documents/1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f/resolve-link",
+            "query": {
+              "href": [
+                "decisions/release-checklist.md#before-you-ship"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/resolve-link-found.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/resolve-link-found.json"
+      }
+    },
+    {
+      "id": "memory.search",
+      "key": "private",
+      "call": {
+        "method": "memory.search",
+        "args": [
+          "release",
+          {
+            "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+            "tags": [
+              "procedure"
+            ]
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/search",
+            "query": {
+              "q": [
+                "release"
+              ],
+              "scopeId": [
+                "a3e4b5c6-d7e8-4f90-8123-456789abcdef"
+              ],
+              "tag": [
+                "procedure"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/search.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/search.json"
+      }
+    },
+    {
+      "id": "memory.search.tooShort",
+      "key": "private",
+      "call": {
+        "method": "memory.search",
+        "args": [
+          "r"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/search",
+            "query": {
+              "q": [
+                "r"
+              ]
+            }
+          },
+          "response": {
+            "status": 400,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/invalid-input.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 400,
+          "code": "INVALID_INPUT",
+          "message": "Enter at least two characters to search."
+        },
+        "attempts": 1
+      }
+    },
+    {
+      "id": "memory.iterateTags",
+      "key": "private",
+      "call": {
+        "method": "memory.iterateTags",
+        "args": [
+          {
+            "q": "r"
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/tags",
+            "query": {
+              "q": [
+                "r"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/tags-page-1.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/tags",
+            "query": {
+              "q": [
+                "r"
+              ],
+              "after": [
+                "5:rules"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/tags-page-2.json"
+          }
+        }
+      ],
+      "expect": {
+        "itemCount": 3
+      }
+    },
+    {
+      "id": "memory.listAssets",
+      "key": "private",
+      "call": {
+        "method": "memory.listAssets",
+        "args": [
+          {
+            "folderId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+            "q": "logo",
+            "tags": [
+              "brand"
+            ]
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets",
+            "query": {
+              "folderId": [
+                "7c9e6679-7425-40de-944b-e07fc1f90ae7"
+              ],
+              "q": [
+                "logo"
+              ],
+              "tag": [
+                "brand"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/assets.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/assets.json"
+      }
+    },
+    {
+      "id": "memory.getAsset",
+      "key": "private",
+      "call": {
+        "method": "memory.getAsset",
+        "args": [
+          "c4ca4238-a0b9-4382-8dcc-509a6f75849b",
+          {
+            "revisionId": "a87ff679-a2f3-4e71-9181-a67b7542122c"
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets/c4ca4238-a0b9-4382-8dcc-509a6f75849b",
+            "query": {
+              "revisionId": [
+                "a87ff679-a2f3-4e71-9181-a67b7542122c"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/asset.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/asset.json"
+      }
+    },
+    {
+      "id": "memory.listAssetVersions",
+      "key": "private",
+      "call": {
+        "method": "memory.listAssetVersions",
+        "args": [
+          "c4ca4238-a0b9-4382-8dcc-509a6f75849b",
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets/c4ca4238-a0b9-4382-8dcc-509a6f75849b/versions",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/asset-versions.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/asset-versions.json"
+      }
+    },
+    {
+      "id": "memory.downloadAsset",
+      "key": "private",
+      "call": {
+        "method": "memory.downloadAsset",
+        "args": [
+          "c4ca4238-a0b9-4382-8dcc-509a6f75849b"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets/c4ca4238-a0b9-4382-8dcc-509a6f75849b/download",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/octet-stream",
+              "content-length": "5",
+              "content-disposition": "attachment; filename*=UTF-8''brand%20logo%20%E2%80%93%20dark.png"
+            },
+            "bodyBase64": "iVBORw0="
+          }
+        }
+      ],
+      "expect": {
+        "download": {
+          "contentType": "application/octet-stream",
+          "filename": "brand logo – dark.png",
+          "size": 5,
+          "bytesBase64": "iVBORw0="
+        }
+      }
+    },
+    {
+      "id": "memory.downloadAsset.preview",
+      "key": "private",
+      "call": {
+        "method": "memory.downloadAsset",
+        "args": [
+          "c4ca4238-a0b9-4382-8dcc-509a6f75849b",
+          {
+            "revisionId": "a87ff679-a2f3-4e71-9181-a67b7542122c",
+            "width": 200
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets/c4ca4238-a0b9-4382-8dcc-509a6f75849b/download",
+            "query": {
+              "revisionId": [
+                "a87ff679-a2f3-4e71-9181-a67b7542122c"
+              ],
+              "preview": [
+                "true"
+              ],
+              "w": [
+                "200"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "image/webp",
+              "content-length": "4"
+            },
+            "bodyBase64": "UklGRg=="
+          }
+        }
+      ],
+      "expect": {
+        "download": {
+          "contentType": "image/webp",
+          "filename": null,
+          "size": 4,
+          "bytesBase64": "UklGRg=="
+        }
+      }
+    },
+    {
+      "id": "locale.listFormats",
+      "key": "private",
+      "call": {
+        "method": "locale.listFormats",
+        "args": []
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/locale/formats",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "locale/formats.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "locale/formats.json"
+      }
+    },
+    {
+      "id": "locale.export.json",
+      "key": "private",
+      "call": {
+        "method": "locale.export",
+        "args": [
+          "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+          {
+            "languages": [
+              "en",
+              "tr"
+            ]
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/locale/export",
+            "query": {
+              "scopeId": [
+                "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f"
+              ],
+              "format": [
+                "json"
+              ],
+              "languages": [
+                "en,tr"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "locale/export-json.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "locale/export-json.json",
+        "checks": [
+          {
+            "path": "files.0.path",
+            "equals": "en.json"
+          },
+          {
+            "path": "files.1.path",
+            "equals": "tr.json"
+          }
+        ]
+      }
+    },
+    {
+      "id": "locale.export.xcstrings",
+      "key": "private",
+      "call": {
+        "method": "locale.export",
+        "args": [
+          "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+          {
+            "format": "xcstrings",
+            "status": [
+              "approved",
+              "needs_review"
+            ],
+            "basename": "Localizable"
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/locale/export",
+            "query": {
+              "scopeId": [
+                "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f"
+              ],
+              "format": [
+                "xcstrings"
+              ],
+              "status": [
+                "approved,needs_review"
+              ],
+              "basename": [
+                "Localizable"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "locale/export-xcstrings.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "locale/export-xcstrings.json"
+      }
+    },
+    {
+      "id": "locale.export.androidXml",
+      "key": "private",
+      "call": {
+        "method": "locale.export",
+        "args": [
+          "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+          {
+            "format": "android-xml",
+            "languages": [
+              "en",
+              "tr"
+            ]
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/locale/export",
+            "query": {
+              "scopeId": [
+                "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f"
+              ],
+              "format": [
+                "android-xml"
+              ],
+              "languages": [
+                "en,tr"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "locale/export-android-xml.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "locale/export-android-xml.json",
+        "checks": [
+          {
+            "path": "files.1.path",
+            "equals": "values-tr/strings.xml"
+          }
+        ]
+      }
+    },
+    {
+      "id": "locale.export.tooLarge",
+      "key": "private",
+      "call": {
+        "method": "locale.export",
+        "args": [
+          "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/locale/export",
+            "query": {
+              "scopeId": [
+                "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f"
+              ],
+              "format": [
+                "json"
+              ]
+            }
+          },
+          "response": {
+            "status": 400,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/locale-export-too-large.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 400,
+          "code": "INVALID_INPUT",
+          "detail": "LOCALE_EXPORT_TOO_LARGE"
+        },
+        "attempts": 1
+      }
+    },
+    {
+      "id": "locale.export.unrepresentable",
+      "key": "private",
+      "call": {
+        "method": "locale.export",
+        "args": [
+          "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+          {
+            "format": "world"
+          }
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/locale/export",
+            "query": {
+              "scopeId": [
+                "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f"
+              ],
+              "format": [
+                "world"
+              ]
+            }
+          },
+          "response": {
+            "status": 400,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/locale-format-unrepresentable.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 400,
+          "code": "INVALID_INPUT",
+          "detail": "LOCALE_FORMAT_UNREPRESENTABLE",
+          "body": {
+            "key": "cart.items",
+            "language": "tr"
+          }
+        }
+      }
+    },
+    {
+      "id": "errors.forbidden",
+      "key": "private",
+      "call": {
+        "method": "memory.getDocument",
+        "args": [
+          "1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/documents/1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f",
+            "query": {}
+          },
+          "response": {
+            "status": 403,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/forbidden.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 403,
+          "code": "FORBIDDEN",
+          "detail": null
+        },
+        "attempts": 1
+      }
+    },
+    {
+      "id": "errors.unauthenticated",
+      "key": "private",
+      "call": {
+        "method": "memory.listScopes",
+        "args": [
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 401,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/unauthenticated.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 401,
+          "code": "UNAUTHENTICATED"
+        },
+        "attempts": 1
+      }
+    },
+    {
+      "id": "retry.rateLimitedThenOk",
+      "key": "private",
+      "call": {
+        "method": "memory.listScopes",
+        "args": [
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 429,
+            "headers": {
+              "content-type": "application/json",
+              "retry-after": "2"
+            },
+            "bodyFile": "errors/rate-limited.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "memory/scopes.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "memory/scopes.json",
+        "attempts": 2,
+        "sleeps": [
+          2000
+        ]
+      }
+    },
+    {
+      "id": "retry.rateLimitedTooLong",
+      "key": "private",
+      "call": {
+        "method": "memory.listScopes",
+        "args": [
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 429,
+            "headers": {
+              "content-type": "application/json",
+              "retry-after": "60"
+            },
+            "bodyFile": "errors/rate-limited.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 429,
+          "code": "RATE_LIMITED",
+          "retryAfter": 60
+        },
+        "attempts": 1,
+        "sleeps": []
+      }
+    },
+    {
+      "id": "retry.serviceUnavailableExhausted",
+      "key": "private",
+      "call": {
+        "method": "memory.listScopes",
+        "args": [
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 503,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/service-unavailable.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 503,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/service-unavailable.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 503,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/service-unavailable.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 503,
+          "code": "SERVICE_UNAVAILABLE"
+        },
+        "attempts": 3,
+        "sleeps": [
+          500,
+          1000
+        ]
+      }
+    },
+    {
+      "id": "retry.badGatewayThenOk",
+      "key": "public",
+      "call": {
+        "method": "grid.listPages",
+        "args": [
+          "nulldull-blog"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ]
+            }
+          },
+          "response": {
+            "status": 502,
+            "headers": {
+              "content-type": "text/html"
+            },
+            "body": "<html>Bad gateway</html>"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "grid/page-list-last.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "grid/page-list-last.json",
+        "attempts": 2,
+        "sleeps": [
+          500
+        ]
+      }
+    },
+    {
+      "id": "errors.nonJsonBody",
+      "key": "private",
+      "call": {
+        "method": "memory.listScopes",
+        "args": [
+          {}
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/scopes",
+            "query": {}
+          },
+          "response": {
+            "status": 404,
+            "headers": {
+              "content-type": "text/plain"
+            },
+            "body": "404 Not Found"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 404,
+          "code": "REQUEST_FAILED"
+        },
+        "attempts": 1
+      }
+    },
+    {
+      "id": "errors.notConfigured",
+      "key": "private",
+      "call": {
+        "method": "memory.downloadAsset",
+        "args": [
+          "c4ca4238-a0b9-4382-8dcc-509a6f75849b"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets/c4ca4238-a0b9-4382-8dcc-509a6f75849b/download",
+            "query": {}
+          },
+          "response": {
+            "status": 503,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/not-configured.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets/c4ca4238-a0b9-4382-8dcc-509a6f75849b/download",
+            "query": {}
+          },
+          "response": {
+            "status": 503,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/not-configured.json"
+          }
+        },
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/platform/workspaces/9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f/assets/c4ca4238-a0b9-4382-8dcc-509a6f75849b/download",
+            "query": {}
+          },
+          "response": {
+            "status": 503,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "errors/not-configured.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 503,
+          "code": "NOT_CONFIGURED"
+        },
+        "attempts": 3
+      }
+    }
+  ]
+}

@@ -1,0 +1,57 @@
+{
+  "id": "1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f",
+  "name": "AGENTS.md",
+  "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+  "folderId": null,
+  "preferredRepository": "https://github.com/acme/storefront",
+  "preferredPath": "AGENTS.md",
+  "metadataVersion": 3,
+  "headRevisionId": "9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b5a",
+  "headAuthorMemberId": "Hq3vX9kLmN2pR7sT4uW8yZ1a",
+  "role": "senior",
+  "content": "# Acme storefront\n\nRead DESIGN.md and MARKETING.md before changing the product.\n\n- Run `pnpm test` before every release.\n- Never print credentials in logs.\n\nSee [the release checklist](decisions/release-checklist.md#before-you-ship).\n",
+  "contentHash": "7f83b1657ff1fc53b92dc18148a1d65dfc2d4b1fa3d677284addd200126d9069",
+  "tags": [
+    "rules",
+    "maintained",
+    "agents"
+  ],
+  "labelKind": "rules",
+  "labelLifecycle": "maintained",
+  "labelSource": "ai",
+  "labelStatus": "ready",
+  "placement": {
+    "repository": "https://github.com/acme/storefront",
+    "path": "AGENTS.md",
+    "folderPath": ""
+  },
+  "locationPath": [
+    {
+      "id": "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+      "name": "Acme",
+      "kind": "workspace",
+      "parentId": null,
+      "iconKind": "symbol",
+      "iconValue": "building",
+      "iconVersion": 0
+    },
+    {
+      "id": "6f1c2a9e-3b7d-4e58-9a0c-1d2e3f405162",
+      "name": "Website",
+      "kind": "customer-product",
+      "parentId": "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+      "iconKind": "emoji",
+      "iconValue": "🌐",
+      "iconVersion": 0
+    },
+    {
+      "id": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+      "name": "storefront-web",
+      "kind": "project",
+      "parentId": "6f1c2a9e-3b7d-4e58-9a0c-1d2e3f405162",
+      "iconKind": null,
+      "iconValue": null,
+      "iconVersion": 0
+    }
+  ]
+}

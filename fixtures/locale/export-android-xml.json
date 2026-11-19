@@ -1,0 +1,17 @@
+{
+  "format": "android-xml",
+  "files": [
+    {
+      "path": "values/strings.xml",
+      "contentType": "application/xml",
+      "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\">\n    <!-- Checkout page heading -->\n    <string name=\"checkout.title\">Checkout</string>\n    <!-- Cart item count -->\n    <plurals name=\"cart.items\">\n        <item quantity=\"one\"><xliff:g id=\"count\">%d</xliff:g> item</item>\n        <item quantity=\"other\"><xliff:g id=\"count\">%d</xliff:g> items</item>\n    </plurals>\n</resources>\n"
+    },
+    {
+      "path": "values-tr/strings.xml",
+      "contentType": "application/xml",
+      "content": "<?xml version=\"1.0\" encoding=\"utf-8\"?>\n<resources xmlns:xliff=\"urn:oasis:names:tc:xliff:document:1.2\">\n    <!-- Checkout page heading -->\n    <string name=\"checkout.title\">Ödeme</string>\n    <!-- Cart item count -->\n    <plurals name=\"cart.items\">\n        <item quantity=\"other\"><xliff:g id=\"count\">%d</xliff:g> ürün</item>\n    </plurals>\n</resources>\n"
+    }
+  ],
+  "notes": [],
+  "contentVersion": 42
+}

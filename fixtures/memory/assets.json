@@ -1,0 +1,68 @@
+{
+  "items": [
+    {
+      "id": "c4ca4238-a0b9-4382-8dcc-509a6f75849b",
+      "name": "logo.png",
+      "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+      "kind": "asset",
+      "folderId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "folderPath": [
+        {
+          "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+          "name": "decisions"
+        }
+      ],
+      "headRevisionId": "e4da3b7f-bbce-4345-9d77-7c8e3f2a1b0c",
+      "revisionId": "e4da3b7f-bbce-4345-9d77-7c8e3f2a1b0c",
+      "metadataVersion": 1,
+      "role": "senior",
+      "description": "Primary Acme mark. Use on dark backgrounds only.",
+      "tags": [
+        "brand",
+        "logo"
+      ],
+      "tagSource": "manual",
+      "summary": "A white Acme wordmark on a transparent background.",
+      "insightStatus": "ready",
+      "object": {
+        "id": "d3d94468-02a4-4ec7-a8b2-6c1f0b1e2d3c",
+        "filename": "logo.png",
+        "mediaType": "image/png",
+        "byteSize": 24816,
+        "checksum": "e3b98a4da31a127d4bde6e43033f66ba274cab0eb7eb1c70ec41402bf6273dd8",
+        "authorMemberId": "Hq3vX9kLmN2pR7sT4uW8yZ1a",
+        "createdAt": 1794012345678
+      },
+      "locationPath": [
+        {
+          "id": "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+          "name": "Acme",
+          "kind": "workspace",
+          "parentId": null,
+          "iconKind": "symbol",
+          "iconValue": "building",
+          "iconVersion": 0
+        },
+        {
+          "id": "6f1c2a9e-3b7d-4e58-9a0c-1d2e3f405162",
+          "name": "Website",
+          "kind": "customer-product",
+          "parentId": "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+          "iconKind": "emoji",
+          "iconValue": "🌐",
+          "iconVersion": 0
+        },
+        {
+          "id": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+          "name": "storefront-web",
+          "kind": "project",
+          "parentId": "6f1c2a9e-3b7d-4e58-9a0c-1d2e3f405162",
+          "iconKind": null,
+          "iconValue": null,
+          "iconVersion": 0
+        }
+      ]
+    }
+  ],
+  "nextCursor": null
+}

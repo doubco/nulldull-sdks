@@ -1,0 +1,39 @@
+# Dependencies and build output
+node_modules/
+dist/
+build/
+coverage/
+*.tgz
+.turbo/
+
+# Python
+__pycache__/
+*.py[cod]
+.venv/
+*.egg-info/
+.pytest_cache/
+
+# Go
+/go/bin/
+
+# Swift
+.build/
+.swiftpm/
+*.xcodeproj/
+
+# Kotlin / Gradle
+.gradle/
+/kotlin/build/
+local.properties
+
+# Editors and OS
+.DS_Store
+.idea/
+.vscode/
+*.swp
+
+# Secrets: never commit keys or env files
+.env
+.env.*
+*.pem
+credentials/

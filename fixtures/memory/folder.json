@@ -1,0 +1,20 @@
+{
+  "workspaceId": "9f8e7d6c-5b4a-4c3d-8e2f-1a0b9c8d7e6f",
+  "id": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+  "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+  "parentId": null,
+  "name": "decisions",
+  "createdBy": "Hq3vX9kLmN2pR7sT4uW8yZ1a",
+  "preferredRepository": "https://github.com/acme/storefront",
+  "preferredPath": "docs/decisions",
+  "metadataVersion": 2,
+  "canManage": false,
+  "placement": {
+    "repository": "https://github.com/acme/storefront",
+    "path": "docs/decisions",
+    "folderPath": ""
+  },
+  "ancestors": [],
+  "contents": "visible",
+  "canDelete": false
+}

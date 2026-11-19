@@ -1,0 +1,130 @@
+{
+  "items": [
+    {
+      "id": "json",
+      "label": "JSON",
+      "capabilities": {
+        "layout": "single",
+        "plurals": "cldr",
+        "variables": "named",
+        "status": false,
+        "description": false,
+        "variableTypes": false
+      },
+      "files": [
+        {
+          "role": "translations",
+          "extension": "json",
+          "contentType": "application/json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "world",
+      "label": "World 1.x",
+      "capabilities": {
+        "layout": "single",
+        "plurals": "one-other",
+        "variables": "named",
+        "status": false,
+        "description": false,
+        "variableTypes": false
+      },
+      "files": [
+        {
+          "role": "translations",
+          "extension": "json",
+          "contentType": "application/json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "world-cldr",
+      "label": "World (CLDR plurals)",
+      "capabilities": {
+        "layout": "single",
+        "plurals": "cldr",
+        "variables": "named",
+        "status": false,
+        "description": false,
+        "variableTypes": false
+      },
+      "files": [
+        {
+          "role": "translations",
+          "extension": "json",
+          "contentType": "application/json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "xcstrings",
+      "label": "Xcode String Catalog",
+      "capabilities": {
+        "layout": "multi",
+        "plurals": "cldr",
+        "variables": "positional",
+        "status": true,
+        "description": true,
+        "variableTypes": false
+      },
+      "files": [
+        {
+          "role": "catalog",
+          "extension": "xcstrings",
+          "contentType": "application/json",
+          "required": true
+        }
+      ]
+    },
+    {
+      "id": "apple-strings",
+      "label": "Xcode .strings / .stringsdict",
+      "capabilities": {
+        "layout": "single",
+        "plurals": "cldr",
+        "variables": "positional",
+        "status": false,
+        "description": true,
+        "variableTypes": false
+      },
+      "files": [
+        {
+          "role": "strings",
+          "extension": "strings",
+          "contentType": "text/plain; charset=utf-8",
+          "required": true
+        },
+        {
+          "role": "stringsdict",
+          "extension": "stringsdict",
+          "contentType": "application/x-plist",
+          "required": false
+        }
+      ]
+    },
+    {
+      "id": "android-xml",
+      "label": "Android strings.xml",
+      "capabilities": {
+        "layout": "single",
+        "plurals": "cldr",
+        "variables": "positional",
+        "status": false,
+        "description": true,
+        "variableTypes": false
+      },
+      "files": [
+        {
+          "role": "strings",
+          "extension": "xml",
+          "contentType": "application/xml",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

@@ -1,0 +1,12 @@
+{
+  "format": "xcstrings",
+  "files": [
+    {
+      "path": "Localizable.xcstrings",
+      "contentType": "application/json",
+      "content": "{\n  \"sourceLanguage\" : \"en\",\n  \"strings\" : {\n    \"cart.items\" : {\n      \"comment\" : \"Cart item count\",\n      \"extractionState\" : \"manual\",\n      \"localizations\" : {\n        \"en\" : {\n          \"variations\" : {\n            \"plural\" : {\n              \"one\" : {\n                \"stringUnit\" : {\n                  \"state\" : \"translated\",\n                  \"value\" : \"%lld item\"\n                }\n              },\n              \"other\" : {\n                \"stringUnit\" : {\n                  \"state\" : \"translated\",\n                  \"value\" : \"%lld items\"\n                }\n              }\n            }\n          }\n        },\n        \"tr\" : {\n          \"variations\" : {\n            \"plural\" : {\n              \"other\" : {\n                \"stringUnit\" : {\n                  \"state\" : \"translated\",\n                  \"value\" : \"%lld ürün\"\n                }\n              }\n            }\n          }\n        }\n      }\n    },\n    \"checkout.title\" : {\n      \"comment\" : \"Checkout page heading\",\n      \"extractionState\" : \"manual\",\n      \"localizations\" : {\n        \"en\" : {\n          \"stringUnit\" : {\n            \"state\" : \"translated\",\n            \"value\" : \"Checkout\"\n          }\n        },\n        \"tr\" : {\n          \"stringUnit\" : {\n            \"state\" : \"translated\",\n            \"value\" : \"Ödeme\"\n          }\n        }\n      }\n    }\n  },\n  \"version\" : \"1.0\"\n}\n"
+    }
+  ],
+  "notes": [],
+  "contentVersion": 42
+}

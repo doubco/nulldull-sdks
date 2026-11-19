@@ -1,0 +1,45 @@
+{
+  "items": [
+    {
+      "id": "1f4e5c2a-8b3d-4a6e-9f7c-2d1b0a9e8c7f",
+      "name": "AGENTS.md",
+      "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+      "headRevisionId": "9d8c7b6a-5f4e-4d3c-b2a1-0f9e8d7c6b5a",
+      "folderId": null,
+      "preferredRepository": "https://github.com/acme/storefront",
+      "preferredPath": "AGENTS.md",
+      "metadataVersion": 3,
+      "role": "senior",
+      "tags": [
+        "rules",
+        "maintained",
+        "agents"
+      ],
+      "labelKind": "rules",
+      "labelLifecycle": "maintained",
+      "labelSource": "ai",
+      "labelStatus": "ready"
+    },
+    {
+      "id": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d",
+      "name": "release-checklist.md",
+      "scopeId": "a3e4b5c6-d7e8-4f90-8123-456789abcdef",
+      "headRevisionId": "2b3c4d5e-6f7a-4b8c-9d0e-1f2a3b4c5d6e",
+      "folderId": "7c9e6679-7425-40de-944b-e07fc1f90ae7",
+      "preferredRepository": null,
+      "preferredPath": null,
+      "metadataVersion": 0,
+      "role": "junior",
+      "tags": [
+        "procedure",
+        "maintained",
+        "release"
+      ],
+      "labelKind": "procedure",
+      "labelLifecycle": "maintained",
+      "labelSource": "ai",
+      "labelStatus": "ready"
+    }
+  ],
+  "nextCursor": "3a7b9c1d-2e4f-4a6b-8c0d-1e2f3a4b5c6d"
+}

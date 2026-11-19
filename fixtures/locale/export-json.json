@@ -1,0 +1,17 @@
+{
+  "format": "json",
+  "files": [
+    {
+      "path": "en.json",
+      "contentType": "application/json",
+      "content": "{\n  \"checkout.title\": \"Checkout\",\n  \"cart.items\": {\n    \"one\": \"{{count}} item\",\n    \"other\": \"{{count}} items\"\n  }\n}\n"
+    },
+    {
+      "path": "tr.json",
+      "contentType": "application/json",
+      "content": "{\n  \"checkout.title\": \"Ödeme\",\n  \"cart.items\": {\n    \"other\": \"{{count}} ürün\"\n  }\n}\n"
+    }
+  ],
+  "notes": [],
+  "contentVersion": 42
+}

@@ -1,0 +1,21 @@
+{
+  "items": [
+    {
+      "id": "5e6f7a8b-9c0d-4e1f-a2b3-c4d5e6f7a8b9",
+      "name": "launch-notes.md",
+      "scopeId": "6f1c2a9e-3b7d-4e58-9a0c-1d2e3f405162",
+      "headRevisionId": null,
+      "folderId": null,
+      "preferredRepository": null,
+      "preferredPath": null,
+      "metadataVersion": 0,
+      "role": "senior",
+      "tags": [],
+      "labelKind": null,
+      "labelLifecycle": null,
+      "labelSource": null,
+      "labelStatus": "unclassified"
+    }
+  ],
+  "nextCursor": null
+}

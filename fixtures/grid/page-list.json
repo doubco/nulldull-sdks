@@ -1,0 +1,44 @@
+{
+  "pool": {
+    "key": "nulldull-blog",
+    "name": "The Void"
+  },
+  "items": [
+    {
+      "id": "nulldull-void-context-that-survives-the-chat",
+      "pool": "nulldull-blog",
+      "slug": "context-that-survives-the-chat",
+      "locale": "en",
+      "title": "Context that survives the chat.",
+      "summary": "Keep the decisions your next teammate—or agent—will need.",
+      "version": 11,
+      "sourceVersion": 14,
+      "publishedAt": 1794701782546,
+      "folderId": "nulldull-void-blog",
+      "cover": {
+        "filename": "context-cover.png",
+        "mediaType": "image/png",
+        "byteSize": 182344,
+        "checksum": "5d41402abc4b2a76b9719d911017c592ae7f2c1a3e8f1d6b4c2a9e0f7d3b1c58",
+        "id": "grid-asset-context-cover",
+        "version": 2,
+        "alt": "A notebook on a desk at night",
+        "url": "/api/grid/v1/pools/nulldull-blog/pages/context-that-survives-the-chat/assets/grid-asset-context-cover?locale=en&version=11&key=nd_pub_0123456789abcdef0123456789abcdef0123456789abcdef0123456789abcdef"
+      }
+    },
+    {
+      "id": "nulldull-void-drafts-are-not-publications",
+      "pool": "nulldull-blog",
+      "slug": "drafts-are-not-publications",
+      "locale": "en",
+      "title": "Drafts are not publications.",
+      "summary": "Why Grid separates editing a page from making it public.",
+      "version": 3,
+      "sourceVersion": 2,
+      "publishedAt": 1794577438403,
+      "folderId": "nulldull-void-blog",
+      "cover": null
+    }
+  ],
+  "nextCursor": "eyJrZXkiOiJudWxsZHVsbC1ibG9nIiwibG9jYWxlIjoiZW4iLCJxIjoiIiwiZm9sZGVySWQiOm51bGwsImF0IjoxNzk0NTc3NDM4NDAzLCJpZCI6Im51bGxkdWxsLXZvaWQtZHJhZnRzLWFyZS1ub3QtcHVibGljYXRpb25zIn0="
+}
