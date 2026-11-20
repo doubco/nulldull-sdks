@@ -129,9 +129,10 @@ public enum GridValidator {
       }
       let properties = try rawProperties.map { value -> GridCustomNode.Property in
         let pair = try object(value)
-        let key = jsTrim(try text(pair["key"], 128, "Property key"))
+        // Self.: a later local named `text` in this function hides the helper for Swift 6.0/6.1.
+        let key = jsTrim(try Self.text(pair["key"], 128, "Property key"))
         if key.isEmpty { throw GridValidationError("Enter a property key.") }
-        return .init(key: key, value: try text(pair["value"], 4000, "Property value"))
+        return .init(key: key, value: try Self.text(pair["value"], 4000, "Property value"))
       }
       if Set(properties.map(\.key)).count != properties.count {
         throw GridValidationError("Property keys must be unique.")
