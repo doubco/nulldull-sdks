@@ -2,7 +2,7 @@
 
 All NullDull SDKs share one version. This project follows [Semantic Versioning](https://semver.org); `0.x` releases may contain breaking changes in minor versions.
 
-## 0.2.0 (unreleased)
+## 0.2.0 (20 November 2026)
 
 Grid renderers, in alpha. The SDK packages are unchanged.
 
@@ -11,7 +11,7 @@ Grid renderers, in alpha. The SDK packages are unchanged.
 - `fixtures/grid-renderer/`: fixture documents, golden layout geometry, validation cases, URL and SVG rules, delivery samples and the icon catalog, generated from the TypeScript Grid packages and read by both renderers' tests.
 - CI: `swift-grid` and `kotlin-grid` jobs.
 
-## 0.1.0 (unreleased, early access)
+## 0.1.0 (20 November 2026, early access)
 
 - `SPEC.md`: the language-neutral contract for workspace API key SDKs. It covers Grid delivery, read-only Memory and Locale export, and defines errors, retries, pagination and conformance.
 - `fixtures/`: shared conformance cases (`manifest.json`) and response fixtures taken from the API handlers.

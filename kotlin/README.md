@@ -196,7 +196,7 @@ try {
 
 Two further artifacts render Grid documents natively on Android. They are versioned separately from `nulldull-sdk` and do not depend on it.
 
-> **Alpha.** The Grid renderer artifacts are in early access, at version `0.1.0`, and their API may change before `1.0`. They are not yet published to Maven Central.
+> **Alpha.** The Grid renderer artifacts are in early access, at version `0.1.0`, and their API may change before `1.0`. They were published to Maven Central on 20 November 2026.
 
 | Artifact | Kind | Contents |
 | --- | --- | --- |

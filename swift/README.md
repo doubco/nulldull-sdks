@@ -200,7 +200,7 @@ You can also pass your own `URLSession` with `session:`; redirects are still ref
 
 The same package also has two products that render Grid documents natively. They are separate from the `NullDull` SDK product and do not depend on it.
 
-> **Alpha.** The Grid renderer products are in early access and their API may change in any `0.x` release. They are not yet part of a tagged release; they are planned for `0.2.0`.
+> **Alpha.** The Grid renderer products are in early access and their API may change in any `0.x` release. They were released in tag `0.2.0` on 20 November 2026.
 
 | Product | Contents | Frameworks | Platforms |
 | --- | --- | --- | --- |
