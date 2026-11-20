@@ -1,5 +1,5 @@
 [versions]
-# Matches the Grid Kotlin renderer's toolchain so both can share this build later.
+# One toolchain for the SDK and the Grid renderers: Gradle 8.14.2 (wrapper), AGP 8.13 and Kotlin 2.2.
 kotlin = "2.2.21"
 serialization = "1.9.0"
 coroutines = "1.10.2"
@@ -7,6 +7,15 @@ okhttp = "4.12.0"
 junit = "5.13.4"
 maven-publish = "0.34.0"
 dokka = "2.0.0"
+# Grid renderers
+agp = "8.13.2"
+markdown = "0.7.3"
+compose-bom = "2025.08.00"
+coil = "3.3.0"
+junit4 = "4.13.2"
+robolectric = "4.16"
+roborazzi = "1.50.0"
+androidx-test = "1.7.0"
 
 [libraries]
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "serialization" }
@@ -17,8 +26,28 @@ okhttp-mockwebserver = { module = "com.squareup.okhttp3:mockwebserver", version.
 junit-bom = { module = "org.junit:junit-bom", version.ref = "junit" }
 junit-jupiter = { module = "org.junit.jupiter:junit-jupiter" }
 junit-platform-launcher = { module = "org.junit.platform:junit-platform-launcher" }
+# Grid renderers
+jetbrains-markdown = { module = "org.jetbrains:markdown", version.ref = "markdown" }
+compose-bom = { module = "androidx.compose:compose-bom", version.ref = "compose-bom" }
+compose-ui = { module = "androidx.compose.ui:ui" }
+compose-foundation = { module = "androidx.compose.foundation:foundation" }
+compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
+compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+coil-compose = { module = "io.coil-kt.coil3:coil-compose", version.ref = "coil" }
+coil-svg = { module = "io.coil-kt.coil3:coil-svg", version.ref = "coil" }
+junit4 = { module = "junit:junit", version.ref = "junit4" }
+kotlin-test-junit = { module = "org.jetbrains.kotlin:kotlin-test-junit", version.ref = "kotlin" }
+robolectric = { module = "org.robolectric:robolectric", version.ref = "robolectric" }
+roborazzi = { module = "io.github.takahirom.roborazzi:roborazzi", version.ref = "roborazzi" }
+roborazzi-compose = { module = "io.github.takahirom.roborazzi:roborazzi-compose", version.ref = "roborazzi" }
+androidx-test-core = { module = "androidx.test:core", version.ref = "androidx-test" }
 
 [plugins]
 kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "kotlin" }
 maven-publish = { id = "com.vanniktech.maven.publish", version.ref = "maven-publish" }
 dokka = { id = "org.jetbrains.dokka", version.ref = "dokka" }
+android-library = { id = "com.android.library", version.ref = "agp" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-serialization = { id = "org.jetbrains.kotlin.plugin.serialization", version.ref = "kotlin" }
+kotlin-compose = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
+roborazzi = { id = "io.github.takahirom.roborazzi", version.ref = "roborazzi" }
