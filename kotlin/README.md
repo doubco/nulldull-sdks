@@ -192,10 +192,60 @@ try {
 - Cancelling the calling coroutine cancels the HTTP call and throws `CancellationException`, as usual for coroutines. Use `withTimeout` for an overall deadline.
 - Redirects are never followed, cookies are never sent and responses are never cached.
 
+## Grid renderer (alpha)
+
+Two further artifacts render Grid documents natively on Android. They are versioned separately from `nulldull-sdk` and do not depend on it.
+
+> **Alpha.** The Grid renderer artifacts are in early access, at version `0.1.0`, and their API may change before `1.0`. They are not yet published to Maven Central.
+
+| Artifact | Kind | Contents |
+| --- | --- | --- |
+| `com.nulldull:nulldull-grid-core:0.1.0` | JVM library (no Android dependency) | Document model and validation, layout engine, Markdown model, URL and SVG safety rules, coroutine content client |
+| `com.nulldull:nulldull-grid-compose:0.1.0` | Android library (AAR) | Jetpack Compose renderer |
+
+```kotlin
+// build.gradle.kts
+dependencies {
+    implementation("com.nulldull:nulldull-grid-compose:0.1.0") // brings nulldull-grid-core
+}
+```
+
+Requirements: `nulldull-grid-core` targets Java 17 bytecode (Kotlin 2.2, kotlinx.serialization 1.9, kotlinx.coroutines 1.10, `org.jetbrains:markdown`). `nulldull-grid-compose` needs minSdk 24 and compileSdk 36, uses Compose BOM 2025.08.00 (no Material dependency) and Coil 3.3 for images and SVG, and declares `INTERNET`. Packages are `com.nulldull.grid` and `com.nulldull.grid.compose`.
+
+```kotlin
+val grid = GridClient(
+    baseUrl = "https://nulldull.com/api/grid/v1",
+    apiKey = "nd_pub_…", // a public key with the grid:published scope
+)
+
+@Composable
+fun Article(slug: String) {
+    val page by produceState<PublicGridPage?>(null, slug) { value = grid.getPage("my-blog", slug) }
+    page?.let {
+        PublishedGridPage(
+            page = it,
+            modifier = Modifier.verticalScroll(rememberScrollState()),
+            customNodes = mapOf("callout" to { node -> Callout(node.property("text").orEmpty()) }),
+        )
+    }
+}
+```
+
+For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument.decode(json)` (throws `GridValidationException`) and render them with `GridRenderer(document, resolveAsset = { id -> urls[id] })`.
+
+- `GridClient` follows the same key rules as the SDK: a private `nd_sec_` key is refused unless `allowPrivateKey = true` (server-side JVM use) and is never put in a URL; a public key is added as `key=` only to asset URLs on the API's own origin. `GridHttpEngine` is a one-method interface, so you can inject OkHttp, Ktor or a test double; engines must not follow redirects, send cookies or cache.
+- Links and assets must be credential-free `http`/`https` URLs. Custom node properties are inert. Downloaded SVG files pass the same static allowlist as the web renderer before AndroidSVG draws them.
+- TalkBack descriptions, system font scale for flowing text, and light and dark themes (`GridTheme`) are supported. Video and audio never autoplay; restricted embeds need a tap, and `renderEmbed` lets you gate them on consent. Each node has the test tag `grid:<node id>`.
+
+Known differences from the web renderer: groove and ridge borders draw solid; Markdown footnotes are plain text; WOFF and WOFF2 fonts fall back to the node's family; animated images show their first frame; video uses the platform `VideoView` (`cover` renders as `contain`), and audio has play and pause only. Replace them with `renderVideo` and `renderAudio`.
+
+The layout engine and validator are tested against golden geometry and validation cases generated from the TypeScript renderer, in [`fixtures/grid-renderer`](../fixtures/grid-renderer) (shared with the Swift renderer).
+
 ## Testing
 
 ```sh
-./gradlew build
+./gradlew build          # the SDK and the Grid renderer modules (needs an Android SDK: ANDROID_HOME or local.properties)
+./gradlew :sdk:build     # the SDK only; no Android SDK needed
 ```
 
 The unit tests run every case in the shared [`fixtures/manifest.json`](../fixtures/manifest.json) against MockWebServer, plus the behaviours in SPEC.md section 11. Optional live tests run against the real API when these are set:
@@ -213,7 +263,7 @@ NULLDULL_PUBLIC_KEY=… NULLDULL_GRID_POOL=my-blog ./gradlew :sdk:test --tests '
 
 ## Publishing
 
-`./gradlew publishToMavenLocal` builds the jar, sources jar, Dokka javadoc jar and POM without signing keys. Releases to Maven Central use `./gradlew publishToMavenCentral` with `mavenCentralUsername`, `mavenCentralPassword` and `signingInMemoryKey` (plus `signingInMemoryKeyPassword`) provided as Gradle properties or `ORG_GRADLE_PROJECT_…` environment variables. Signing turns on only when a signing key is present.
+`./gradlew publishToMavenLocal` builds the jar, sources jar, Dokka javadoc jar and POM without signing keys, for `nulldull-sdk` and `nulldull-grid-core`. For `nulldull-grid-compose` it builds the AAR, sources jar and POM; its javadoc jar holds only this README, because the KDoc ships in the sources jar. Releases to Maven Central use `./gradlew publishToMavenCentral` with `mavenCentralUsername`, `mavenCentralPassword` and `signingInMemoryKey` (plus `signingInMemoryKeyPassword`) provided as Gradle properties or `ORG_GRADLE_PROJECT_…` environment variables. Signing turns on only when a signing key is present.
 
 ## License
 

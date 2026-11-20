@@ -196,15 +196,78 @@ let client = try NullDullClient(
 
 You can also pass your own `URLSession` with `session:`; redirects are still refused.
 
+## Grid renderer (alpha)
+
+The same package also has two products that render Grid documents natively. They are separate from the `NullDull` SDK product and do not depend on it.
+
+> **Alpha.** The Grid renderer products are in early access and their API may change in any `0.x` release. They are not yet part of a tagged release; they are planned for `0.2.0`.
+
+| Product | Contents | Frameworks | Platforms |
+| --- | --- | --- | --- |
+| `NullDullGrid` | Document model and validation, layout engine, public content client, static SVG support | Foundation | Same as `NullDull` |
+| `NullDullGridUI` | SwiftUI renderer | SwiftUI, AVKit, Core Text | iOS 16, macOS 13, tvOS 16, visionOS 1; not watchOS |
+
+Building the Grid products needs Xcode 16 or later (Swift 6 toolchain). The `NullDull` product still builds with Swift 5.9.
+
+```swift
+dependencies: [
+    .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.2.0"),
+],
+targets: [
+    .target(name: "MyApp", dependencies: [
+        .product(name: "NullDullGrid", package: "nulldull-sdks"),
+        .product(name: "NullDullGridUI", package: "nulldull-sdks"),
+    ]),
+]
+```
+
+```swift
+import NullDullGrid
+import NullDullGridUI
+
+let grid = try GridPublicClient(
+    baseURL: URL(string: "https://nulldull.com/api/grid/v1")!,
+    apiKey: "nd_pub_…"  // a public key with the grid:published scope
+)
+
+struct ArticleView: View {
+    let grid: GridPublicClient
+    @State private var page: PublicGridPage?
+
+    var body: some View {
+        ScrollView {
+            if let page { PublishedGridPageView(page: page) }
+        }
+        .task { page = try? await grid.page(pool: "my-blog", slug: "hello-world") }
+    }
+}
+```
+
+For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument(json:)` and render them with `GridView(document:resolveAsset:)`. `GridView` picks the breakpoint from its width; `theme:`, `customNodes:` (a `GridCustomNodeRegistry`), `messages:` and `label:` customize it.
+
+- `NullDull` and `NullDullGrid` both declare `GridDocument` and `JSONValue`. In a file that imports both modules, qualify the name (`NullDullGrid.GridDocument`).
+- The client follows the same key rules as the SDK: only public `nd_pub_` keys belong in apps (iOS, tvOS and visionOS reject `nd_sec_` keys), a key is added as `key=` only to asset URLs on the API's own origin, and redirects are refused.
+- Links and assets must be credential-free `http`/`https` URLs. Markdown HTML is shown as text. Custom node properties are inert strings, and only views registered in `GridCustomNodeRegistry` run. Uploaded SVG files pass a static allowlist and are drawn natively; nothing in them is executed or fetched.
+- VoiceOver labels, Dynamic Type for flowing text, and light and dark appearance are supported. Video and audio never autoplay, and restricted embeds (YouTube, Vimeo) show a card until tapped unless you pass `embed:`.
+
+Known differences from the web renderer: groove and ridge borders draw solid; Markdown footnotes show as literal text; `justify` alignment renders left-aligned; code blocks are clipped instead of scrolling; `cover` video plays as `contain`; SVG gradients, clip paths, masks and percentage lengths show a "Preview unavailable" fallback.
+
+The layout engine is tested against golden geometry generated from the TypeScript renderer, in [`fixtures/grid-renderer`](../fixtures/grid-renderer) (shared with the Kotlin renderer).
+
 ## Development
 
 Swift Package Manager resolves the package from the repository root, so run everything there:
 
 ```sh
 swift build
-swift test
+swift test                                  # all products
+swift test --filter NullDullTests           # the SDK only
+swift test --filter 'NullDullGridTests|NullDullGridUITests'   # the Grid renderer only
 xcodebuild -scheme NullDull -destination 'generic/platform=iOS Simulator' build
+xcodebuild -scheme NullDullGridUI -destination 'generic/platform=iOS Simulator' build
 ```
+
+Grid render review images: `GRID_RENDER_OUTPUT=/tmp/shots swift test --filter testWritesReviewImagesWhenRequested`.
 
 The unit tests run every case in the shared [`fixtures/manifest.json`](../fixtures/manifest.json) and the SPEC conformance list against a mock transport. The fixtures are read in place, not copied.
 
