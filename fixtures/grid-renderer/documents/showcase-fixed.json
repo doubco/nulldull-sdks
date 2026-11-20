@@ -1,0 +1,650 @@
+{
+  "layout": {
+    "padding": 8,
+    "background": "#f6f1e7",
+    "color": "#1f1d1a",
+    "radius": 12,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 40,
+    "gap": 4
+  },
+  "breakpoints": [
+    {
+      "padding": 16,
+      "background": "#f6f1e7",
+      "color": "#1f1d1a",
+      "radius": 16,
+      "direction": "vertical",
+      "columns": 24,
+      "rows": 8,
+      "cellSize": 40,
+      "gap": 4,
+      "id": "tablet",
+      "name": "Tablet",
+      "minWidth": 700
+    }
+  ],
+  "nodes": [
+    {
+      "padding": 4,
+      "fitToBox": true,
+      "fontFamily": "serif",
+      "verticalAlign": "middle",
+      "id": "headline",
+      "kind": "text",
+      "name": "Text",
+      "text": "Fitted **headline** text",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 0,
+          "width": 16,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "center",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 4,
+      "strokeColor": "#9a5b12",
+      "strokeWidth": 3,
+      "id": "sun",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 9,
+        "y": 2,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 17,
+          "y": 0,
+          "width": 3,
+          "height": 3
+        }
+      },
+      "color": "#e8a33d",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "circle",
+      "hidden": false
+    },
+    {
+      "dropcap": true,
+      "lineHeight": 1.4,
+      "fontFamily": "serif",
+      "id": "story",
+      "kind": "text",
+      "name": "Text",
+      "text": "Grids hold pages together. This paragraph opens with a drop cap and wraps around it the way the web renderer floats the first letter of the first paragraph.\n\nA second paragraph keeps going.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 9,
+        "height": 6
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 2,
+          "width": 12,
+          "height": 6
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 15,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "borderColor": "#c9bfae",
+      "borderWidth": 1,
+      "fontFamily": "system",
+      "id": "list",
+      "kind": "text",
+      "name": "Text",
+      "text": "**Plan**\n\n- Fixtures\n- Goldens\n  - Swift\n  - Kotlin\n\n1. Build\n2. Test\n\n| Kind | Ready |\n|:--|--:|\n| text | yes |\n| `code` | ~~no~~ |\n\n[Example link](https://example.com/docs)",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 8,
+        "width": 7,
+        "height": 7
+      },
+      "frames": {
+        "tablet": {
+          "x": 12,
+          "y": 3,
+          "width": 12,
+          "height": 7
+        }
+      },
+      "color": "transparent",
+      "background": "#ffffff",
+      "fontSize": 13,
+      "radius": 10,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "tri",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 7,
+        "y": 8,
+        "width": 2,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#3f7d5c",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "triangle",
+      "hidden": false
+    },
+    {
+      "colorOpacity": 0.6,
+      "id": "hex",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 9,
+        "y": 8,
+        "width": 2,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 2,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#3d5a99",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "hexagon",
+      "hidden": false
+    },
+    {
+      "rotation": 15,
+      "id": "star",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 7,
+        "y": 10,
+        "width": 2,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 4,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#d94f30",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "star",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#1f1d1a",
+      "strokeWidth": 2,
+      "strokeStyle": "dashed",
+      "polygonSides": 7,
+      "id": "poly",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 9,
+        "y": 10,
+        "width": 2,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 6,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "polygon",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#1f1d1a",
+      "strokeWidth": 3,
+      "id": "arrow",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 7,
+        "y": 12,
+        "width": 4,
+        "height": 1
+      },
+      "frames": {
+        "tablet": {
+          "x": 8,
+          "y": 8,
+          "width": 4,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "arrow",
+      "hidden": false
+    },
+    {
+      "padding": 6,
+      "iconName": "information",
+      "id": "icon",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 11,
+        "y": 8,
+        "width": 1,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 8,
+          "y": 9,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#3d5a99",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "icon",
+      "hidden": false
+    },
+    {
+      "opacity": 0.9,
+      "strokeColor": "#1f1d1a",
+      "strokeWidth": 2,
+      "strokeStyle": "dotted",
+      "rotation": -4,
+      "id": "card",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 7,
+        "y": 13,
+        "width": 5,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 10,
+          "y": 10,
+          "width": 6,
+          "height": 2
+        }
+      },
+      "color": "#ffffff",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 14,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#9a5b12",
+      "strokeWidth": 2,
+      "separatorStyle": "centered",
+      "id": "sep",
+      "kind": "separator",
+      "name": "Separator",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 15,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 12,
+          "width": 24,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "borderOpacity": 0.5,
+      "borderColor": "#1f1d1a",
+      "borderWidth": 2,
+      "borderStyle": "dashed",
+      "id": "photo",
+      "kind": "image",
+      "name": "Coastal photo",
+      "text": "",
+      "assetId": "photo",
+      "frame": {
+        "x": 0,
+        "y": 16,
+        "width": 6,
+        "height": 4
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 13,
+          "width": 8,
+          "height": 5
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 12,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "tiles",
+      "kind": "image",
+      "name": "Tiled pattern",
+      "text": "",
+      "assetId": "tile",
+      "frame": {
+        "x": 6,
+        "y": 16,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 8,
+          "y": 13,
+          "width": 8,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "tile",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "logo",
+      "kind": "shape",
+      "name": "Logo",
+      "text": "",
+      "assetId": "logo",
+      "frame": {
+        "x": 6,
+        "y": 18,
+        "width": 3,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 8,
+          "y": 15,
+          "width": 3,
+          "height": 3
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "svg",
+      "hidden": false
+    },
+    {
+      "backgroundOpacity": 0.85,
+      "link": "https://example.com/linked",
+      "verticalAlign": "middle",
+      "id": "linked",
+      "kind": "text",
+      "name": "Text",
+      "text": "Tap the whole node",
+      "assetId": null,
+      "frame": {
+        "x": 9,
+        "y": 18,
+        "width": 3,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 11,
+          "y": 15,
+          "width": 5,
+          "height": 1
+        }
+      },
+      "color": "#f6f1e7",
+      "background": "#1f1d1a",
+      "fontSize": 24,
+      "radius": 20,
+      "align": "center",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "callout",
+      "kind": "custom",
+      "name": "Custom",
+      "frame": {
+        "x": 0,
+        "y": 20,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 16,
+          "y": 13,
+          "width": 8,
+          "height": 2
+        }
+      },
+      "hidden": false,
+      "opacity": 1,
+      "nodeKey": "callout",
+      "properties": [
+        {
+          "key": "title",
+          "value": "Registered custom node"
+        }
+      ]
+    },
+    {
+      "id": "unknown",
+      "kind": "custom",
+      "name": "Custom",
+      "frame": {
+        "x": 6,
+        "y": 20,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 16,
+          "y": 15,
+          "width": 8,
+          "height": 2
+        }
+      },
+      "hidden": false,
+      "opacity": 0.5,
+      "nodeKey": "not-registered",
+      "properties": [
+        {
+          "key": "html",
+          "value": "<b>inert</b>"
+        }
+      ]
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "id": "video",
+      "kind": "embed",
+      "name": "Launch video",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 22,
+        "width": 12,
+        "height": 4
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 18,
+          "width": 12,
+          "height": 5
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "colorOpacity": 0.7,
+      "fontAssetId": "font",
+      "id": "font",
+      "kind": "text",
+      "name": "Text",
+      "text": "Uploaded font sample",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 26,
+        "width": 12,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 12,
+          "y": 18,
+          "width": 12,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 22,
+      "radius": 8,
+      "align": "right",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

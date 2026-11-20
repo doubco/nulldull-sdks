@@ -1,0 +1,122 @@
+[
+  {
+    "input": "https://Example.COM",
+    "safe": "https://example.com/",
+    "embed": null
+  },
+  {
+    "input": "http://example.com:80/a/./b/../c?q=a b#frag ment",
+    "safe": "http://example.com/a/c?q=a%20b#frag%20ment",
+    "embed": null
+  },
+  {
+    "input": "https://example.com:8443",
+    "safe": "https://example.com:8443/",
+    "embed": null
+  },
+  {
+    "input": "https://bücher.example/ä",
+    "safe": "https://xn--bcher-kva.example/%C3%A4",
+    "embed": null
+  },
+  {
+    "input": "HTTPS://EXAMPLE.com/Path?Q=1",
+    "safe": "https://example.com/Path?Q=1",
+    "embed": null
+  },
+  {
+    "input": "https://example.com/a%20b",
+    "safe": "https://example.com/a%20b",
+    "embed": null
+  },
+  {
+    "input": "https://example.com?x=1",
+    "safe": "https://example.com/?x=1",
+    "embed": null
+  },
+  {
+    "input": "https://example.com/'quote'",
+    "safe": "https://example.com/'quote'",
+    "embed": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "safe": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+    "embed": "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+  },
+  {
+    "input": "https://youtu.be/dQw4w9WgXcQ",
+    "safe": "https://youtu.be/dQw4w9WgXcQ",
+    "embed": "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+  },
+  {
+    "input": "https://youtube.com/shorts/dQw4w9WgXcQ",
+    "safe": "https://youtube.com/shorts/dQw4w9WgXcQ",
+    "embed": "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+  },
+  {
+    "input": "https://www.youtube.com/embed/dQw4w9WgXcQ?start=3",
+    "safe": "https://www.youtube.com/embed/dQw4w9WgXcQ?start=3",
+    "embed": "https://www.youtube-nocookie.com/embed/dQw4w9WgXcQ"
+  },
+  {
+    "input": "https://vimeo.com/123456",
+    "safe": "https://vimeo.com/123456",
+    "embed": "https://player.vimeo.com/video/123456"
+  },
+  {
+    "input": "https://www.vimeo.com/123456/",
+    "safe": "https://www.vimeo.com/123456/",
+    "embed": null
+  },
+  {
+    "input": "https://www.youtube.com/watch?v=short",
+    "safe": "https://www.youtube.com/watch?v=short",
+    "embed": null
+  },
+  {
+    "input": "https://evil.example/watch?v=dQw4w9WgXcQ",
+    "safe": "https://evil.example/watch?v=dQw4w9WgXcQ",
+    "embed": null
+  },
+  {
+    "input": "javascript:alert(1)",
+    "safe": null,
+    "embed": null
+  },
+  {
+    "input": "data:text/html,x",
+    "safe": null,
+    "embed": null
+  },
+  {
+    "input": "https://user:pw@example.com",
+    "safe": null,
+    "embed": null
+  },
+  {
+    "input": "ftp://example.com",
+    "safe": null,
+    "embed": null
+  },
+  {
+    "input": "https://",
+    "safe": null,
+    "embed": null
+  },
+  {
+    "input": "/relative",
+    "safe": null,
+    "embed": null
+  },
+  {
+    "input": "",
+    "safe": null,
+    "embed": null
+  },
+  {
+    "input": " https://example.com/trimmed ",
+    "safe": "https://example.com/trimmed",
+    "embed": null
+  }
+]

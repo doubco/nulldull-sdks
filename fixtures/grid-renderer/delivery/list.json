@@ -1,0 +1,55 @@
+{
+  "pool": {
+    "key": "example-pool",
+    "name": "Example pool"
+  },
+  "items": [
+    {
+      "id": "page-showcase",
+      "pool": "example-pool",
+      "slug": "showcase",
+      "locale": "en",
+      "title": "Showcase",
+      "summary": "Showcase summary.",
+      "version": 2,
+      "sourceVersion": 7,
+      "publishedAt": 1763251200000,
+      "folderId": "folder-a",
+      "cover": {
+        "id": "photo",
+        "version": 1,
+        "url": "/api/grid/v1/pools/example-pool/pages/showcase/assets/photo?version=1",
+        "filename": "photo.png",
+        "mediaType": "image/png",
+        "byteSize": 1024,
+        "checksum": "0000000000000000000000000000000000000000000000000000000000000000",
+        "alt": "A coastline at dusk"
+      }
+    },
+    {
+      "id": "page-welcome-to-the-void",
+      "pool": "example-pool",
+      "slug": "welcome-to-the-void",
+      "locale": "en",
+      "title": "Welcome to the Void.",
+      "summary": "Welcome to the Void. summary.",
+      "version": 2,
+      "sourceVersion": 7,
+      "publishedAt": 1763251200000,
+      "folderId": null,
+      "cover": null
+    },
+    {
+      "id": "page-legacy",
+      "pool": "example-pool",
+      "slug": "legacy",
+      "locale": "en",
+      "title": "Legacy snapshot",
+      "summary": "Legacy snapshot summary.",
+      "version": 2,
+      "sourceVersion": 7,
+      "publishedAt": 1763251200000
+    }
+  ],
+  "nextCursor": "opaque-cursor+/="
+}

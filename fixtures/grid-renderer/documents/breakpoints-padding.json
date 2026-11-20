@@ -1,0 +1,181 @@
+{
+  "layout": {
+    "padding": 12,
+    "direction": "vertical",
+    "columns": 6,
+    "rows": 8,
+    "cellSize": 80,
+    "gap": 6,
+    "maxRows": 20
+  },
+  "breakpoints": [
+    {
+      "padding": 16,
+      "direction": "vertical",
+      "columns": 12,
+      "rows": 8,
+      "cellSize": 48,
+      "gap": 8,
+      "id": "tablet",
+      "name": "Tablet",
+      "minWidth": 600
+    },
+    {
+      "direction": "vertical",
+      "columns": 24,
+      "rows": 8,
+      "cellSize": 40,
+      "gap": 4,
+      "maxRows": 10,
+      "id": "desktop",
+      "name": "Desktop",
+      "minWidth": 1024
+    },
+    {
+      "padding": 32,
+      "direction": "vertical",
+      "columns": 64,
+      "rows": 8,
+      "cellSize": 24,
+      "gap": 2,
+      "id": "wide",
+      "name": "Wide",
+      "minWidth": 1400
+    }
+  ],
+  "nodes": [
+    {
+      "id": "title",
+      "kind": "text",
+      "name": "Text",
+      "text": "Responsive",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 2,
+          "y": 0,
+          "width": 8,
+          "height": 2
+        },
+        "desktop": {
+          "x": 4,
+          "y": 1,
+          "width": 16,
+          "height": 3
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "bar",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 3,
+        "y": 2,
+        "width": 80,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "low",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 1,
+        "y": 30,
+        "width": 2,
+        "height": 2
+      },
+      "frames": {
+        "desktop": {
+          "x": 22,
+          "y": 9,
+          "width": 4,
+          "height": 4
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "hexagon",
+      "hidden": false
+    },
+    {
+      "id": "hidden",
+      "kind": "text",
+      "name": "Text",
+      "text": "Never laid out",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 6,
+        "height": 6
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": true
+    },
+    {
+      "id": "widget",
+      "kind": "custom",
+      "name": "Custom",
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "wide": {
+          "x": 40,
+          "y": 0,
+          "width": 24,
+          "height": 6
+        }
+      },
+      "hidden": false,
+      "opacity": 0.5,
+      "nodeKey": "chart",
+      "properties": []
+    }
+  ],
+  "baseLayoutName": "Phone",
+  "baseLayoutIndex": 1
+}

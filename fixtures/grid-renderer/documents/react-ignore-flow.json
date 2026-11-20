@@ -1,0 +1,63 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "previewWidth": 320,
+    "previewHeight": 900,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 48,
+    "gap": 8,
+    "maxRows": 100,
+    "maxColumns": 100
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "id": "flow",
+      "kind": "text",
+      "name": "Text",
+      "text": "Flowing",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "ignoreFlow": true,
+      "id": "floating",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 2,
+        "y": 5,
+        "width": 3,
+        "height": 2
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ],
+  "baseLayoutName": "Mobile"
+}

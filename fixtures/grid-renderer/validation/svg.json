@@ -1,0 +1,70 @@
+[
+  {
+    "source": "<?xml version=\"1.0\" encoding=\"UTF-8\"?><svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 10 10\"><!-- c --><path d=\"M0 0h10v10z\" style=\"fill:rgb(1, 2, 3);stroke:url(#g)\"/></svg>",
+    "safe": true
+  },
+  {
+    "source": "<svg viewBox=\"0 0 1 1\" overflow=\"visible\"><defs><linearGradient id=\"g\"><stop offset=\"0\" stop-color=\"#fff\"/></linearGradient></defs><rect width=\"1\" height=\"1\" fill=\"url(#g)\"/></svg>",
+    "safe": true
+  },
+  {
+    "source": "<svg xmlns=\"http://www.w3.org/2000/svg\" width=\"24\" height=\"24\"><title>Logo</title><g transform=\"translate(1 1)\"><circle cx=\"5\" cy=\"5\" r=\"4\" fill-opacity=\".5\"/></g></svg>",
+    "safe": true
+  },
+  {
+    "source": "<svg style=\"fill: red !important; opacity: 0.5\"><path d=\"M0 0\"/></svg>",
+    "safe": true
+  },
+  {
+    "source": "<svg><script>alert(1)</script></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg onload=\"alert(1)\"></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg><image href=\"https://example.com/x.png\"/></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg><style>path{fill:red}</style></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg><path d=\"M0 0\" fill=\"url(https://evil.example/#x)\"/></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg><path style=\"background:url(x)\"/></svg>",
+    "safe": false
+  },
+  {
+    "source": "<!DOCTYPE svg><svg></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg>&amp;</svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg></svg><svg></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg><g></svg>",
+    "safe": false
+  },
+  {
+    "source": "<svg><path d=\"M0 0\" d=\"M1 1\"/></svg>",
+    "safe": false
+  },
+  {
+    "source": "text<svg></svg>",
+    "safe": false
+  },
+  {
+    "source": "",
+    "safe": false
+  }
+]

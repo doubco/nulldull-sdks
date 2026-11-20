@@ -1,0 +1,971 @@
+{
+  "layout": {
+    "padding": 8,
+    "previewWidth": 390,
+    "background": "#f4efe6",
+    "color": "#1d1d1f",
+    "radius": 12,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 32,
+    "gap": 4,
+    "maxRows": 64
+  },
+  "breakpoints": [
+    {
+      "padding": 16,
+      "previewWidth": 768,
+      "background": "#fafafa",
+      "color": "#202124",
+      "radius": 16,
+      "direction": "vertical",
+      "columns": 16,
+      "rows": 8,
+      "cellSize": 40,
+      "gap": 6,
+      "maxRows": 64,
+      "id": "tablet",
+      "name": "Tablet",
+      "minWidth": 600
+    },
+    {
+      "padding": 24,
+      "colorOpacity": 0.95,
+      "backgroundOpacity": 0.9,
+      "background": "#ffffff",
+      "radius": 0,
+      "direction": "vertical",
+      "columns": 24,
+      "rows": 8,
+      "cellSize": 40,
+      "gap": 8,
+      "id": "desktop",
+      "name": "Desktop",
+      "minWidth": 1024
+    }
+  ],
+  "nodes": [
+    {
+      "padding": 4,
+      "fontFamily": "serif",
+      "id": "heading",
+      "kind": "text",
+      "name": "Heading",
+      "text": "# Grid on every screen",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 0,
+          "width": 10,
+          "height": 2
+        },
+        "desktop": {
+          "x": 0,
+          "y": 0,
+          "width": 14,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "backgroundOpacity": 0.8,
+      "borderOpacity": 0.5,
+      "borderColor": "#888888",
+      "borderWidth": 1,
+      "borderStyle": "solid",
+      "lineHeight": 1.4,
+      "id": "body",
+      "kind": "text",
+      "name": "Body",
+      "text": "Text with **strong**, *emphasis*, ~~strike~~, `code` and a [safe link](https://example.com/docs).\n\n- First item\n- Second item\n  - Nested item\n\n1. One\n2. Two\n\n| Plan | Seats |\n| --- | --- |\n| Alpha | 3 |\n\n[unsafe](javascript:alert(1)) <b>escaped</b>",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 8
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 2,
+          "width": 10,
+          "height": 7
+        },
+        "desktop": {
+          "x": 0,
+          "y": 2,
+          "width": 14,
+          "height": 6
+        }
+      },
+      "color": "transparent",
+      "background": "#ffffff",
+      "fontSize": 14,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "dropcap": true,
+      "lineHeight": 1.3,
+      "id": "dropcap",
+      "kind": "text",
+      "name": "Drop cap",
+      "text": "Once the page is published, every client reads the same snapshot. Native renderers place the same nodes at the same cells, so a layout authored once looks intentional on phones and tablets alike.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 10,
+        "width": 12,
+        "height": 5
+      },
+      "frames": {
+        "tablet": {
+          "x": 10,
+          "y": 0,
+          "width": 6,
+          "height": 9
+        },
+        "desktop": {
+          "x": 14,
+          "y": 0,
+          "width": 10,
+          "height": 6
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 15,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "colorOpacity": 0.9,
+      "fitToBox": true,
+      "fontFamily": "mono",
+      "verticalAlign": "middle",
+      "id": "fit",
+      "kind": "text",
+      "name": "Fitted",
+      "text": "Fit to box",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 15,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 9,
+          "width": 6,
+          "height": 2
+        },
+        "desktop": {
+          "x": 0,
+          "y": 8,
+          "width": 6,
+          "height": 2
+        }
+      },
+      "color": "#ffffff",
+      "background": "#2f5d50",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "center",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "borderColor": "#2f5d50",
+      "borderWidth": 2,
+      "borderStyle": "dashed",
+      "verticalAlign": "bottom",
+      "id": "aligned",
+      "kind": "text",
+      "name": "Right aligned",
+      "text": "Bottom right\nwith a line break",
+      "assetId": null,
+      "frame": {
+        "x": 6,
+        "y": 15,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 6,
+          "y": 9,
+          "width": 6,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 13,
+      "radius": 8,
+      "align": "right",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#1d1d1f",
+      "strokeWidth": 3,
+      "strokeStyle": "dashed",
+      "id": "rect",
+      "kind": "shape",
+      "name": "rectangle",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 17,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 6,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#e4572e",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 12,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "colorOpacity": 0.6,
+      "id": "ellipse",
+      "kind": "shape",
+      "name": "ellipse",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 3,
+        "y": 17,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 2,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 8,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#17bebb",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "ellipse",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#1d1d1f",
+      "strokeWidth": 2,
+      "id": "circle",
+      "kind": "shape",
+      "name": "circle",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 6,
+        "y": 17,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 4,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 10,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#ffc914",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "circle",
+      "hidden": false
+    },
+    {
+      "id": "triangle",
+      "kind": "shape",
+      "name": "triangle",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 9,
+        "y": 17,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 6,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 12,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#76b041",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "triangle",
+      "hidden": false
+    },
+    {
+      "rotation": 15,
+      "id": "star",
+      "kind": "shape",
+      "name": "star",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 20,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 8,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 14,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#e4572e",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "star",
+      "hidden": false
+    },
+    {
+      "opacity": 0.7,
+      "polygonSides": 7,
+      "id": "polygon",
+      "kind": "shape",
+      "name": "polygon",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 3,
+        "y": 20,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 10,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 16,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#2e282a",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "polygon",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#2e282a",
+      "strokeWidth": 3,
+      "id": "line",
+      "kind": "shape",
+      "name": "line",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 6,
+        "y": 20,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 12,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 18,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "line",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#e4572e",
+      "strokeWidth": 4,
+      "strokeStyle": "dashed",
+      "id": "arrow",
+      "kind": "shape",
+      "name": "arrow",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 9,
+        "y": 20,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 14,
+          "y": 11,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 20,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "arrow",
+      "hidden": false
+    },
+    {
+      "padding": 4,
+      "iconName": "text-bold",
+      "id": "icon",
+      "kind": "shape",
+      "name": "icon",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 23,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 13,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 22,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#2f5d50",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "icon",
+      "hidden": false
+    },
+    {
+      "strokeOpacity": 0.6,
+      "strokeColor": "#2e282a",
+      "strokeWidth": 2,
+      "strokeStyle": "dotted",
+      "id": "hexagon",
+      "kind": "shape",
+      "name": "hexagon",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 3,
+        "y": 23,
+        "width": 3,
+        "height": 3
+      },
+      "frames": {
+        "tablet": {
+          "x": 2,
+          "y": 13,
+          "width": 2,
+          "height": 2
+        },
+        "desktop": {
+          "x": 24,
+          "y": 8,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#9d75cb",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "hexagon",
+      "hidden": false
+    },
+    {
+      "strokeColor": "#1d1d1f",
+      "strokeWidth": 2,
+      "separatorStyle": "full",
+      "id": "rule-full",
+      "kind": "separator",
+      "name": "Full rule",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 26,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 15,
+          "width": 16,
+          "height": 1
+        },
+        "desktop": {
+          "x": 0,
+          "y": 10,
+          "width": 24,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "strokeOpacity": 0.5,
+      "strokeColor": "transparent",
+      "strokeWidth": 1,
+      "separatorStyle": "centered",
+      "id": "rule-centered",
+      "kind": "separator",
+      "name": "Centered rule",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 27,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 16,
+          "width": 16,
+          "height": 1
+        },
+        "desktop": {
+          "x": 0,
+          "y": 11,
+          "width": 24,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "strokeColor": "transparent",
+      "strokeWidth": 1,
+      "separatorStyle": "empty",
+      "id": "spacer",
+      "kind": "separator",
+      "name": "Spacer",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 28,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "image-empty",
+      "kind": "image",
+      "name": "Team photo",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 29,
+        "width": 6,
+        "height": 4
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 17,
+          "width": 8,
+          "height": 5
+        },
+        "desktop": {
+          "x": 0,
+          "y": 12,
+          "width": 8,
+          "height": 5
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 16,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "url": "https://www.youtube.com/watch?v=dQw4w9WgXcQ",
+      "id": "embed",
+      "kind": "embed",
+      "name": "Product video",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 6,
+        "y": 29,
+        "width": 6,
+        "height": 4
+      },
+      "frames": {
+        "tablet": {
+          "x": 8,
+          "y": 17,
+          "width": 8,
+          "height": 5
+        },
+        "desktop": {
+          "x": 8,
+          "y": 12,
+          "width": 8,
+          "height": 5
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "custom-known",
+      "kind": "custom",
+      "name": "Callout",
+      "frame": {
+        "x": 0,
+        "y": 33,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 0,
+          "y": 22,
+          "width": 8,
+          "height": 2
+        },
+        "desktop": {
+          "x": 16,
+          "y": 12,
+          "width": 8,
+          "height": 2
+        }
+      },
+      "hidden": false,
+      "opacity": 1,
+      "nodeKey": "callout",
+      "properties": [
+        {
+          "key": "text",
+          "value": "Registered host component"
+        }
+      ]
+    },
+    {
+      "id": "custom-unknown",
+      "kind": "custom",
+      "name": "Unknown",
+      "frame": {
+        "x": 6,
+        "y": 33,
+        "width": 6,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 8,
+          "y": 22,
+          "width": 8,
+          "height": 2
+        },
+        "desktop": {
+          "x": 16,
+          "y": 14,
+          "width": 8,
+          "height": 3
+        }
+      },
+      "hidden": false,
+      "opacity": 0.5,
+      "nodeKey": "pricing-table",
+      "properties": [
+        {
+          "key": "html",
+          "value": "<img src=x onerror=alert(1)>"
+        }
+      ]
+    },
+    {
+      "borderColor": "#e4572e",
+      "borderWidth": 2,
+      "borderStyle": "dotted",
+      "link": "https://example.com/docs",
+      "rotation": -4,
+      "id": "linked",
+      "kind": "shape",
+      "name": "Open the docs",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 2,
+        "y": 35,
+        "width": 8,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 4,
+          "y": 24,
+          "width": 8,
+          "height": 2
+        },
+        "desktop": {
+          "x": 8,
+          "y": 17,
+          "width": 8,
+          "height": 2
+        }
+      },
+      "color": "#2f5d50",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 24,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "verticalAlign": "middle",
+      "id": "overlay",
+      "kind": "text",
+      "name": "Overlay label",
+      "text": "**On top**",
+      "assetId": null,
+      "frame": {
+        "x": 2,
+        "y": 35,
+        "width": 8,
+        "height": 2
+      },
+      "frames": {
+        "tablet": {
+          "x": 4,
+          "y": 24,
+          "width": 8,
+          "height": 2
+        },
+        "desktop": {
+          "x": 8,
+          "y": 17,
+          "width": 8,
+          "height": 2
+        }
+      },
+      "color": "#ffffff",
+      "background": "transparent",
+      "fontSize": 16,
+      "radius": 8,
+      "align": "center",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "clamped",
+      "kind": "shape",
+      "name": "Clamped",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 40,
+        "y": 37,
+        "width": 30,
+        "height": 1
+      },
+      "frames": {},
+      "color": "#cccccc",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "hidden",
+      "kind": "text",
+      "name": "Hidden",
+      "text": "NOT VISIBLE",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 2
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": true
+    }
+  ],
+  "baseLayoutName": "Phone",
+  "baseLayoutIndex": 0
+}

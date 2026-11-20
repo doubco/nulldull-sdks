@@ -1,0 +1,214 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "previewWidth": 320,
+    "direction": "vertical",
+    "columns": 10,
+    "rows": 8,
+    "cellSize": 32,
+    "gap": 0
+  },
+  "breakpoints": [
+    {
+      "flowGap": 24,
+      "previewWidth": 640,
+      "direction": "vertical",
+      "columns": 20,
+      "rows": 8,
+      "cellSize": 32,
+      "gap": 0,
+      "id": "desktop",
+      "name": "Desktop",
+      "minWidth": 640
+    }
+  ],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "Heading",
+      "text": "# Heading\n\n[one]: <https://example.com>",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 10,
+        "height": 1
+      },
+      "frames": {
+        "desktop": {
+          "x": 0,
+          "y": 0,
+          "width": 20,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "A **bold** [reference][one].",
+      "text": "A **bold** [reference][one].\n\n[one]: <https://example.com>",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 10,
+        "height": 1
+      },
+      "frames": {
+        "desktop": {
+          "x": 0,
+          "y": 1,
+          "width": 20,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "- First - Nested - Last",
+      "text": "- First\n  - Nested\n- Last\n\n[one]: <https://example.com>",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 10,
+        "height": 1
+      },
+      "frames": {
+        "desktop": {
+          "x": 0,
+          "y": 2,
+          "width": 20,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "Quoted text",
+      "text": "> Quoted text\n\n[one]: <https://example.com>",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 10,
+        "height": 1
+      },
+      "frames": {
+        "desktop": {
+          "x": 0,
+          "y": 3,
+          "width": 20,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "const x = 1;",
+      "text": "```js\nconst x = 1;\n```\n\n[one]: <https://example.com>",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 10,
+        "height": 1
+      },
+      "frames": {
+        "desktop": {
+          "x": 0,
+          "y": 4,
+          "width": 20,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-5",
+      "kind": "text",
+      "name": "| A | B | | - | - | | One | Two |",
+      "text": "| A | B |\n| - | - |\n| One | Two |\n\n[one]: <https://example.com>",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 5,
+        "width": 10,
+        "height": 1
+      },
+      "frames": {
+        "desktop": {
+          "x": 0,
+          "y": 5,
+          "width": 20,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ],
+  "baseLayoutName": "Mobile"
+}

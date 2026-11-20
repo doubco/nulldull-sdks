@@ -1,0 +1,145 @@
+{
+  "layout": {
+    "padding": 10,
+    "direction": "horizontal",
+    "columns": 4,
+    "rows": 6,
+    "cellSize": 40,
+    "gap": 4,
+    "maxColumns": 30
+  },
+  "breakpoints": [
+    {
+      "direction": "vertical",
+      "columns": 16,
+      "rows": 8,
+      "cellSize": 48,
+      "gap": 0,
+      "id": "desktop",
+      "name": "Desktop",
+      "minWidth": 900
+    }
+  ],
+  "nodes": [
+    {
+      "id": "a",
+      "kind": "text",
+      "name": "Text",
+      "text": "Wide strip",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 8,
+        "height": 2
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "b",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 9,
+        "y": 1,
+        "width": 4,
+        "height": 4
+      },
+      "frames": {
+        "desktop": {
+          "x": 12,
+          "y": 0,
+          "width": 6,
+          "height": 3
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "ellipse",
+      "hidden": false
+    },
+    {
+      "id": "c",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 14,
+        "y": 3,
+        "width": 3,
+        "height": 9
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "d",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 40,
+        "y": 0,
+        "width": 5,
+        "height": 2
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "star",
+      "hidden": false
+    },
+    {
+      "strokeColor": "transparent",
+      "strokeWidth": 1,
+      "separatorStyle": "empty",
+      "id": "hidden",
+      "kind": "separator",
+      "name": "Separator",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 50,
+        "y": 0,
+        "width": 4,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": true
+    }
+  ]
+}

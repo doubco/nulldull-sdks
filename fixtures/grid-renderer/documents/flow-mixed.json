@@ -1,0 +1,207 @@
+{
+  "layout": {
+    "flowGap": 16,
+    "padding": 20,
+    "direction": "vertical",
+    "columns": 8,
+    "rows": 8,
+    "cellSize": 56,
+    "gap": 8
+  },
+  "breakpoints": [
+    {
+      "flowGap": 32,
+      "padding": 32,
+      "direction": "vertical",
+      "columns": 16,
+      "rows": 8,
+      "cellSize": 40,
+      "gap": 4,
+      "id": "desktop",
+      "name": "Desktop",
+      "minWidth": 760
+    }
+  ],
+  "nodes": [
+    {
+      "padding": 4,
+      "lineHeight": 1.5,
+      "id": "intro",
+      "kind": "text",
+      "name": "Text",
+      "text": "## Content flow\n\nText nodes take their intrinsic height; everything else keeps the frame height.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 8,
+        "height": 1
+      },
+      "frames": {
+        "desktop": {
+          "x": 2,
+          "y": 0,
+          "width": 12,
+          "height": 1
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "photo",
+      "kind": "image",
+      "name": "Image",
+      "text": "",
+      "assetId": "photo",
+      "frame": {
+        "x": 1,
+        "y": 9,
+        "width": 6,
+        "height": 3
+      },
+      "frames": {
+        "desktop": {
+          "x": 0,
+          "y": 1,
+          "width": 16,
+          "height": 6
+        }
+      },
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "gone",
+      "kind": "text",
+      "name": "Text",
+      "text": "Hidden flowing nodes add no spacing.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 3,
+        "height": 2
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": true
+    },
+    {
+      "strokeColor": "transparent",
+      "strokeWidth": 1,
+      "separatorStyle": "centered",
+      "id": "rule",
+      "kind": "separator",
+      "name": "Separator",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 8,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "narrow",
+      "kind": "text",
+      "name": "Text",
+      "text": "A narrow column of text that wraps a lot more than the rest of the page does.",
+      "assetId": null,
+      "frame": {
+        "x": 4,
+        "y": 3,
+        "width": 4,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 16,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "sidebar",
+      "kind": "custom",
+      "name": "Custom",
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 8,
+        "height": 2
+      },
+      "frames": {},
+      "hidden": false,
+      "opacity": 0.5,
+      "nodeKey": "newsletter",
+      "properties": [
+        {
+          "key": "list",
+          "value": "weekly"
+        }
+      ]
+    },
+    {
+      "ignoreFlow": true,
+      "id": "badge",
+      "kind": "shape",
+      "name": "Shape",
+      "text": "",
+      "assetId": null,
+      "frame": {
+        "x": 6,
+        "y": 18,
+        "width": 2,
+        "height": 2
+      },
+      "frames": {
+        "desktop": {
+          "x": 14,
+          "y": 2,
+          "width": 2,
+          "height": 2
+        }
+      },
+      "color": "#d94f30",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "star",
+      "hidden": false
+    }
+  ]
+}

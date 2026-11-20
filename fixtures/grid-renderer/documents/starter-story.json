@@ -1,0 +1,74 @@
+{
+  "layout": {
+    "previewWidth": 320,
+    "direction": "vertical",
+    "columns": 10,
+    "rows": 8,
+    "cellSize": 32,
+    "gap": 0,
+    "maxRows": 100,
+    "maxColumns": 100
+  },
+  "breakpoints": [
+    {
+      "previewWidth": 640,
+      "direction": "vertical",
+      "columns": 20,
+      "rows": 8,
+      "cellSize": 32,
+      "gap": 0,
+      "maxRows": 100,
+      "maxColumns": 100,
+      "id": "desktop",
+      "name": "Desktop",
+      "minWidth": 640
+    }
+  ],
+  "nodes": [
+    {
+      "id": "heading",
+      "kind": "text",
+      "name": "Text",
+      "text": "A story worth sharing",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 10,
+        "height": 3
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 40,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "id": "body",
+      "kind": "text",
+      "name": "Text",
+      "text": "Start with a thought. Add your images from Grid Assets.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 7,
+        "height": 4
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 24,
+      "radius": 8,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ],
+  "baseLayoutName": "Mobile"
+}
