@@ -56,6 +56,30 @@ final class WidthTests: XCTestCase {
     XCTAssertEqual(try XCTUnwrap(renderer.cgImage).width, 390)
   }
 
+  /// The README usage (no `width:`, in a vertical `ScrollView`) resized wide, then narrower than
+  /// `initialWidth`: after each resize the canvas lays out at the new width, so its height matches
+  /// the same document rendered with an explicit `width:`.
+  func testDefaultUsageShrinksAfterGrowingWithExplicitWidthHeights() throws {
+    let document = try document()
+    func explicitHeight(_ width: CGFloat) -> CGFloat {
+      fittingSize(GridView(document: document, width: width).fixedSize(horizontal: false, vertical: true), width: width).height
+    }
+    var heights: [CGFloat] = []
+    let host = Host(
+      ScrollView {
+        GridView(document: document)
+          .onGeometryChange(for: CGFloat.self) { $0.size.height } action: { heights.append($0) }
+      })
+    // The fixture's height depends on the width (breakpoint and text wrapping), so a stale canvas
+    // laid out at the previous width would show a different height.
+    XCTAssertGreaterThan(abs(explicitHeight(260) - explicitHeight(718)), 0.5)
+    XCTAssertGreaterThan(abs(explicitHeight(260) - explicitHeight(390)), 0.5)
+    for width in [718, 390, 300, 260, 718, 260] as [CGFloat] {
+      host.layout(width: width)
+      XCTAssertEqual(heights.last ?? 0, explicitHeight(width), accuracy: 0.5, "after resizing to \(width): \(heights)")
+    }
+  }
+
   func fittingSize<V: View>(_ view: V, width: CGFloat) -> CGSize {
     let fit = CGSize(width: width, height: .infinity)
     #if canImport(AppKit)
