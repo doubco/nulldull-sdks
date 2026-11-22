@@ -3,6 +3,7 @@ package com.nulldull.grid.compose
 import android.net.Uri
 import android.view.View
 import android.view.ViewGroup
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceRequest
 import android.webkit.WebView
 import androidx.activity.ComponentActivity
@@ -173,6 +174,20 @@ class GridEmbedLoadingTest {
             compose.onNodeWithText("YouTube").assertDoesNotExist()
             assertEquals(0, webViews().size, "\$mode")
         }
+    }
+
+    @Test
+    fun aLostRendererRemovesThePlayerInsteadOfKillingTheApp() {
+        compose.setContent { GridRenderer(document = fixture("kitchen-sink"), width = 390.dp) }
+        compose.waitForIdle()
+        val web = webViews().single()
+        val detail = object : RenderProcessGoneDetail() {
+            override fun didCrash() = true
+            override fun rendererPriorityAtExit() = 0
+        }
+        assertTrue(shadowOf(web).webViewClient.onRenderProcessGone(web, detail), "handled, so the system keeps the app")
+        compose.waitForIdle()
+        assertEquals(0, webViews().size)
     }
 
     /** Layout, settings and navigation shared by both modes. */

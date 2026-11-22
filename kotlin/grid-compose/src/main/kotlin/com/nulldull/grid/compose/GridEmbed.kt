@@ -3,6 +3,7 @@ package com.nulldull.grid.compose
 import android.annotation.SuppressLint
 import android.view.ViewGroup
 import android.webkit.CookieManager
+import android.webkit.RenderProcessGoneDetail
 import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
@@ -212,6 +213,16 @@ private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Play
                         // The top-level page is the local frame page; navigating it means leaving the player.
                         if (!request.isForMainFrame) return false
                         GridUrl.safe(request.url.toString())?.let(openUrl)
+                        return true
+                    }
+
+                    /**
+                     * The WebView renderer crashed or the system reclaimed it (API 26+). Unhandled, this kills the
+                     * host app. The WebView cannot be used again: remove and destroy it, leaving the node empty.
+                     */
+                    override fun onRenderProcessGone(view: WebView, detail: RenderProcessGoneDetail): Boolean {
+                        (view.parent as? ViewGroup)?.removeView(view)
+                        view.destroy()
                         return true
                     }
                 }
