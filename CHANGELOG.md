@@ -24,6 +24,7 @@ Grid renderers, still alpha: Swift tag `0.3.0` (`NullDullGrid`, `NullDullGridUI`
 - The built-in YouTube player plays again instead of showing "Error 153", and Vimeo uses the same framed page. Embeds play inline in a WebView with no JavaScript bridge, no file or content access and no third-party cookies; links tapped in the player go to `onOpenUrl`.
 - New: `GridEmbedLoading` (`Immediate`, the default, and `Tap`) and the `embedLoading` parameter of `GridRenderer` and `PublishedGridPage`.
 - Fixed: if the WebView renderer crashed or was reclaimed by the system, the app showing the page was killed. The embed is now removed instead.
+- Fixed: in tap mode, rotating the device (or any other activity recreation) put a playing embed back to its poster, so the viewer had to tap again. The tap is now saved with the embed's URL and name: after recreation the player loads again and starts from the beginning, because the WebView is new and the playback position is not kept. When the document changes an embed's URL or name, the old player and tap are discarded in both modes, as in the Swift renderer (before, Kotlin ignored a name change).
 - Fixed (`nulldull-grid-core`): `GridUrl.embed` accepts only ASCII YouTube IDs and Vimeo numbers, as the TypeScript and Swift rules do. On Android, non-ASCII letters or digits could pass.
 - `nulldull-grid-core` has no API changes; it is released at `0.2.0` because both Grid artifacts share one version.
 

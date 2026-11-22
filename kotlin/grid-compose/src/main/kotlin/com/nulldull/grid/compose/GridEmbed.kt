@@ -22,6 +22,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.saveable.rememberSaveable
 import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -136,13 +137,22 @@ internal fun GridEmbedContent(
         else GridPlaceholder(node.url?.takeIf { it.isNotEmpty() } ?: node.name, color)
         return
     }
-    var tapped by remember(player, loading) { mutableStateOf(false) }
+    // The player is built from the URL and name (the frame page's title), as in the Swift renderer:
+    // when the document changes either under the same node id, the old player and tap are discarded.
+    val identity = embedIdentity(node)
+    // The tap is saved, so it survives activity recreation (a rotation) and a lazy list item that
+    // scrolls away and back; the restored player is a new WebView that starts again from the
+    // beginning. It records what was tapped, so a restored tap never applies to another video.
+    var tappedFor by rememberSaveable(node.url, node.name, loading) { mutableStateOf<ArrayList<String?>?>(null) }
     when {
-        loading == GridEmbedLoading.Immediate -> key(player, false) { GridEmbedWebView(node, player, autoplay = false, openUrl) }
-        tapped -> key(player, true) { GridEmbedWebView(node, player, autoplay = true, openUrl) }
-        else -> GridEmbedPoster(node, player, color, messages) { tapped = true }
+        loading == GridEmbedLoading.Immediate -> key(identity, false) { GridEmbedWebView(node, player, autoplay = false, openUrl) }
+        tappedFor == identity -> key(identity, true) { GridEmbedWebView(node, player, autoplay = true, openUrl) }
+        else -> GridEmbedPoster(node, player, color, messages) { tappedFor = identity }
     }
 }
+
+/** What the built-in player is built from (an `ArrayList`, so it can be saved in a `Bundle`). */
+private fun embedIdentity(node: GridBuiltinNode): ArrayList<String?> = arrayListOf(node.url, node.name)
 
 /** Local poster with a play affordance; makes no network request. */
 @Composable

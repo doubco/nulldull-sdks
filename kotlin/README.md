@@ -238,7 +238,7 @@ For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`
 - TalkBack descriptions, system font scale for flowing text, and light and dark themes (`GridTheme`) are supported. Video and audio never autoplay. Each node has the test tag `grid:<node id>`.
 - Restricted embeds (YouTube on `youtube-nocookie.com`, and Vimeo) play inline, in a WebView inside the node. The `embedLoading` parameter of `GridRenderer` and `PublishedGridPage` sets when the player loads:
   - `GridEmbedLoading.Immediate` (the default) loads the player as soon as the embed is composed, without a tap. This means a request to YouTube or Vimeo happens as soon as the embed is shown. `GridRenderer` composes every node of the page, so this includes embeds further down a long page that the viewer has not scrolled to yet. The video does not autoplay: the viewer starts it with the player's own play button.
-  - `GridEmbedLoading.Tap` shows a local poster with the node name, the provider and a play button, and makes no request to the provider until the viewer taps it. The tap loads the player and starts the video.
+  - `GridEmbedLoading.Tap` shows a local poster with the node name, the provider and a play button, and makes no request to the provider until the viewer taps it. The tap loads the player and starts the video. The tap is kept in saved state, so after a rotation, or when a lazy list scrolls the page away and back, the player loads and starts again from the beginning instead of showing the poster.
 
   ```kotlin
   PublishedGridPage(page = page, embedLoading = GridEmbedLoading.Tap)
