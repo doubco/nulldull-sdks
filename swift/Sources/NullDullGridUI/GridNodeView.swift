@@ -85,7 +85,7 @@ struct GridNodeView: View {
     case .shape:
       GridShapeView(node: node, foreground: color, assetURL: node.assetId.flatMap(asset), messages: messages, size: size)
     case .embed:
-      if let embed { embed(node) } else { GridEmbedCard(node: node, messages: messages) }
+      if let embed { embed(node) } else { GridEmbedContent(node: node, messages: messages) }
     case .image, .video, .audio:
       if let id = node.assetId, let url = asset(id) {
         switch node.kind {

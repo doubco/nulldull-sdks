@@ -205,7 +205,7 @@ The same package also has two products that render Grid documents natively. They
 | Product | Contents | Frameworks | Platforms |
 | --- | --- | --- | --- |
 | `NullDullGrid` | Document model and validation, layout engine, public content client, static SVG support | Foundation | Same as `NullDull` |
-| `NullDullGridUI` | SwiftUI renderer | SwiftUI, AVKit, Core Text | iOS 16, macOS 13, tvOS 16, visionOS 1; not watchOS |
+| `NullDullGridUI` | SwiftUI renderer | SwiftUI, AVKit, Core Text, WebKit (not on tvOS) | iOS 16, macOS 13, tvOS 16, visionOS 1; not watchOS |
 
 Building the Grid products needs Xcode 16 or later (Swift 6 toolchain). The `NullDull` product still builds with Swift 5.9.
 
@@ -243,12 +243,22 @@ struct ArticleView: View {
 }
 ```
 
-For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument(json:)` and render them with `GridView(document:resolveAsset:)`. `GridView` picks the breakpoint from its width: without `width:` it takes the width its container proposes and follows it as it changes (rotation, window resizing), starting from `initialWidth` (390) until the first layout; pass `width:` when you already know it. `theme:`, `customNodes:` (a `GridCustomNodeRegistry`), `messages:` and `label:` customize it.
+For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument(json:)` and render them with `GridView(document:resolveAsset:)`. `GridView` picks the breakpoint from its width: without `width:` it takes the width its container proposes and follows it as it changes (rotation, window resizing), starting from `initialWidth` (390) until the first layout; pass `width:` when you already know it. `theme:`, `customNodes:` (a `GridCustomNodeRegistry`), `embed:`, `embedLoading:`, `messages:` and `label:` customize it.
 
 - `NullDull` and `NullDullGrid` both declare `GridDocument` and `JSONValue`. In a file that imports both modules, qualify the name (`NullDullGrid.GridDocument`).
 - The client follows the same key rules as the SDK: only public `nd_pub_` keys belong in apps (iOS, tvOS and visionOS reject `nd_sec_` keys), a key is added as `key=` only to asset URLs on the API's own origin, and redirects are refused.
 - Links and assets must be credential-free `http`/`https` URLs. Markdown HTML is shown as text. Custom node properties are inert strings, and only views registered in `GridCustomNodeRegistry` run. Uploaded SVG files pass a static allowlist and are drawn natively; nothing in them is executed or fetched.
-- VoiceOver labels, Dynamic Type for flowing text, and light and dark appearance are supported. Video and audio never autoplay, and restricted embeds (YouTube, Vimeo) show a card until tapped unless you pass `embed:`.
+- VoiceOver labels, Dynamic Type for flowing text, and light and dark appearance are supported. Video and audio never autoplay.
+- Restricted embeds (YouTube on `youtube-nocookie.com`, and Vimeo) play inline in a `WKWebView`. `embedLoading:` on `GridView` and `PublishedGridPageView` chooses when the player loads:
+  - `.immediate` (the default): the player loads as soon as the embed appears, without a tap, so the app contacts YouTube or Vimeo when the page is shown. The video starts only when the viewer presses the player's play button.
+  - `.tap`: a local poster with the node name, the provider and a play button is shown first, and no request is made to YouTube or Vimeo until the viewer taps it. The tap loads the player and starts the video.
+
+  ```swift
+  GridView(document: document, resolveAsset: resolve, embedLoading: .tap)
+  ```
+
+  The web view runs JavaScript for the player only, with no script message handlers, file access or persistent website data, and plays inline. Links that leave the player (the title, the YouTube logo) go through the environment's `openURL`, so you can intercept them. YouTube requires embedders to identify themselves with an HTTP `Referer` (without one it shows "Error 153"), so the player is framed in a local page whose origin is your app's bundle identifier, lowercased, for example `https://com.example.app/`, as [YouTube documents for apps](https://developers.google.com/youtube/terms/required-minimum-functionality#embedded-player-api-client-identity). YouTube and Vimeo therefore receive your bundle identifier. You need no setup for this. Pass `embed:` to replace the built-in player entirely, for example to wait for consent; `embedLoading:` is then ignored.
+- tvOS has no web view, so there an embed shows a card that opens the video on YouTube or Vimeo through `openURL` (label: `GridMessages.openEmbed`), in both loading modes.
 
 Known differences from the web renderer: groove and ridge borders draw solid; Markdown footnotes show as literal text; `justify` alignment renders left-aligned; code blocks are clipped instead of scrolling; `cover` video plays as `contain`; SVG gradients, clip paths, masks and percentage lengths show a "Preview unavailable" fallback.
 

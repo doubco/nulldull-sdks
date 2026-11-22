@@ -28,16 +28,20 @@ public struct GridMessages: Sendable {
   public var unavailable: String
   public var download: String
   public var chooseAsset: String
-  /// Label of the built-in embed card, e.g. "Play on YouTube". `%@` is the provider name.
+  /// Label of the tvOS embed card, which opens the video on the provider, e.g. "Open on YouTube".
+  /// `%@` is the provider name.
   public var openEmbed: String
+  /// Accessibility label prefix of the embed poster's play button in `.tap` loading, followed by the node name.
+  public var play: String
   public init(
     unavailable: String = "Preview unavailable.", download: String = "Download original",
-    chooseAsset: String = "No asset selected", openEmbed: String = "Open on %@"
+    chooseAsset: String = "No asset selected", openEmbed: String = "Open on %@", play: String = "Play"
   ) {
     self.unavailable = unavailable
     self.download = download
     self.chooseAsset = chooseAsset
     self.openEmbed = openEmbed
+    self.play = play
   }
 }
 

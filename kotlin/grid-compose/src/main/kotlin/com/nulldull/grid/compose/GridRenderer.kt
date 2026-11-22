@@ -56,11 +56,14 @@ import kotlin.math.roundToInt
  *   Never put a private API key in these URLs.
  * @param customNodes trusted host components by `nodeKey`. Stored custom properties are inert data.
  * @param renderUnknownNode replaces the inert placeholder for unregistered keys.
- * @param renderEmbed replaces the built-in YouTube/Vimeo player, e.g. to gate it behind consent. The
- *   built-in player shows a local poster and contacts the provider only after the viewer taps it.
+ * @param renderEmbed replaces the built-in YouTube/Vimeo player, e.g. to gate it behind consent. It
+ *   takes precedence over [embedLoading].
  * @param renderVideo replaces the built-in video player.
  * @param renderAudio replaces the built-in audio control.
  * @param layout with [breakpointId], forces a layout instead of width-based selection.
+ * @param embedLoading when the built-in YouTube/Vimeo player loads. [GridEmbedLoading.Immediate]
+ *   (default) loads it as soon as the embed is composed, which contacts the provider without a tap;
+ *   [GridEmbedLoading.Tap] shows a local poster and loads the player only after the viewer taps it.
  * @param onOpenUrl opens safe http(s) links; defaults to the platform URI handler.
  */
 @Composable
@@ -80,6 +83,7 @@ public fun GridRenderer(
     messages: GridMessages = GridMessages(),
     options: GridRenderOptions = GridRenderOptions(),
     label: String? = null,
+    embedLoading: GridEmbedLoading = GridEmbedLoading.Immediate,
     onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val uriHandler = LocalUriHandler.current
@@ -125,7 +129,7 @@ public fun GridRenderer(
                                     node = node, index = index, contentSized = contentSized, foreground = foreground, theme = theme,
                                     messages = messages, asset = asset, fontUrls = fontUrls, openUrl = openUrl, customNodes = customNodes,
                                     renderUnknownNode = renderUnknownNode, renderEmbed = renderEmbed, renderVideo = renderVideo,
-                                    renderAudio = renderAudio,
+                                    renderAudio = renderAudio, embedLoading = embedLoading,
                                 )
                             }
                         }
@@ -166,7 +170,10 @@ public fun GridRenderer(
     }
 }
 
-/** Renders a page from [com.nulldull.grid.client.GridClient.getPage], resolving assets from its pinned manifest. */
+/**
+ * Renders a page from [com.nulldull.grid.client.GridClient.getPage], resolving assets from its pinned manifest.
+ * The parameters behave as in [GridRenderer].
+ */
 @Composable
 public fun PublishedGridPage(
     page: PublicGridPage,
@@ -178,13 +185,14 @@ public fun PublishedGridPage(
     messages: GridMessages = GridMessages(),
     options: GridRenderOptions = GridRenderOptions(),
     label: String? = page.title,
+    embedLoading: GridEmbedLoading = GridEmbedLoading.Immediate,
     onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val assets = remember(page) { page.assets.associate { it.id to it.url } }
     GridRenderer(
         document = page.document, modifier = modifier, resolveAsset = { assets[it] }, customNodes = customNodes,
         renderUnknownNode = renderUnknownNode, renderEmbed = renderEmbed, theme = theme, messages = messages,
-        options = options, label = label, onOpenUrl = onOpenUrl,
+        options = options, label = label, embedLoading = embedLoading, onOpenUrl = onOpenUrl,
     )
 }
 
@@ -204,6 +212,7 @@ private fun GridNodeView(
     renderEmbed: (@Composable (GridBuiltinNode) -> Unit)?,
     renderVideo: (@Composable (GridBuiltinNode, String) -> Unit)?,
     renderAudio: (@Composable (GridBuiltinNode, String) -> Unit)?,
+    embedLoading: GridEmbedLoading,
 ) {
     val builtin = node as? GridBuiltinNode
     val radius = (builtin?.radius ?: 0).dp
@@ -256,7 +265,7 @@ private fun GridNodeView(
                     GridSvgShape(builtin, asset(builtin.assetId), messages, color, openUrl)
                 builtin.kind == GridNodeKind.Shape -> GridShapeContent(builtin, foreground)
                 builtin.kind == GridNodeKind.Embed ->
-                    if (renderEmbed != null) renderEmbed(builtin) else GridEmbedContent(builtin, color, messages, openUrl)
+                    if (renderEmbed != null) renderEmbed(builtin) else GridEmbedContent(builtin, color, messages, embedLoading, openUrl)
                 else -> {
                     val url = asset(builtin.assetId)
                     when {

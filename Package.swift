@@ -9,6 +9,8 @@
 // `NullDullGridUI` declares them with `@available(iOS 16, macOS 13, tvOS 16, *)` instead of
 // raising them here. `NullDullGrid` builds at the package minimums. `NullDullGridUI` does not
 // support watchOS (it uses AVKit's player), and the Grid products need a Swift 6 toolchain.
+// `NullDullGridUI` plays YouTube and Vimeo embeds in a WebKit web view where WebKit exists
+// (iOS, macOS, visionOS); tvOS has no web view and keeps a card that opens the video.
 import PackageDescription
 
 /// Strict concurrency for every Swift target, so the code also builds in Swift 6 language mode.
@@ -55,7 +57,10 @@ let package = Package(
             dependencies: ["NullDullGrid"],
             path: "swift/Sources/NullDullGridUI",
             swiftSettings: strictConcurrency,
-            linkerSettings: [.linkedFramework("AVKit"), .linkedFramework("AVFoundation")]
+            linkerSettings: [
+                .linkedFramework("AVKit"), .linkedFramework("AVFoundation"),
+                .linkedFramework("WebKit", .when(platforms: [.iOS, .macOS, .visionOS])),
+            ]
         ),
         .testTarget(
             name: "NullDullGridTests",

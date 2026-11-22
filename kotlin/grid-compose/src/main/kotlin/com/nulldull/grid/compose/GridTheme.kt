@@ -61,6 +61,24 @@ public enum class GridFontScaling {
     Always,
 }
 
+/**
+ * When the built-in YouTube and Vimeo player loads ("embed loading"). In both modes the video
+ * plays inline, and `renderEmbed`, when passed, replaces the built-in player.
+ */
+public enum class GridEmbedLoading {
+    /**
+     * Default. The player loads as soon as the embed is composed, so the provider is contacted
+     * when the embed is shown, without a tap. The video does not autoplay: the viewer starts it
+     * with the player's own play button.
+     */
+    Immediate,
+    /**
+     * The embed shows a local poster (node name, provider and a play button) and makes no request
+     * to the provider until the viewer taps it. The tap loads the player and starts the video.
+     */
+    Tap,
+}
+
 /** Rendering options that are not part of the document. */
 @Immutable
 public data class GridRenderOptions(

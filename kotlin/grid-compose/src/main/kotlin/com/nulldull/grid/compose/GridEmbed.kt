@@ -18,6 +18,7 @@ import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicText
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.key
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
@@ -54,8 +55,10 @@ internal object GridEmbedPlayer {
 
     /** A resolved embed: the provider and the player URL the web renderer frames. */
     internal data class Player(val provider: Provider, val src: String) {
-        /** The player URL with `autoplay=1`: the player only exists after the viewer tapped play. */
+        /** The player URL with `autoplay=1`, used only when the viewer tapped the poster to load it. */
         val autoplaySrc: String get() = src + (if ('?' in src) "&" else "?") + "autoplay=1"
+
+        fun src(autoplay: Boolean): String = if (autoplay) autoplaySrc else src
     }
 
     fun resolve(url: String?): Player? {
@@ -75,8 +78,9 @@ internal object GridEmbedPlayer {
      * `allow-popups` and `allow-top-navigation-by-user-activation` so links the viewer taps in the
      * player (the title, the YouTube logo) reach the WebView client, which hands them to `openUrl`
      * instead of navigating. The referrer policy sends only the origin (the app identity).
+     * [autoplay] adds `autoplay=1`, for a player the viewer loaded by tapping the poster.
      */
-    fun html(player: Player, title: String): String = buildString {
+    fun html(player: Player, title: String, autoplay: Boolean): String = buildString {
         append("<!doctype html><html><head><meta charset=\"utf-8\">")
         append("<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">")
         append("<meta name=\"referrer\" content=\"strict-origin-when-cross-origin\">")
@@ -84,7 +88,7 @@ internal object GridEmbedPlayer {
         append("<link rel=\"icon\" href=\"data:,\">")
         append("<style>html,body{margin:0;padding:0;width:100%;height:100%;overflow:hidden;background:#000}")
         append("iframe{display:block;border:0;width:100%;height:100%}</style></head><body>")
-        append("<iframe src=\"").append(escape(player.autoplaySrc)).append("\" title=\"").append(escape(title)).append("\"")
+        append("<iframe src=\"").append(escape(player.src(autoplay))).append("\" title=\"").append(escape(title)).append("\"")
         append(" sandbox=\"allow-scripts allow-same-origin allow-presentation allow-popups allow-top-navigation-by-user-activation\"")
         append(" allow=\"autoplay; encrypted-media; fullscreen; picture-in-picture\"")
         append(" referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>")
@@ -104,12 +108,20 @@ internal object GridEmbedPlayer {
 }
 
 /**
- * Restricted embed. Nothing is requested from the provider until the viewer taps the local
- * poster; the tap then loads the player, which starts playing. Other URLs show a link or text.
- * Hosts that need consent gating replace this with `renderEmbed`.
+ * Restricted embed. With [GridEmbedLoading.Immediate] the player loads when the embed is composed
+ * and waits for the viewer to press its play button. With [GridEmbedLoading.Tap] nothing is
+ * requested from the provider until the viewer taps the local poster; the tap then loads the
+ * player, which starts playing. Other URLs show a link or text. Hosts that need consent gating
+ * replace this with `renderEmbed`.
  */
 @Composable
-internal fun GridEmbedContent(node: GridBuiltinNode, color: Color, messages: GridMessages, openUrl: (String) -> Unit) {
+internal fun GridEmbedContent(
+    node: GridBuiltinNode,
+    color: Color,
+    messages: GridMessages,
+    loading: GridEmbedLoading,
+    openUrl: (String) -> Unit,
+) {
     val player = remember(node.url) { GridEmbedPlayer.resolve(node.url) }
     if (player == null) {
         val href = GridUrl.safe(node.url)
@@ -117,9 +129,12 @@ internal fun GridEmbedContent(node: GridBuiltinNode, color: Color, messages: Gri
         else GridPlaceholder(node.url?.takeIf { it.isNotEmpty() } ?: node.name, color)
         return
     }
-    var activated by remember(player) { mutableStateOf(false) }
-    if (activated) GridEmbedWebView(node, player, openUrl)
-    else GridEmbedPoster(node, player, color, messages) { activated = true }
+    var tapped by remember(player, loading) { mutableStateOf(false) }
+    when {
+        loading == GridEmbedLoading.Immediate -> key(player, false) { GridEmbedWebView(node, player, autoplay = false, openUrl) }
+        tapped -> key(player, true) { GridEmbedWebView(node, player, autoplay = true, openUrl) }
+        else -> GridEmbedPoster(node, player, color, messages) { tapped = true }
+    }
 }
 
 /** Local poster with a play affordance; makes no network request. */
@@ -157,11 +172,12 @@ private fun Color.luminance(): Float = 0.2126f * red + 0.7152f * green + 0.0722f
 /**
  * The player in a WebView: JavaScript on (the players need it), no JavaScript bridge, no file or
  * content access, no third-party cookies, no extra windows, and every top-level navigation (a
- * link in the player) handed to `openUrl` instead of replacing the player.
+ * link in the player) handed to `openUrl` instead of replacing the player. [autoplay] is true only
+ * when the viewer's tap on the poster created this WebView.
  */
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
-private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Player, openUrl: (String) -> Unit) {
+private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Player, autoplay: Boolean, openUrl: (String) -> Unit) {
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -180,8 +196,9 @@ private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Play
                 settings.domStorageEnabled = true
                 settings.setSupportMultipleWindows(false)
                 settings.javaScriptCanOpenWindowsAutomatically = false
-                // The WebView is created by the viewer's tap on the poster, so playback may start at once.
-                settings.mediaPlaybackRequiresUserGesture = false
+                // After a tap on the poster playback may start at once; otherwise media waits for the
+                // viewer's press on the player's own play button.
+                settings.mediaPlaybackRequiresUserGesture = !autoplay
                 settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
                 CookieManager.getInstance().setAcceptThirdPartyCookies(this, false)
                 webViewClient = object : WebViewClient() {
@@ -194,7 +211,7 @@ private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Play
                 }
                 loadDataWithBaseURL(
                     GridEmbedPlayer.embedderOrigin(context.packageName),
-                    GridEmbedPlayer.html(player, node.name),
+                    GridEmbedPlayer.html(player, node.name, autoplay),
                     "text/html", "utf-8", null,
                 )
             }

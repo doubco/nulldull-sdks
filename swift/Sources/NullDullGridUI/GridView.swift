@@ -47,6 +47,7 @@ public struct GridView: View {
   let theme: GridTheme
   let customNodes: GridCustomNodeRegistry
   let embed: ((GridBuiltinNode) -> AnyView)?
+  let embedLoading: GridEmbedLoading
   let messages: GridMessages
   let label: String?
   let dynamicType: GridDynamicType
@@ -56,7 +57,9 @@ public struct GridView: View {
   /// - Parameters:
   ///   - resolveAsset: maps Grid asset IDs to absolute http(s) URLs. Other schemes are ignored.
   ///   - layout, breakpointId: render a specific layout instead of choosing one by width.
-  ///   - embed: replaces the built-in embed card, e.g. with a consent-aware inline player.
+  ///   - embed: replaces the built-in embed player, e.g. with one that waits for consent.
+  ///   - embedLoading: when the built-in YouTube and Vimeo player loads: `.immediate` (default) as soon
+  ///     as the embed appears, or `.tap` after the viewer taps a local poster. Ignored when `embed:` is set.
   public init(
     document: GridDocument,
     resolveAsset: @escaping (String) -> URL? = { _ in nil },
@@ -67,6 +70,7 @@ public struct GridView: View {
     theme: GridTheme = GridTheme(),
     customNodes: GridCustomNodeRegistry = GridCustomNodeRegistry(),
     embed: ((GridBuiltinNode) -> AnyView)? = nil,
+    embedLoading: GridEmbedLoading = .immediate,
     messages: GridMessages = GridMessages(),
     label: String? = nil,
     dynamicType: GridDynamicType = .contentFlowText
@@ -79,6 +83,7 @@ public struct GridView: View {
     self.theme = theme
     self.customNodes = customNodes
     self.embed = embed
+    self.embedLoading = embedLoading
     self.messages = messages
     self.label = label
     self.dynamicType = dynamicType
@@ -97,6 +102,7 @@ public struct GridView: View {
       }
     }
     .environmentObject(store)
+    .environment(\.gridEmbedLoading, embedLoading)
     .accessibilityElement(children: .contain)
     .accessibilityLabel(label.map { Text($0) } ?? Text(""))
   }
@@ -140,12 +146,14 @@ public struct PublishedGridPageView: View {
   public init(
     page: PublicGridPage, width: CGFloat? = nil, initialWidth: CGFloat = 390, theme: GridTheme = GridTheme(),
     customNodes: GridCustomNodeRegistry = GridCustomNodeRegistry(), embed: ((GridBuiltinNode) -> AnyView)? = nil,
-    messages: GridMessages = GridMessages(), dynamicType: GridDynamicType = .contentFlowText
+    embedLoading: GridEmbedLoading = .immediate, messages: GridMessages = GridMessages(),
+    dynamicType: GridDynamicType = .contentFlowText
   ) {
     let assets = page.assetURLs
     content = GridView(
       document: page.document, resolveAsset: { assets[$0].flatMap(URL.init(string:)) }, width: width,
-      initialWidth: initialWidth, theme: theme, customNodes: customNodes, embed: embed, messages: messages,
+      initialWidth: initialWidth, theme: theme, customNodes: customNodes, embed: embed, embedLoading: embedLoading,
+      messages: messages,
       label: page.title, dynamicType: dynamicType)
   }
 

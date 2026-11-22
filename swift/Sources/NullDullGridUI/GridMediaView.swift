@@ -108,40 +108,6 @@ struct GridAudioView: View {
   }
 }
 
-/// Default embed rendering: no third-party request until the viewer chooses to open the video.
-/// Supply `embed:` on `GridView` to show a consent-aware inline player instead.
-@available(iOS 16, macOS 13, tvOS 16, *)
-struct GridEmbedCard: View {
-  let node: GridBuiltinNode
-  let messages: GridMessages
-
-  var body: some View {
-    if let embed = GridEmbed(node.url), let url = URL(string: embed.pageURL) {
-      let provider = embed.provider == .youtube ? "YouTube" : "Vimeo"
-      GridLinkButton(url: url) {
-        VStack(spacing: 8) {
-          Image(systemName: "play.rectangle.fill").font(.system(size: 28))
-          Text(node.name).font(.system(size: 13, weight: .semibold)).lineLimit(2)
-          Text(String(format: messages.openEmbed, provider)).font(.system(size: 12, weight: .medium)).opacity(0.7)
-        }
-        .multilineTextAlignment(.center)
-        .padding(8)
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-        .background(Color.primary.opacity(0.06))
-        .contentShape(Rectangle())
-      }
-      .accessibilityLabel(Text(node.name))
-      .accessibilityHint(Text(String(format: messages.openEmbed, provider)))
-    } else if let href = GridURL.safeHref(node.url), let url = URL(string: href) {
-      GridLinkButton(url: url) { Text(node.name).underline() }
-        .font(.system(size: 12, weight: .medium))
-        .frame(maxWidth: .infinity, maxHeight: .infinity)
-    } else {
-      GridPlaceholder(text: (node.url?.isEmpty == false ? node.url : nil) ?? node.name)
-    }
-  }
-}
-
 /// Opens a safe http(s) URL through the environment's `openURL`, so hosts can intercept it.
 /// A plain button (rather than `Link`) also renders in `ImageRenderer` snapshots.
 @available(iOS 16, macOS 13, tvOS 16, *)
