@@ -62,6 +62,11 @@ class GridEmbedPlayerTest {
         assertTrue("sandbox=\"allow-scripts allow-same-origin allow-presentation allow-popups allow-top-navigation-by-user-activation\"" in html, html)
         assertTrue("referrerpolicy=\"strict-origin-when-cross-origin\"" in html, html)
         assertFalse("<script" in html, html)
+        // The frame page runs no script of its own, even if markup ever reached it.
+        assertTrue(
+            "<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'\">" in html,
+            html,
+        )
         // Nothing may be fetched from the identity origin (it is not a server the app controls).
         assertTrue("<link rel=\"icon\" href=\"data:,\">" in html, html)
         assertEquals(1, Regex("<iframe").findAll(html).count())

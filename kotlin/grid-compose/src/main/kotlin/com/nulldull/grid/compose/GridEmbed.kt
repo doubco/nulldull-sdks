@@ -82,6 +82,9 @@ internal object GridEmbedPlayer {
      */
     fun html(player: Player, title: String, autoplay: Boolean): String = buildString {
         append("<!doctype html><html><head><meta charset=\"utf-8\">")
+        // The frame page itself never runs script: if markup ever got into it, nothing would execute.
+        // The policy does not reach the cross-origin player, which keeps its own.
+        append("<meta http-equiv=\"Content-Security-Policy\" content=\"").append(CONTENT_SECURITY_POLICY).append("\">")
         append("<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">")
         append("<meta name=\"referrer\" content=\"strict-origin-when-cross-origin\">")
         // The base URL is an identity, not a server: an inline icon stops the WebView requesting /favicon.ico from it.
@@ -94,6 +97,9 @@ internal object GridEmbedPlayer {
         append(" referrerpolicy=\"strict-origin-when-cross-origin\"></iframe>")
         append("</body></html>")
     }
+
+    /** The frame page's policy: no script, plugins, `<base>` or form submissions of its own. */
+    const val CONTENT_SECURITY_POLICY: String = "script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
 
     private fun escape(value: String): String = buildString {
         for (c in value) when (c) {

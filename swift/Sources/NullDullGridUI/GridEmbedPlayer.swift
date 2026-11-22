@@ -82,6 +82,9 @@ enum GridEmbedPlayer {
   /// (the app identity) to the provider.
   static func html(_ player: Player, title: String, autoplay: Bool) -> String {
     var html = "<!doctype html><html><head><meta charset=\"utf-8\">"
+    // The frame page itself never runs script: if markup ever got into it, nothing would execute.
+    // The policy does not reach the cross-origin player, which keeps its own.
+    html += "<meta http-equiv=\"Content-Security-Policy\" content=\"\(contentSecurityPolicy)\">"
     html += "<meta name=\"viewport\" content=\"width=device-width,initial-scale=1\">"
     html += "<meta name=\"referrer\" content=\"strict-origin-when-cross-origin\">"
     // The base URL is an identity, not a server: an inline icon stops a request for /favicon.ico.
@@ -95,6 +98,9 @@ enum GridEmbedPlayer {
     html += "</body></html>"
     return html
   }
+
+  /// The frame page's policy: no script, plugins, `<base>` or form submissions of its own.
+  static let contentSecurityPolicy = "script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'"
 
   /// Escapes text for an HTML attribute value. It works on Unicode scalars, as the HTML tokenizer
   /// does: iterating `Character`s would miss a quote followed by a combining mark (one grapheme

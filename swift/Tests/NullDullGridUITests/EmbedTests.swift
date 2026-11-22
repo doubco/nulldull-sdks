@@ -84,6 +84,11 @@ final class EmbedTests: XCTestCase {
     XCTAssertTrue(html.contains("allow=\"autoplay; encrypted-media; fullscreen; picture-in-picture\""), html)
     XCTAssertTrue(html.contains("referrerpolicy=\"strict-origin-when-cross-origin\""), html)
     XCTAssertFalse(html.contains("<script"), html)
+    // The frame page runs no script of its own, even if markup ever reached it.
+    XCTAssertTrue(
+      html.contains(
+        "<meta http-equiv=\"Content-Security-Policy\" content=\"script-src 'none'; object-src 'none'; base-uri 'none'; form-action 'none'\">"),
+      html)
     // Nothing may be fetched from the identity origin (it is not a server the app controls).
     XCTAssertTrue(html.contains("<link rel=\"icon\" href=\"data:,\">"), html)
     // The player fills the page, which fills the web view.
