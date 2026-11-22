@@ -200,7 +200,7 @@ You can also pass your own `URLSession` with `session:`; redirects are still ref
 
 The same package also has two products that render Grid documents natively. They are separate from the `NullDull` SDK product and do not depend on it.
 
-> **Alpha.** The Grid renderer products are in early access and their API may change in any `0.x` release. They were released in tag `0.2.0` on 20 November 2026.
+> **Alpha.** The Grid renderer products are in early access and their API may change in any `0.x` release. They were first released in tag `0.2.0` on 20 November 2026; the current release is tag `0.3.0` (22 November 2026).
 
 | Product | Contents | Frameworks | Platforms |
 | --- | --- | --- | --- |
@@ -211,7 +211,7 @@ Building the Grid products needs Xcode 16 or later (Swift 6 toolchain). The `Nul
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.2.0"),
+    .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.3.0"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: [

@@ -1,12 +1,31 @@
 # Changelog
 
-All NullDull SDKs share one version. This project follows [Semantic Versioning](https://semver.org); `0.x` releases may contain breaking changes in minor versions.
+All NullDull SDKs share one version, the repository's release tag; the Kotlin Grid renderer artifacts have their own version, given in each entry. This project follows [Semantic Versioning](https://semver.org); `0.x` releases may contain breaking changes in minor versions.
 
-## Unreleased
+## 0.3.0 (22 November 2026)
 
-- Swift: `GridView` and `PublishedGridPageView` without `width:` now follow the width their container proposes when it narrows as well as when it widens. Before, the measured width could only grow, so a container narrower than 390 pt clipped the canvas, rotating back to portrait kept the landscape width, and a macOS window could not be narrowed below the last Grid width. An explicit `width:` behaves as before.
-- Swift (`NullDullGridUI`): YouTube and Vimeo embeds now play inline in a `WKWebView` on iOS, macOS and visionOS, instead of a card that opened the video in another app. **The default changes:** the player loads as soon as the embed appears, so YouTube or Vimeo is contacted when the page is shown, without a tap; the video does not autoplay. The new `embedLoading:` parameter of `GridView` and `PublishedGridPageView` (`GridEmbedLoading.immediate`, the default, or `.tap`) can instead show a local poster that makes no request to YouTube or Vimeo until the viewer taps it; the tap loads the player and starts the video. The player is framed in a local page whose origin is the app's bundle identifier (`https://<bundle identifier>/`, lowercased), so YouTube receives the `Referer` it requires from embedders. Links tapped in the player go through `openURL`. `embed:` still replaces the built-in player in both modes. tvOS has no web view and keeps the card that opens the video. `GridMessages` gains `play` (the poster's accessibility label prefix). Existing call sites compile unchanged.
-- Kotlin (`nulldull-grid-compose`): the built-in YouTube embed plays again instead of showing "Error 153". The player is now framed in a local page whose origin is the app's application ID (`https://<application id>/`), so YouTube receives the `Referer` it requires from embedders; Vimeo embeds get the same page. Embeds play inline and, by default, the player loads as soon as the embed is composed, so YouTube or Vimeo is contacted when the embed is shown; the video does not autoplay. The new `embedLoading` parameter of `GridRenderer` and `PublishedGridPage` (`GridEmbedLoading.Immediate`, the default, or `GridEmbedLoading.Tap`) can instead show a local poster that makes no request to YouTube or Vimeo until the viewer taps it; the tap loads the player and starts the video. `renderEmbed` still replaces the built-in player in both modes. Links tapped in the player go to `onOpenUrl`. Existing call sites compile unchanged; code compiled against 0.1.0 must be recompiled, because the composables gained a parameter.
+Grid renderers, still alpha: Swift tag `0.3.0` (`NullDullGrid`, `NullDullGridUI`) and Kotlin `com.nulldull:nulldull-grid-core:0.2.0` and `com.nulldull:nulldull-grid-compose:0.2.0`. The SDK packages are unchanged: `@nulldull/sdk`, `@nulldull/react`, `nulldull` (Python), the Go module and `com.nulldull:nulldull-sdk` are not re-released, and the Swift `NullDull` product in tag `0.3.0` is the same code as in `0.1.0` (it still reports version `0.1.0`).
+
+### Behavior changes to know before upgrading
+
+- **YouTube and Vimeo embeds load immediately by default** (Swift and Kotlin). The built-in player is created as soon as the embed is shown, without a tap, so your app contacts YouTube or Vimeo when the page is displayed, including embeds further down the page that the viewer has not scrolled to. The video still does not autoplay. To make no request to the provider until the viewer taps a local poster, pass `embedLoading: .tap` (Swift) or `embedLoading = GridEmbedLoading.Tap` (Kotlin); the tap then loads the player and starts the video. To wait for consent, keep replacing the player with `embed:` (Swift) or `renderEmbed` (Kotlin), which take precedence in both modes.
+- **Embeds send a `Referer` naming your app.** YouTube requires embedders to identify themselves and shows "Error 153" without it, so the player is framed in a local page whose origin is your app's identity, lowercased: `https://<bundle identifier>/` on Apple platforms and `https://<application id>/` on Android. YouTube and Vimeo therefore receive your bundle identifier or application ID. Nothing is fetched from that origin, and you need no setup.
+- **Swift: `GridView` no longer keeps a 390 pt minimum width.** Without `width:`, `GridView` and `PublishedGridPageView` now follow the width their container proposes when it narrows as well as when it widens. Before, the measured width could only grow: a container narrower than 390 pt clipped the canvas, rotating back to portrait kept the landscape width, and a macOS window could not be narrowed below the last Grid width. `initialWidth` (390) is still used until the first layout, and an explicit `width:` behaves as before.
+- **Kotlin: recompile against `nulldull-grid-compose` 0.2.0.** `GridRenderer` and `PublishedGridPage` gained a parameter, so code compiled against 0.1.0 is not binary compatible. Existing call sites compile unchanged, including a trailing `onOpenUrl` lambda.
+
+### Swift (`NullDullGridUI`)
+
+- YouTube and Vimeo embeds play inline in a `WKWebView` on iOS, macOS and visionOS, instead of a card that opened the video in another app. The web view has JavaScript for the player only, no script message handlers, no file access and a non-persistent website data store; links tapped in the player go through the environment's `openURL`. tvOS has no web view and keeps the card that opens the video, in both loading modes.
+- New: `GridEmbedLoading` (`.immediate`, the default, and `.tap`) and the `embedLoading:` parameter of `GridView` and `PublishedGridPageView`. `GridMessages` gains `play` (the poster's accessibility label prefix). Existing call sites compile unchanged.
+- `NullDullGridUI` now links WebKit on iOS, macOS and visionOS.
+
+### Kotlin (`nulldull-grid-compose`, `nulldull-grid-core`)
+
+- The built-in YouTube player plays again instead of showing "Error 153", and Vimeo uses the same framed page. Embeds play inline in a WebView with no JavaScript bridge, no file or content access and no third-party cookies; links tapped in the player go to `onOpenUrl`.
+- New: `GridEmbedLoading` (`Immediate`, the default, and `Tap`) and the `embedLoading` parameter of `GridRenderer` and `PublishedGridPage`.
+- Fixed: if the WebView renderer crashed or was reclaimed by the system, the app showing the page was killed. The embed is now removed instead.
+- Fixed (`nulldull-grid-core`): `GridUrl.embed` accepts only ASCII YouTube IDs and Vimeo numbers, as the TypeScript and Swift rules do. On Android, non-ASCII letters or digits could pass.
+- `nulldull-grid-core` has no API changes; it is released at `0.2.0` because both Grid artifacts share one version.
 
 ## 0.2.0 (20 November 2026)
 

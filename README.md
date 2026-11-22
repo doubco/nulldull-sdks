@@ -34,12 +34,12 @@ Memory and Locale calls also need your **workspace ID**, because a key cannot lo
 
 ### Grid renderers (alpha)
 
-Native renderers for Grid documents, for apps that show published pages without a web view. They are in early access, separate from the SDK packages above and not yet released.
+Native renderers for Grid documents, for apps that show published pages without a web view. They are in early access (alpha) and separate from the SDK packages above. They were first released in `0.2.0` on 20 November 2026; the current release is Swift tag `0.3.0` and Kotlin Grid artifacts `0.2.0`, which have their own version.
 
 | Platform | Package | Install |
 | --- | --- | --- |
-| SwiftUI (iOS 16, macOS 13, tvOS 16, visionOS 1) | `NullDullGrid`, `NullDullGridUI` (Swift Package Manager) | `.package(url: "https://github.com/doubco/nulldull-sdks", from: "0.2.0")` |
-| Jetpack Compose (Android minSdk 24) | `com.nulldull:nulldull-grid-compose` (with `com.nulldull:nulldull-grid-core`) | `implementation("com.nulldull:nulldull-grid-compose:0.1.0")` |
+| SwiftUI (iOS 16, macOS 13, tvOS 16, visionOS 1) | `NullDullGrid`, `NullDullGridUI` (Swift Package Manager) | `.package(url: "https://github.com/doubco/nulldull-sdks", from: "0.3.0")` |
+| Jetpack Compose (Android minSdk 24) | `com.nulldull:nulldull-grid-compose` (with `com.nulldull:nulldull-grid-core`) | `implementation("com.nulldull:nulldull-grid-compose:0.2.0")` |
 
 See the Grid renderer sections of [`swift/README.md`](swift/README.md#grid-renderer-alpha) and [`kotlin/README.md`](kotlin/README.md#grid-renderer-alpha).
 

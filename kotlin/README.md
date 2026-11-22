@@ -196,17 +196,17 @@ try {
 
 Two further artifacts render Grid documents natively on Android. They are versioned separately from `nulldull-sdk` and do not depend on it.
 
-> **Alpha.** The Grid renderer artifacts are in early access, at version `0.1.0`, and their API may change before `1.0`. They were published to Maven Central on 20 November 2026.
+> **Alpha.** The Grid renderer artifacts are in early access, at version `0.2.0` (22 November 2026), and their API may change before `1.0`. Version `0.1.0` was the first release on Maven Central, on 20 November 2026.
 
 | Artifact | Kind | Contents |
 | --- | --- | --- |
-| `com.nulldull:nulldull-grid-core:0.1.0` | JVM library (no Android dependency) | Document model and validation, layout engine, Markdown model, URL and SVG safety rules, coroutine content client |
-| `com.nulldull:nulldull-grid-compose:0.1.0` | Android library (AAR) | Jetpack Compose renderer |
+| `com.nulldull:nulldull-grid-core:0.2.0` | JVM library (no Android dependency) | Document model and validation, layout engine, Markdown model, URL and SVG safety rules, coroutine content client |
+| `com.nulldull:nulldull-grid-compose:0.2.0` | Android library (AAR) | Jetpack Compose renderer |
 
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("com.nulldull:nulldull-grid-compose:0.1.0") // brings nulldull-grid-core
+    implementation("com.nulldull:nulldull-grid-compose:0.2.0") // brings nulldull-grid-core
 }
 ```
 
