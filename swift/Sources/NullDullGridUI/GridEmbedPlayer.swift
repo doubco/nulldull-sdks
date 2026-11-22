@@ -96,19 +96,23 @@ enum GridEmbedPlayer {
     return html
   }
 
+  /// Escapes text for an HTML attribute value. It works on Unicode scalars, as the HTML tokenizer
+  /// does: iterating `Character`s would miss a quote followed by a combining mark (one grapheme
+  /// cluster, so not equal to `"`), and a document's node name could then close the attribute and
+  /// add event handlers to the frame page.
   static func escape(_ value: String) -> String {
-    var out = ""
-    for c in value {
-      switch c {
-      case "&": out += "&amp;"
-      case "<": out += "&lt;"
-      case ">": out += "&gt;"
-      case "\"": out += "&quot;"
-      case "'": out += "&#39;"
-      default: out.append(c)
+    var out = String.UnicodeScalarView()
+    for scalar in value.unicodeScalars {
+      switch scalar {
+      case "&": out.append(contentsOf: "&amp;".unicodeScalars)
+      case "<": out.append(contentsOf: "&lt;".unicodeScalars)
+      case ">": out.append(contentsOf: "&gt;".unicodeScalars)
+      case "\"": out.append(contentsOf: "&quot;".unicodeScalars)
+      case "'": out.append(contentsOf: "&#39;".unicodeScalars)
+      default: out.append(scalar)
       }
     }
-    return out
+    return String(out)
   }
 
   enum Navigation: Equatable {

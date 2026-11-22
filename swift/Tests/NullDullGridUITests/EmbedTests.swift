@@ -93,6 +93,26 @@ final class EmbedTests: XCTestCase {
     XCTAssertFalse(GridEmbedPlayer.html(player, title: "x", autoplay: false).contains("autoplay=1"))
   }
 
+  /// A quote, apostrophe, `&`, `<` or `>` followed by a combining mark is one `Character` but two
+  /// code points for the HTML tokenizer; every one of them must still be escaped, or a node name
+  /// could close the `title` attribute and add an event handler to the frame page.
+  func testTitleEscapingCannotBeBypassedWithCombiningMarks() throws {
+    let player = try XCTUnwrap(GridEmbedPlayer.resolve("https://www.youtube.com/watch?v=dQw4w9WgXcQ"))
+    let mark = "\u{301}"
+    let title = "x\"\(mark) onload=location=`https://evil.example/` y='\(mark)&\(mark)<\(mark)>\(mark)"
+    let html = GridEmbedPlayer.html(player, title: title, autoplay: false)
+    let start = try XCTUnwrap(html.range(of: " title=\""))
+    let end = try XCTUnwrap(html.range(of: "\" sandbox=", range: start.upperBound..<html.endIndex))
+    let value = html.unicodeScalars[start.upperBound..<end.lowerBound]
+    for forbidden in ["\"", "'", "<", ">"] as [Unicode.Scalar] {
+      XCTAssertFalse(value.contains(forbidden), "raw \(forbidden) in title: \(String(value))")
+    }
+    XCTAssertEqual(
+      String(value),
+      "x&quot;\(mark) onload=location=`https://evil.example/` y=&#39;\(mark)&amp;\(mark)&lt;\(mark)&gt;\(mark)")
+    XCTAssertEqual(GridEmbedPlayer.escape("e\u{301}\u{1F600}"), "e\u{301}\u{1F600}")
+  }
+
   func testNavigationLeavesThePlayerThroughOpenURL() {
     let identity = URL(string: "https://com.example.app/")!
     let watch = URL(string: "https://www.youtube.com/watch?v=dQw4w9WgXcQ")!
