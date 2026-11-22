@@ -35,7 +35,8 @@ public struct GridCustomNodeRegistry {
 ///
 /// The container width selects the breakpoint, exactly as on the web. Give `width` when you
 /// know it (for example in a fixed-width cell) to skip the measuring pass; otherwise the view
-/// takes the available width and starts from `initialWidth`.
+/// takes the width its container proposes, starts from `initialWidth` until it has measured it,
+/// and follows it as it narrows or widens (rotation, window resizing, split view).
 @available(iOS 16, macOS 13, tvOS 16, *)
 public struct GridView: View {
   let document: GridDocument
@@ -84,7 +85,7 @@ public struct GridView: View {
   }
 
   public var body: some View {
-    let viewport = width ?? measured ?? initialWidth
+    let viewport = Self.viewport(width: width, measured: measured, initialWidth: initialWidth)
     let canvas = GridCanvasView(
       document: document, viewport: viewport, override: override, asset: safeAsset, theme: theme,
       customNodes: customNodes, embed: embed, messages: messages, dynamicType: dynamicType)
@@ -92,9 +93,7 @@ public struct GridView: View {
       if let width {
         canvas.frame(width: width)
       } else {
-        canvas
-          .frame(maxWidth: .infinity)
-          .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { measured = $0 }
+        canvas.readingProposedWidth { measured = $0 }
       }
     }
     .environmentObject(store)
@@ -106,6 +105,30 @@ public struct GridView: View {
   func safeAsset(_ id: String) -> URL? {
     guard let url = resolveAsset(id), let href = GridURL.safeHref(url.absoluteString) else { return nil }
     return URL(string: href)
+  }
+
+  /// The canvas width: an explicit `width` wins, then the last measured width, then `initialWidth`.
+  static func viewport(width: CGFloat?, measured: CGFloat?, initialWidth: CGFloat) -> CGFloat {
+    width ?? measured ?? initialWidth
+  }
+}
+
+@available(iOS 16, macOS 13, tvOS 16, *)
+extension View {
+  /// Takes the width the parent proposes, whatever this view's own width, and reports it.
+  ///
+  /// `GridView` sizes its canvas from the reported width, so the frame must not depend on the
+  /// canvas: with only `maxWidth: .infinity`, a flexible frame is never narrower than its child,
+  /// and a canvas laid out at a wider width would keep the measurement from ever shrinking.
+  /// `minWidth: 0` makes the frame exactly as wide as a finite proposal. Height still follows the
+  /// child, so this works in a vertical `ScrollView`. Without a width proposal (for example in a
+  /// horizontal `ScrollView`) the frame takes the child's width, which reports the current width
+  /// again and changes nothing.
+  func readingProposedWidth(_ action: @escaping (CGFloat) -> Void) -> some View {
+    frame(minWidth: 0, maxWidth: .infinity)
+      .onGeometryChange(for: CGFloat.self) { $0.size.width } action: { width in
+        if width.isFinite, width > 0 { action(width) }
+      }
   }
 }
 
