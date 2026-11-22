@@ -250,7 +250,7 @@ For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`
 - Links and assets must be credential-free `http`/`https` URLs. Markdown HTML is shown as text. Custom node properties are inert strings, and only views registered in `GridCustomNodeRegistry` run. Uploaded SVG files pass a static allowlist and are drawn natively; nothing in them is executed or fetched.
 - VoiceOver labels, Dynamic Type for flowing text, and light and dark appearance are supported. Video and audio never autoplay.
 - Restricted embeds (YouTube on `youtube-nocookie.com`, and Vimeo) play inline in a `WKWebView`. `embedLoading:` on `GridView` and `PublishedGridPageView` chooses when the player loads:
-  - `.immediate` (the default): the player loads as soon as the embed appears, without a tap, so the app contacts YouTube or Vimeo when the page is shown. The video starts only when the viewer presses the player's play button.
+  - `.immediate` (the default): the player loads as soon as the embed appears, without a tap, so the app contacts YouTube or Vimeo when the page is shown. `GridView` lays out every node of the page, so this includes embeds further down a long page that the viewer has not scrolled to yet. The video starts only when the viewer presses the player's play button.
   - `.tap`: a local poster with the node name, the provider and a play button is shown first, and no request is made to YouTube or Vimeo until the viewer taps it. The tap loads the player and starts the video.
 
   ```swift
