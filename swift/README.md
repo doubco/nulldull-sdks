@@ -243,7 +243,7 @@ struct ArticleView: View {
 }
 ```
 
-For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument(json:)` and render them with `GridView(document:resolveAsset:)`. `GridView` picks the breakpoint from its width; `theme:`, `customNodes:` (a `GridCustomNodeRegistry`), `messages:` and `label:` customize it.
+For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument(json:)` and render them with `GridView(document:resolveAsset:)`. `GridView` picks the breakpoint from its width: without `width:` it takes the width its container proposes and follows it as it changes (rotation, window resizing), starting from `initialWidth` (390) until the first layout; pass `width:` when you already know it. `theme:`, `customNodes:` (a `GridCustomNodeRegistry`), `messages:` and `label:` customize it.
 
 - `NullDull` and `NullDullGrid` both declare `GridDocument` and `JSONValue`. In a file that imports both modules, qualify the name (`NullDullGrid.GridDocument`).
 - The client follows the same key rules as the SDK: only public `nd_pub_` keys belong in apps (iOS, tvOS and visionOS reject `nd_sec_` keys), a key is added as `key=` only to asset URLs on the API's own origin, and redirects are refused.

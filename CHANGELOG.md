@@ -2,6 +2,10 @@
 
 All NullDull SDKs share one version. This project follows [Semantic Versioning](https://semver.org); `0.x` releases may contain breaking changes in minor versions.
 
+## Unreleased
+
+- Swift: `GridView` and `PublishedGridPageView` without `width:` now follow the width their container proposes when it narrows as well as when it widens. Before, the measured width could only grow, so a container narrower than 390 pt clipped the canvas, rotating back to portrait kept the landscape width, and a macOS window could not be narrowed below the last Grid width. An explicit `width:` behaves as before.
+
 ## 0.2.0 (20 November 2026)
 
 Grid renderers, in alpha. The SDK packages are unchanged.
