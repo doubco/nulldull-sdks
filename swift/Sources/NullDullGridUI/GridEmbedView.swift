@@ -34,6 +34,11 @@ struct GridEmbedContent: View {
   @State private var appeared = false
   @State private var tapped = false
 
+  /// What the player is built from. The web view loads its page once, so `GridNodeView` gives the
+  /// content this identity: when the document changes the node's URL or name, the old player
+  /// (and a tap on the old poster) is discarded instead of staying on screen.
+  static func identity(_ node: GridBuiltinNode) -> [String?] { [node.url, node.name] }
+
   var body: some View {
     if let player = GridEmbedPlayer.resolve(node.url) {
       #if canImport(WebKit) && !os(tvOS)

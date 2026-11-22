@@ -60,6 +60,29 @@ final class EmbedTests: XCTestCase {
     XCTAssertEqual(GridView(document: document, embedLoading: .tap).embedLoading, .tap)
   }
 
+  /// The web view loads its page once, so a document update that changes an embed's URL or name
+  /// under the same node ID must give the content a new identity (a new player, no stale tap).
+  @MainActor
+  func testEmbedContentIdentityFollowsURLAndName() throws {
+    guard #available(iOS 16, macOS 13, tvOS 16, *) else { throw XCTSkip("needs SwiftUI Layout") }
+    let document = try GridDocument(
+      json: Data(contentsOf: RenderTests.fixtures.appendingPathComponent("documents/kitchen-sink.json")))
+    let embed = try XCTUnwrap(
+      document.nodes.lazy.compactMap { node -> GridBuiltinNode? in
+        if case .builtin(let builtin) = node, builtin.kind == .embed { return builtin }
+        return nil
+      }.first)
+    var moved = embed
+    moved.url = "https://vimeo.com/76979871"
+    var renamed = embed
+    renamed.name = "Another video"
+    var restyled = embed
+    restyled.opacity = 0.5
+    XCTAssertNotEqual(GridEmbedContent.identity(embed), GridEmbedContent.identity(moved))
+    XCTAssertNotEqual(GridEmbedContent.identity(embed), GridEmbedContent.identity(renamed))
+    XCTAssertEqual(GridEmbedContent.identity(embed), GridEmbedContent.identity(restyled))
+  }
+
   func testEmbedderIdentityIsTheBundleIdentifier() {
     XCTAssertEqual(GridEmbedPlayer.embedderOrigin(bundleIdentifier: "com.example.app").absoluteString, "https://com.example.app/")
     XCTAssertEqual(
