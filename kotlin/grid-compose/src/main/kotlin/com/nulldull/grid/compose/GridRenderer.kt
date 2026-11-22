@@ -56,7 +56,8 @@ import kotlin.math.roundToInt
  *   Never put a private API key in these URLs.
  * @param customNodes trusted host components by `nodeKey`. Stored custom properties are inert data.
  * @param renderUnknownNode replaces the inert placeholder for unregistered keys.
- * @param renderEmbed replaces the built-in YouTube/Vimeo player, e.g. to gate it behind consent.
+ * @param renderEmbed replaces the built-in YouTube/Vimeo player, e.g. to gate it behind consent. The
+ *   built-in player shows a local poster and contacts the provider only after the viewer taps it.
  * @param renderVideo replaces the built-in video player.
  * @param renderAudio replaces the built-in audio control.
  * @param layout with [breakpointId], forces a layout instead of width-based selection.
@@ -255,7 +256,7 @@ private fun GridNodeView(
                     GridSvgShape(builtin, asset(builtin.assetId), messages, color, openUrl)
                 builtin.kind == GridNodeKind.Shape -> GridShapeContent(builtin, foreground)
                 builtin.kind == GridNodeKind.Embed ->
-                    if (renderEmbed != null) renderEmbed(builtin) else GridEmbedContent(builtin, color, openUrl)
+                    if (renderEmbed != null) renderEmbed(builtin) else GridEmbedContent(builtin, color, messages, openUrl)
                 else -> {
                     val url = asset(builtin.assetId)
                     when {

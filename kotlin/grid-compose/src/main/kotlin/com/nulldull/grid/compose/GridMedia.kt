@@ -1,13 +1,8 @@
 package com.nulldull.grid.compose
 
-import android.annotation.SuppressLint
 import android.media.AudioAttributes
 import android.media.MediaPlayer
 import android.net.Uri
-import android.webkit.WebResourceRequest
-import android.webkit.WebSettings
-import android.webkit.WebView
-import android.webkit.WebViewClient
 import android.widget.MediaController
 import android.widget.VideoView
 import androidx.compose.foundation.Canvas
@@ -214,50 +209,4 @@ internal fun GridAudioContent(node: GridBuiltinNode, url: String, messages: Grid
             }
         }
     }
-}
-
-/**
- * Restricted embed: only YouTube (privacy-enhanced) and Vimeo players, in a WebView with no
- * JavaScript bridge, no file or content access, and every navigation away from the player
- * handed to the system browser. Hosts that need consent gating pass `renderEmbed`.
- */
-@SuppressLint("SetJavaScriptEnabled")
-@Composable
-internal fun GridEmbedContent(node: GridBuiltinNode, color: Color, openUrl: (String) -> Unit) {
-    val src = GridUrl.embed(node.url)
-    if (src == null) {
-        val href = GridUrl.safe(node.url)
-        if (href != null) GridPlaceholder(node.name, color, link = { openUrl(href) }, linkText = href)
-        else GridPlaceholder(node.url?.takeIf { it.isNotEmpty() } ?: node.name, color)
-        return
-    }
-    val host = Uri.parse(src).host
-    AndroidView(
-        factory = { context ->
-            WebView(context).apply {
-                contentDescription = node.name
-                settings.javaScriptEnabled = true // Required by the YouTube and Vimeo players.
-                settings.allowFileAccess = false
-                settings.allowContentAccess = false
-                settings.domStorageEnabled = true
-                settings.setSupportMultipleWindows(false)
-                settings.javaScriptCanOpenWindowsAutomatically = false
-                settings.mediaPlaybackRequiresUserGesture = true
-                settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
-                webViewClient = object : WebViewClient() {
-                    override fun shouldOverrideUrlLoading(view: WebView, request: WebResourceRequest): Boolean {
-                        val target = request.url
-                        if (request.isForMainFrame && target.host != host) {
-                            GridUrl.safe(target.toString())?.let(openUrl)
-                            return true
-                        }
-                        return false
-                    }
-                }
-                loadUrl(src)
-            }
-        },
-        onRelease = { it.destroy() },
-        modifier = Modifier.fillMaxSize(),
-    )
 }

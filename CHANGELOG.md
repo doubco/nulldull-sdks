@@ -5,6 +5,7 @@ All NullDull SDKs share one version. This project follows [Semantic Versioning](
 ## Unreleased
 
 - Swift: `GridView` and `PublishedGridPageView` without `width:` now follow the width their container proposes when it narrows as well as when it widens. Before, the measured width could only grow, so a container narrower than 390 pt clipped the canvas, rotating back to portrait kept the landscape width, and a macOS window could not be narrowed below the last Grid width. An explicit `width:` behaves as before.
+- Kotlin (`nulldull-grid-compose`): the built-in YouTube embed plays again instead of showing "Error 153". The player is now framed in a local page whose origin is the app's application ID (`https://<application id>/`), so YouTube receives the `Referer` it requires from embedders; Vimeo embeds get the same page. Embeds now show a local poster and make no request to YouTube or Vimeo until the viewer taps it; the tap loads the player and starts the video. Links tapped in the player go to `onOpenUrl`.
 
 ## 0.2.0 (20 November 2026)
 
