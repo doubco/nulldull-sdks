@@ -7,9 +7,12 @@ import java.net.IDN
  * http(s) URLs are ever opened, loaded or embedded.
  */
 public object GridUrl {
-    private val YOUTUBE_ID = Regex("^[\\w-]{11}$")
-    private val YOUTUBE_PATH = Regex("^/(?:embed|shorts)/([\\w-]+)$")
-    private val VIMEO_PATH = Regex("^/\\d+$")
+    // Explicit ASCII classes, as in the TypeScript and Swift rules: the meaning of `\w` and `\d` depends on
+    // the regex engine (Android's is ICU-based and may treat them as Unicode classes), and a
+    // percent-decoded `v=` value can contain non-ASCII letters and digits.
+    private val YOUTUBE_ID = Regex("^[A-Za-z0-9_-]{11}$")
+    private val YOUTUBE_PATH = Regex("^/(?:embed|shorts)/([A-Za-z0-9_-]+)$")
+    private val VIMEO_PATH = Regex("^/[0-9]+$")
 
     /** `safeGridUrl`: the normalized href of a credential-free http(s) URL, else null. */
     public fun safe(value: String?): String? = value?.let(::normalizeHttp)

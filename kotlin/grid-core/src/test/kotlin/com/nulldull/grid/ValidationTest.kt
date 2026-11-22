@@ -80,6 +80,16 @@ class ValidationTest {
     }
 
     @Test
+    fun embedIdsAreAsciiOnly() {
+        // Eleven Arabic letters, percent-encoded in `v=`, are not a YouTube ID (the TypeScript and Swift rules agree).
+        val arabic = "%D8%A7".repeat(11)
+        assertNull(GridUrl.embed("https://www.youtube.com/watch?v=$arabic"))
+        assertNull(GridUrl.embed("https://www.youtube.com/watch?v=${"\u0663".repeat(11)}"))
+        assertNull(GridUrl.embed("https://vimeo.com/\u0663\u0664"))
+        assertEquals("https://www.youtube-nocookie.com/embed/a-b_C0123zZ", GridUrl.embed("https://youtu.be/a-b_C0123zZ"))
+    }
+
+    @Test
     fun assetReferencesMustBeHttpOrSameHostPaths() {
         assertEquals("/api/grid/v1/a.png", GridUrl.safeAsset("/api/grid/v1/a.png"))
         assertNull(GridUrl.safeAsset("//evil.example/a.png"))
