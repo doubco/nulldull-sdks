@@ -8,6 +8,9 @@ import android.webkit.WebResourceRequest
 import android.webkit.WebSettings
 import android.webkit.WebView
 import android.webkit.WebViewClient
+import androidx.compose.foundation.layout.Box
+import androidx.compose.ui.layout.boundsInWindow
+import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -150,7 +153,14 @@ internal fun GridEmbedContent(
     // beginning. It records what was tapped, so a restored tap never applies to another video.
     var tappedFor by rememberSaveable(node.url, node.name, loading) { mutableStateOf<ArrayList<String?>?>(null) }
     when {
-        loading == GridEmbedLoading.Immediate -> key(identity, false) { GridEmbedWebView(node, player, autoplay = false, openUrl) }
+        loading == GridEmbedLoading.Immediate -> key(identity, false) {
+            var seen by remember { mutableStateOf(false) }
+            Box(Modifier.fillMaxSize().onGloballyPositioned { coordinates ->
+                if (!seen && !coordinates.boundsInWindow().isEmpty) seen = true
+            }) {
+                if (seen) GridEmbedWebView(node, player, autoplay = false, openUrl)
+            }
+        }
         tappedFor == identity -> key(identity, true) { GridEmbedWebView(node, player, autoplay = true, openUrl) }
         else -> GridEmbedPoster(node, player, color, messages) { tappedFor = identity }
     }

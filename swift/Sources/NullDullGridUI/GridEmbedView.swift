@@ -50,7 +50,7 @@ struct GridEmbedContent: View {
           .accessibilityLabel(Text(node.name))
         } else {
           GridEmbedPoster(node: node, provider: player.provider, label: messages.play) { tapped = true }
-            .onAppear { appeared = true }
+            .modifier(GridEmbedVisibility(appeared: $appeared))
         }
       #else
         GridEmbedCard(node: node, provider: player.provider, messages: messages)
@@ -61,6 +61,22 @@ struct GridEmbedContent: View {
         .frame(maxWidth: .infinity, maxHeight: .infinity)
     } else {
       GridPlaceholder(text: (node.url?.isEmpty == false ? node.url : nil) ?? node.name)
+    }
+  }
+}
+
+/// Latch the first visible pixel so scrolling away keeps the player and its position.
+@available(iOS 16, macOS 13, tvOS 16, *)
+private struct GridEmbedVisibility: ViewModifier {
+  @Binding var appeared: Bool
+
+  func body(content: Content) -> some View {
+    if #available(iOS 18, macOS 15, tvOS 18, visionOS 2, *) {
+      content.onScrollVisibilityChange(threshold: 0.001) { visible in
+        if visible { appeared = true }
+      }
+    } else {
+      content.onAppear { appeared = true }
     }
   }
 }
