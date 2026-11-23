@@ -17,6 +17,11 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.text.BasicText
+import androidx.compose.ui.platform.LocalView
+import androidx.lifecycle.Lifecycle
+import androidx.lifecycle.LifecycleEventObserver
+import androidx.lifecycle.findViewTreeLifecycleOwner
+import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.key
@@ -195,6 +200,20 @@ private fun Color.luminance(): Float = 0.2126f * red + 0.7152f * green + 0.0722f
 @SuppressLint("SetJavaScriptEnabled")
 @Composable
 private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Player, autoplay: Boolean, openUrl: (String) -> Unit) {
+    val lifecycle = LocalView.current.findViewTreeLifecycleOwner()?.lifecycle
+    var active by remember(lifecycle) { mutableStateOf(lifecycle == null || lifecycle.currentState.isAtLeast(Lifecycle.State.STARTED)) }
+    var allowAutoplay by remember { mutableStateOf(autoplay) }
+    DisposableEffect(lifecycle) {
+        val observer = LifecycleEventObserver { _, event ->
+            if (event == Lifecycle.Event.ON_STOP) {
+                active = false
+                allowAutoplay = false
+            } else if (event == Lifecycle.Event.ON_START) active = true
+        }
+        lifecycle?.addObserver(observer)
+        onDispose { lifecycle?.removeObserver(observer) }
+    }
+    if (!active) return
     AndroidView(
         factory = { context ->
             WebView(context).apply {
@@ -215,7 +234,7 @@ private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Play
                 settings.javaScriptCanOpenWindowsAutomatically = false
                 // After a tap on the poster playback may start at once; otherwise media waits for the
                 // viewer's press on the player's own play button.
-                settings.mediaPlaybackRequiresUserGesture = !autoplay
+                settings.mediaPlaybackRequiresUserGesture = !allowAutoplay
                 settings.mixedContentMode = WebSettings.MIXED_CONTENT_NEVER_ALLOW
                 CookieManager.getInstance().setAcceptThirdPartyCookies(this, false)
                 webViewClient = object : WebViewClient() {
@@ -238,7 +257,7 @@ private fun GridEmbedWebView(node: GridBuiltinNode, player: GridEmbedPlayer.Play
                 }
                 loadDataWithBaseURL(
                     GridEmbedPlayer.embedderOrigin(context.packageName),
-                    GridEmbedPlayer.html(player, node.name, autoplay),
+                    GridEmbedPlayer.html(player, node.name, allowAutoplay),
                     "text/html", "utf-8", null,
                 )
             }

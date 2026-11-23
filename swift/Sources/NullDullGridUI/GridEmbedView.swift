@@ -219,6 +219,7 @@ struct GridEmbedCard: View {
 
       func updateNSView(_ webView: WKWebView, context: Context) {
         context.coordinator.openURL = context.environment.openURL
+        if context.environment.scenePhase != .active { webView.pauseAllMediaPlayback(completionHandler: nil) }
       }
 
       static func dismantleNSView(_ webView: WKWebView, coordinator: Coordinator) { tearDown(webView) }
@@ -233,6 +234,7 @@ struct GridEmbedCard: View {
 
       func updateUIView(_ webView: WKWebView, context: Context) {
         context.coordinator.openURL = context.environment.openURL
+        if context.environment.scenePhase != .active { webView.pauseAllMediaPlayback(completionHandler: nil) }
       }
 
       static func dismantleUIView(_ webView: WKWebView, coordinator: Coordinator) { tearDown(webView) }

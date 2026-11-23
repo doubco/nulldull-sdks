@@ -4,6 +4,8 @@ All NullDull SDKs share one version, the repository's release tag; the Kotlin Gr
 
 ## Unreleased
 
+- Swift pauses embedded media when the scene loses activity. Android releases the embedded player when its lifecycle stops and reloads without autoplay on return.
+
 - Swift hosts can map GridTheme.fontNames to registered PostScript names for built-in families. Uploaded fonts have priority.
 
 - Swift Grid reads expose GridNetworkError with the underlying URL error code. Cancellation continues to throw CancellationError.
