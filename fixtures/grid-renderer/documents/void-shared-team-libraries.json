@@ -1,0 +1,133 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "Why teams.",
+      "text": "## Why teams.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "Today, a member reaches files and assets through the…",
+      "text": "Today, a member reaches files and assets through the workspace, product and project they are assigned to. Some guidance belongs to a group of people instead—a design team, a release team—across several locations.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "What we plan.",
+      "text": "## What we plan.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "Memory collections and asset libraries that can be shared…",
+      "text": "Memory collections and asset libraries that can be shared with a team in one explicit step, with the same roles, reviews and agent rules as the rest of Memory. Teams group access; they do not replace the product and project hierarchy or reveal locations a member could not otherwise see.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "This is planned. We are not attaching a date.",
+      "text": "This is planned. We are not attaching a date.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

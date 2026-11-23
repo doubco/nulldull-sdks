@@ -1,0 +1,157 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "Workspace owners and admins can now create API keys under…",
+      "text": "Workspace owners and admins can now create API keys under **Workspace settings → API keys**. Keys are for product integrations—your sites, apps and services—not for agents.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "Public and private keys.",
+      "text": "## Public and private keys.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "A **public** key reads only published Grid content. It can…",
+      "text": "A **public** key reads only published Grid content. It can be included in browser and mobile apps and viewed again later. A **private** key is shown once, stored by NullDull only as a hash, and belongs on a server. A private key can also be given read-only Memory access, acting as the member who created it within that member’s current access.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "Keys can’t write, read Secrets, reach private Grid drafts…",
+      "text": "Keys can’t write, read Secrets, reach private Grid drafts or manage anything. Rotation and revocation take effect on the next request.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "Published Grid reads now use keys.",
+      "text": "## Published Grid reads now use keys.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-5",
+      "kind": "text",
+      "name": "From the same date, the production public Grid API…",
+      "text": "From the same date, the production public Grid API requires a workspace API key with the Published Grid content scope. Invalid or revoked keys are rejected rather than treated as anonymous readers. The NullDull website reads its own pages this way.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 5,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

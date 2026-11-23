@@ -1,0 +1,133 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "What we plan.",
+      "text": "## What we plan.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "You will be able to choose the whole NullDull suite or…",
+      "text": "You will be able to choose the whole NullDull suite or individual products. Limits can vary by product—content and storage, operations and seats—and a suite plan replaces overlapping product plans rather than stacking on them. Prices and exact limits are not set yet.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "Early access stays free.",
+      "text": "## Early access stays free.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "Early access includes the suite free with unlimited…",
+      "text": "Early access includes the suite free with unlimited product quotas; request-rate and concurrency limits still apply. It needs no payment method and never turns into a paid subscription on its own. Ending it will require choosing a plan explicitly.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "Paid checkout stays off until the real catalog is…",
+      "text": "Paid checkout stays off until the real catalog is configured. No date is promised.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

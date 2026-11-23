@@ -1,0 +1,157 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "You can now upload a profile picture in **Account settings…",
+      "text": "You can now upload a profile picture in **Account settings → Profile**. Image previews across the app load smaller versions sized for where they appear.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "Profile pictures.",
+      "text": "## Profile pictures.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "Choose **Upload picture** and pick a PNG, JPEG, WebP, GIF…",
+      "text": "Choose **Upload picture** and pick a PNG, JPEG, WebP, GIF or AVIF image up to 20 MB. Your browser crops it to a square and re-encodes it, removing camera and location metadata. You can change or remove it at any time.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "Your picture appears in the account menu, Account settings…",
+      "text": "Your picture appears in the account menu, Account settings and workspace member lists. Only you and people who share an active workspace with you can see it.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "Smaller image versions.",
+      "text": "## Smaller image versions.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-5",
+      "kind": "text",
+      "name": "Avatars, Memory asset previews and Grid asset previews now…",
+      "text": "Avatars, Memory asset previews and Grid asset previews now ask for a smaller version of the image instead of the full file. Each version is made once and reused, and it is only ever served after your access to the original has been checked. Animated GIFs keep their original file, and full-size viewers still show the original.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 5,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

@@ -2,6 +2,26 @@
   "source": "packages/ui/src/components/primitives/icons/Icon/Icon.tsx",
   "fallback": "grid-shape",
   "icons": {
+    "calendar": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M7 3v3M17 3v3M4 10h16M6 5h12a2 2 0 0 1 2 2v11a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V7a2 2 0 0 1 2-2Z",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.8,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
     "grid-separator": {
       "viewBox": {
         "minX": 0,
@@ -602,6 +622,106 @@
         }
       ]
     },
+    "entry-delete": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M4 7h16M10 11v6M14 11v6M5.5 7l1 12.5a1.5 1.5 0 0 0 1.5 1.5h8a1.5 1.5 0 0 0 1.5-1.5L18.5 7M9 7V4.5A1.5 1.5 0 0 1 10.5 3h3A1.5 1.5 0 0 1 15 4.5V7",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.6,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "entry-move": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M3 7.5A1.5 1.5 0 0 1 4.5 6h4.4l2 2h8.6A1.5 1.5 0 0 1 21 9.5v9a1.5 1.5 0 0 1-1.5 1.5h-15A1.5 1.5 0 0 1 3 18.5Z",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.6,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        },
+        {
+          "d": "M9 14h6M12.5 11.5 15 14l-2.5 2.5",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.6,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "entry-select": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M7 4H17A3 3 0 0 1 20 7V17A3 3 0 0 1 17 20H7A3 3 0 0 1 4 17V7A3 3 0 0 1 7 4Z",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.6,
+          "strokeLinecap": "butt",
+          "strokeLinejoin": "miter",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "entry-selected": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M7 4H17A3 3 0 0 1 20 7V17A3 3 0 0 1 17 20H7A3 3 0 0 1 4 17V7A3 3 0 0 1 7 4Z",
+          "fill": "currentColor",
+          "stroke": "none",
+          "strokeWidth": 1,
+          "strokeLinecap": "butt",
+          "strokeLinejoin": "miter",
+          "fillRule": "nonzero",
+          "opacity": 1
+        },
+        {
+          "d": "m8.5 12.2 2.4 2.4 4.6-4.9",
+          "fill": "none",
+          "stroke": "var(--bg, #000)",
+          "strokeWidth": 1.8,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
     "select-chevron": {
       "viewBox": {
         "minX": 0,
@@ -1115,6 +1235,186 @@
           "fill": "none",
           "stroke": "currentColor",
           "strokeWidth": 1.5,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "priority-none": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M5 12h2M11 12h2M17 12h2",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.8,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "priority-low": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M6 19v-4",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 2.6,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "priority-medium": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M6 19v-4M12 19v-8",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 2.6,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "priority-high": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M6 19v-4M12 19v-8M18 19V7",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 2.6,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "priority-urgent": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M6 3h12a3 3 0 0 1 3 3v12a3 3 0 0 1-3 3H6a3 3 0 0 1-3-3V6a3 3 0 0 1 3-3ZM12 7.5v5.5M12 16.5h.01",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.8,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "task-more": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M5 12h.01M12 12h.01M19 12h.01",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 2.6,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "assignee-cannot-see": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M12 6v8M12 18.5h.01",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 3.4,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "task-insights": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "M4 20h16M7 16v-4M12 16V6M17 16v-7",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.8,
+          "strokeLinecap": "round",
+          "strokeLinejoin": "round",
+          "fillRule": "nonzero",
+          "opacity": 1
+        }
+      ]
+    },
+    "code-brackets": {
+      "viewBox": {
+        "minX": 0,
+        "minY": 0,
+        "width": 24,
+        "height": 24
+      },
+      "paths": [
+        {
+          "d": "m8 6-5 6 5 6m8-12 5 6-5 6",
+          "fill": "none",
+          "stroke": "currentColor",
+          "strokeWidth": 1.8,
           "strokeLinecap": "round",
           "strokeLinejoin": "round",
           "fillRule": "nonzero",

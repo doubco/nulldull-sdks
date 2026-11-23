@@ -11,11 +11,11 @@
   "nodes": [
     {
       "padding": 0,
-      "lineHeight": 1.2,
+      "lineHeight": 1.5,
       "id": "markdown-0",
       "kind": "text",
-      "name": "One navigation across the website.",
-      "text": "## One navigation across the website.",
+      "name": "Public pages use the same navigation and animated logo as…",
+      "text": "Public pages use the same navigation and animated logo as the landing page. Their shorter header puts the page title in the center, leaving the longer landing introduction on the home page.",
       "assetId": null,
       "frame": {
         "x": 0,
@@ -26,7 +26,7 @@
       "frames": {},
       "color": "transparent",
       "background": "transparent",
-      "fontSize": 28,
+      "fontSize": 18,
       "radius": 0,
       "align": "left",
       "fit": "cover",
@@ -38,8 +38,8 @@
       "lineHeight": 1.5,
       "id": "markdown-1",
       "kind": "text",
-      "name": "Public pages use the same navigation and animated logo as…",
-      "text": "Public pages use the same navigation and animated logo as the landing page. Their shorter header puts the page title in the center, leaving the longer landing introduction on the home page.",
+      "name": "The footer brings together product links, public…",
+      "text": "The footer brings together product links, public information, appearance, language and Cookie settings.",
       "assetId": null,
       "frame": {
         "x": 0,
@@ -59,39 +59,15 @@
     },
     {
       "padding": 0,
-      "lineHeight": 1.5,
-      "id": "markdown-2",
-      "kind": "text",
-      "name": "The footer brings together product links, public…",
-      "text": "The footer brings together product links, public information, appearance, language and Cookie settings.",
-      "assetId": null,
-      "frame": {
-        "x": 0,
-        "y": 2,
-        "width": 12,
-        "height": 1
-      },
-      "frames": {},
-      "color": "transparent",
-      "background": "transparent",
-      "fontSize": 18,
-      "radius": 0,
-      "align": "left",
-      "fit": "cover",
-      "shape": "rectangle",
-      "hidden": false
-    },
-    {
-      "padding": 0,
       "lineHeight": 1.2,
-      "id": "markdown-3",
+      "id": "markdown-2",
       "kind": "text",
       "name": "The Void is the blog.",
       "text": "## The Void is the blog.",
       "assetId": null,
       "frame": {
         "x": 0,
-        "y": 3,
+        "y": 2,
         "width": 12,
         "height": 1
       },
@@ -108,10 +84,34 @@
     {
       "padding": 0,
       "lineHeight": 1.5,
-      "id": "markdown-4",
+      "id": "markdown-3",
       "kind": "text",
       "name": "The Void lives at /void. Support, What’s new? and Roadmap…",
       "text": "The Void lives at /void. Support, What’s new? and Roadmap have separate destinations at /support, /whats-new and /roadmap. They are not subsections of the blog.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "Older links under /void/blog, /void/support,…",
+      "text": "Older links under /void/blog, /void/support, /void/whats-new and /void/roadmap redirect to the corresponding destinations.",
       "assetId": null,
       "frame": {
         "x": 0,
@@ -131,39 +131,15 @@
     },
     {
       "padding": 0,
-      "lineHeight": 1.5,
-      "id": "markdown-5",
-      "kind": "text",
-      "name": "Older links under /void/blog, /void/support,…",
-      "text": "Older links under /void/blog, /void/support, /void/whats-new and /void/roadmap redirect to the corresponding destinations.",
-      "assetId": null,
-      "frame": {
-        "x": 0,
-        "y": 5,
-        "width": 12,
-        "height": 1
-      },
-      "frames": {},
-      "color": "transparent",
-      "background": "transparent",
-      "fontSize": 18,
-      "radius": 0,
-      "align": "left",
-      "fit": "cover",
-      "shape": "rectangle",
-      "hidden": false
-    },
-    {
-      "padding": 0,
       "lineHeight": 1.2,
-      "id": "markdown-6",
+      "id": "markdown-5",
       "kind": "text",
       "name": "Small details, consistently applied.",
       "text": "## Small details, consistently applied.",
       "assetId": null,
       "frame": {
         "x": 0,
-        "y": 6,
+        "y": 5,
         "width": 12,
         "height": 1
       },
@@ -180,14 +156,14 @@
     {
       "padding": 0,
       "lineHeight": 1.5,
-      "id": "markdown-7",
+      "id": "markdown-6",
       "kind": "text",
       "name": "Header and footer text links reduce opacity on hover. The…",
       "text": "Header and footer text links reduce opacity on hover. The legal pages show the operator’s company number and their actual version date. Cookie settings appears in the footer instead of a floating control or repeated buttons inside the policies.",
       "assetId": null,
       "frame": {
         "x": 0,
-        "y": 7,
+        "y": 6,
         "width": 12,
         "height": 1
       },

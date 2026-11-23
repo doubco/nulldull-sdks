@@ -1,0 +1,157 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "Client 0.18.0: the NullDull CLI and MCP client now keeps…",
+      "text": "Client 0.18.0: the NullDull CLI and MCP client now keeps one login per origin and workspace. Previously, signing in to a second workspace replaced the first, so switching between projects that used different workspaces meant signing in again.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "What changed.",
+      "text": "## What changed.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "- `login` binds the directory it runs in to the approved…",
+      "text": "- `login` binds the directory it runs in to the approved workspace. Subdirectories inherit the nearest binding.\n- `workspaces` lists the workspaces you are signed in to and the one the current directory uses.\n- `use WORKSPACE_ID` binds a directory to a workspace you are already signed in to, without a browser login. `use --clear` removes the binding.\n- `logout` removes only the selected workspace’s login.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "A command chooses its workspace from `--workspace`, then…",
+      "text": "A command chooses its workspace from `--workspace`, then `NULLDULL_WORKSPACE`, then the nearest bound directory, then the default login. Bindings and credentials stay in your private configuration directory, never in the repository.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "Updating.",
+      "text": "## Updating.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-5",
+      "kind": "text",
+      "name": "The client offers the update itself and installs it only…",
+      "text": "The client offers the update itself and installs it only after you approve the exact version and checksum. Restart or reconnect the MCP server afterwards and run `status` to confirm the workspace.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 5,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

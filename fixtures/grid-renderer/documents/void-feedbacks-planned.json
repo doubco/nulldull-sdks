@@ -38,8 +38,8 @@
       "lineHeight": 1.5,
       "id": "markdown-1",
       "kind": "text",
-      "name": "Feedback can belong to a workspace-wide service, a…",
-      "text": "Feedback can belong to a workspace-wide service, a customer product or a specific project. Feedbacks is planned to keep those ownership choices visible instead of assuming every repository needs a separate feedback system.",
+      "name": "Feedback can belong to a workspace-wide service, a product…",
+      "text": "Feedback can belong to a workspace-wide service, a product or a specific project. Feedbacks is planned to keep those ownership choices visible instead of assuming every repository needs a separate feedback system.",
       "assetId": null,
       "frame": {
         "x": 0,
@@ -183,7 +183,7 @@
       "id": "markdown-7",
       "kind": "text",
       "name": "Feedbacks is a future product in the suite, not a…",
-      "text": "Feedbacks is a future product in the suite, not a currently purchasable standalone service. No release date is promised here.",
+      "text": "Feedbacks is a future product in the suite, not a currently available or purchasable standalone service. No release date is promised here.",
       "assetId": null,
       "frame": {
         "x": 0,

@@ -38,8 +38,8 @@
       "lineHeight": 1.5,
       "id": "markdown-1",
       "kind": "text",
-      "name": "Open Cookie settings in the website footer. Analytics and…",
-      "text": "Open Cookie settings in the website footer. Analytics and External media are separate optional choices. You can accept both, reject both, or save a selection. Essential functionality stays on.",
+      "name": "Open **Cookie settings** in the website footer. Analytics…",
+      "text": "Open **Cookie settings** in the website footer. Analytics and External media are separate optional choices. You can accept both, reject both, or save a selection. Essential functionality stays on.",
       "assetId": null,
       "frame": {
         "x": 0,
@@ -63,7 +63,7 @@
       "id": "markdown-2",
       "kind": "text",
       "name": "Closing the dialog does not save a new choice. Your…",
-      "text": "Closing the dialog does not save a new choice. Your settings apply to the current browser and host; the public website and staging keep separate choices.",
+      "text": "Closing the dialog does not save a new choice. Your settings apply to the current browser and site.",
       "assetId": null,
       "frame": {
         "x": 0,
@@ -155,15 +155,39 @@
     },
     {
       "padding": 0,
-      "lineHeight": 1.2,
+      "lineHeight": 1.5,
       "id": "markdown-6",
+      "kind": "text",
+      "name": "Sign-in, language and appearance settings are separate…",
+      "text": "Sign-in, language and appearance settings are separate from optional tracking.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 6,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-7",
       "kind": "text",
       "name": "Contact us without sending secrets.",
       "text": "## Contact us without sending secrets.",
       "assetId": null,
       "frame": {
         "x": 0,
-        "y": 6,
+        "y": 7,
         "width": 12,
         "height": 1
       },
@@ -180,14 +204,14 @@
     {
       "padding": 0,
       "lineHeight": 1.5,
-      "id": "markdown-7",
+      "id": "markdown-8",
       "kind": "text",
       "name": "For product help, privacy requests or legal enquiries,…",
-      "text": "For product help, privacy requests or legal enquiries, email info@nulldull.com. Include the page or feature involved and a short description of the problem.",
+      "text": "For product help, privacy requests or legal enquiries, email info@nulldull.com. Include the page or feature involved, a short description of the problem and, for API errors, the request ID.",
       "assetId": null,
       "frame": {
         "x": 0,
-        "y": 7,
+        "y": 8,
         "width": 12,
         "height": 1
       },
@@ -204,14 +228,14 @@
     {
       "padding": 0,
       "lineHeight": 1.5,
-      "id": "markdown-8",
+      "id": "markdown-9",
       "kind": "text",
       "name": "Do not include passwords, API keys, private key files or…",
       "text": "Do not include passwords, API keys, private key files or secret values. The Privacy Policy, Terms of Service and Cookie Policy explain the operator details and current processing practices.",
       "assetId": null,
       "frame": {
         "x": 0,
-        "y": 8,
+        "y": 9,
         "width": 12,
         "height": 1
       },

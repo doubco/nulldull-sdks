@@ -34,7 +34,7 @@ final class ValidationTests: XCTestCase {
   func testRealDocumentsRoundTripThroughCodable() throws {
     let names = Fixtures.documentNames
     XCTAssertTrue(names.contains("void-welcome-to-the-void"))
-    XCTAssertEqual(names.filter { $0.hasPrefix("void-") }.count, 16)
+    XCTAssertEqual(names.filter { $0.hasPrefix("void-") }.count, 52)
     for name in names {
       let raw = try Fixtures.json("documents/\(name).json")
       let document = try JSONDecoder().decode(GridDocument.self, from: Fixtures.data("documents/\(name).json"))

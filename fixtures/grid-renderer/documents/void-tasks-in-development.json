@@ -1,0 +1,181 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "What Tasks is for.",
+      "text": "## What Tasks is for.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "Tasks gives people, external agents and Null basic shared…",
+      "text": "Tasks gives people, external agents and Null basic shared tasks, with one set of operations for the browser, the HTTP API, MCP and the CLI. Each task belongs to one workspace, product or project, and anyone who can see that location can read and edit its tasks.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "What shipped.",
+      "text": "## What shipped.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "Every task has a mode—Plan or Build—separate from its…",
+      "text": "Every task has a mode—Plan or Build—separate from its status. In Plan mode an agent writes a plan into the task and stops for review; Ready to build switches it to Build when a person decides the work should start. List, board and timeline views, sub-tasks, dependencies, drag and drop, @mentions, attachments and in-app notifications help a team follow the work, and Null can answer questions about tasks or change them in Work mode.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "Agents pick up work they are assigned when their harness…",
+      "text": "Agents pick up work they are assigned when their harness asks; the server never pushes tasks to a local agent.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-5",
+      "kind": "text",
+      "name": "Current status: early access.",
+      "text": "## Current status: early access.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 5,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-6",
+      "kind": "text",
+      "name": "Tasks is available in early access, not generally…",
+      "text": "Tasks is available in early access, not generally available, and not sold as a standalone product. Agent connections have Tasks access only after the connection owner turns it on in Settings.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 6,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

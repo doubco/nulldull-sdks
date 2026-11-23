@@ -4,6 +4,8 @@ All NullDull SDKs share one version, the repository's release tag; the Kotlin Gr
 
 ## Unreleased
 
+- Regenerated geometry for the current editorial snapshots at eight widths, the legacy delivery sample and the native icon catalog. The suite now covers 52 editorial pages and 16 other documents.
+
 ### Paused public requests (all SDKs and both Grid content clients)
 
 When a workspace on the Free plan has used its monthly public requests, Grid delivery answers `429 RATE_LIMITED` with `reason` and `detail` `PUBLIC_REQUESTS_PAUSED`, a `renewsAt` time (the start of the next UTC month) and a `Retry-After` until then ([SPEC.md 5.4](SPEC.md#54-paused-public-requests-public_requests_paused)). The errors now carry that information, so an app can show a calm notice instead of a generic error. No breaking changes: existing fields, constructors and error handling are unchanged.

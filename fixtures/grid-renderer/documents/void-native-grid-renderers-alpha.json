@@ -1,0 +1,181 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "Apps can now render published Grid pages natively. The…",
+      "text": "Apps can now render published Grid pages natively. The renderers are in alpha and live in the public [NullDull SDK repository](https://github.com/doubco/nulldull-sdks) next to the client SDKs.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "Swift.",
+      "text": "## Swift.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "Add the package `https://github.com/doubco/nulldull-sdks`…",
+      "text": "Add the package `https://github.com/doubco/nulldull-sdks` from `0.2.0` and depend on `NullDullGrid` (document model, layout and delivery client) and `NullDullGridUI` (the SwiftUI renderer for iOS 16, macOS 13, tvOS 16 and visionOS).",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "Kotlin.",
+      "text": "## Kotlin.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-4",
+      "kind": "text",
+      "name": "Add `com.nulldull:nulldull-grid-compose:0.1.0` from Maven…",
+      "text": "Add `com.nulldull:nulldull-grid-compose:0.1.0` from Maven Central for the Jetpack Compose renderer, or `com.nulldull:nulldull-grid-core:0.1.0` for the JVM core without Android.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 4,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-5",
+      "kind": "text",
+      "name": "Alpha.",
+      "text": "## Alpha.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 5,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-6",
+      "kind": "text",
+      "name": "Both renderers are tested against the same layout goldens…",
+      "text": "Both renderers are tested against the same layout goldens as the web renderer. The Swift renderer has been run on iPhone and macOS and the Kotlin renderer on Pixel phone and tablet emulators; iPad, tvOS, visionOS and the oldest supported versions, iOS 16 and Android 7 (API 24), have not been tried yet. Their APIs may change before 1.0. The developer docs list what differs from the web renderer. Use a public API key in apps, never a private one.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 6,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}

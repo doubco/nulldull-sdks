@@ -1,0 +1,109 @@
+{
+  "layout": {
+    "flowGap": 24,
+    "direction": "vertical",
+    "columns": 12,
+    "rows": 8,
+    "cellSize": 64,
+    "gap": 4
+  },
+  "breakpoints": [],
+  "nodes": [
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-0",
+      "kind": "text",
+      "name": "Where they are now.",
+      "text": "## Where they are now.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 0,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-1",
+      "kind": "text",
+      "name": "Native Grid renderers for Swift (SwiftUI) and Kotlin…",
+      "text": "Native Grid renderers for Swift (SwiftUI) and Kotlin (Jetpack Compose) were first published in alpha on 20 November 2026 from the public [NullDull SDK repository](https://github.com/doubco/nulldull-sdks). The current release, from 22 November 2026, is `NullDullGrid` and `NullDullGridUI` through Swift Package Manager at tag 0.3.0, and `com.nulldull:nulldull-grid-core` and `com.nulldull:nulldull-grid-compose` 0.2.0 on Maven Central.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 1,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.2,
+      "id": "markdown-2",
+      "kind": "text",
+      "name": "What comes next.",
+      "text": "## What comes next.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 2,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 28,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    },
+    {
+      "padding": 0,
+      "lineHeight": 1.5,
+      "id": "markdown-3",
+      "kind": "text",
+      "name": "They are tested against the same layout goldens as the web…",
+      "text": "They are tested against the same layout goldens as the web renderer, and have been run on iPhone, macOS and Android phone and tablet emulators. We will verify them on iPad, tvOS, visionOS and the oldest supported versions and keep closing the parity gaps listed in the developer docs before calling them stable.",
+      "assetId": null,
+      "frame": {
+        "x": 0,
+        "y": 3,
+        "width": 12,
+        "height": 1
+      },
+      "frames": {},
+      "color": "transparent",
+      "background": "transparent",
+      "fontSize": 18,
+      "radius": 0,
+      "align": "left",
+      "fit": "cover",
+      "shape": "rectangle",
+      "hidden": false
+    }
+  ]
+}
