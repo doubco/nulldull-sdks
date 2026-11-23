@@ -16,6 +16,8 @@ public struct GridTheme: Sendable {
   public var foreground: Color?
   /// Defaults to no fill.
   public var background: Color?
+  /// Registered PostScript font names for built-in Grid families. Uploaded fonts take precedence.
+  public var fontNames: [GridFontFamily: String] = [:]
   public init(foreground: Color? = nil, background: Color? = nil) {
     self.foreground = foreground
     self.background = background

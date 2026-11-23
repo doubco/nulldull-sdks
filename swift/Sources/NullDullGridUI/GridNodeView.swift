@@ -1,3 +1,4 @@
+import CoreText
 import Foundation
 import NullDullGrid
 import SwiftUI
@@ -5,6 +6,7 @@ import SwiftUI
 /// One node: opacity, rotation, background, border, radius, content and whole-node link.
 @available(iOS 16, macOS 13, tvOS 16, *)
 struct GridNodeView: View {
+  var fontNames: [GridFontFamily: String] = [:]
   let placed: GridPlacedNode
   let foreground: Color
   let asset: (String) -> URL?
@@ -79,7 +81,9 @@ struct GridNodeView: View {
       let _ = store.revision
       GridTextView(
         node: node, contentSized: placed.isContentSized, boxSize: size, color: color,
-        descriptor: fontURL.flatMap { store.font($0) }, typeScale: typeScale)
+        descriptor: fontURL.flatMap { store.font($0) } ?? fontNames[node.fontFamily ?? .sans].map {
+          CTFontDescriptorCreateWithNameAndSize($0 as CFString, 0)
+        }, typeScale: typeScale)
     case .separator:
       separator(node)
     case .shape:

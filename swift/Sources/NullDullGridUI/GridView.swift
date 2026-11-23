@@ -188,7 +188,7 @@ struct GridCanvasView: View {
     let canvas = GridCanvasLayout(document: document, viewport: Double(viewport), active: active) {
       ForEach(Array(preview.nodes.enumerated()), id: \.element.node.id) { index, placed in
         GridNodeView(
-          placed: placed, foreground: foreground, asset: asset, fontURL: fontURL(placed.node, fonts), customNodes: customNodes,
+          fontNames: theme.fontNames, placed: placed, foreground: foreground, asset: asset, fontURL: fontURL(placed.node, fonts), customNodes: customNodes,
           embed: embed, messages: messages, typeScale: placed.isFlowing && placed.node.isText ? scale : 1)
           .accessibilitySortPriority(Double(preview.nodes.count - index))
       }

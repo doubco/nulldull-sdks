@@ -4,6 +4,8 @@ All NullDull SDKs share one version, the repository's release tag; the Kotlin Gr
 
 ## Unreleased
 
+- Swift hosts can map GridTheme.fontNames to registered PostScript names for built-in families. Uploaded fonts have priority.
+
 - Swift Grid reads expose GridNetworkError with the underlying URL error code. Cancellation continues to throw CancellationError.
 
 - Regenerated geometry for the current editorial snapshots at eight widths, the legacy delivery sample and the native icon catalog. The suite now covers 52 editorial pages and 16 other documents.
