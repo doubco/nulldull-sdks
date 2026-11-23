@@ -1,5 +1,5 @@
 export { NullDullClient, DEFAULT_BASE_URL, type NullDullClientOptions } from "./client";
-export { NullDullError, type ClientErrorCode, type NullDullErrorInit } from "./errors";
+export { NullDullError, PUBLIC_REQUESTS_PAUSED, isPublicRequestsPaused, type ClientErrorCode, type NullDullErrorInit } from "./errors";
 export { GridApi, type GetPageParams, type ListPagesParams, type RequestOptions } from "./grid";
 export {
   MemoryApi,

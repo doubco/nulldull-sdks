@@ -129,7 +129,8 @@ class _Transport:
             if 200 <= status < 300:
                 return status, response_headers, data
             error = error_from(status, response_headers, data)
-            if status not in RETRYABLE or retry >= self.config.max_retries:
+            # A paused allowance lasts until the month renews or an upgrade: never retried.
+            if status not in RETRYABLE or retry >= self.config.max_retries or error.public_requests_paused:
                 raise error
             if error.retry_after is not None and error.retry_after > MAX_RETRY_AFTER_SECONDS:
                 raise error

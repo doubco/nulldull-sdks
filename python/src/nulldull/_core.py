@@ -157,6 +157,8 @@ def error_from(status: int, headers: Mapping[str, str], data: bytes) -> NullDull
     code = body.get("code") if body is not None else None
     message = body.get("message") if body is not None else None
     detail = body.get("detail") if body is not None else None
+    reason = body.get("reason") if body is not None else None
+    renews_at = body.get("renewsAt") if body is not None else None
     return NullDullError(
         status,
         code if isinstance(code, str) else "REQUEST_FAILED",
@@ -165,6 +167,8 @@ def error_from(status: int, headers: Mapping[str, str], data: bytes) -> NullDull
         request_id=request_id(headers),
         retry_after=parse_retry_after(headers.get("retry-after")),
         body=body,
+        reason=reason if isinstance(reason, str) else None,
+        renews_at=renews_at if isinstance(renews_at, str) else None,
     )
 
 

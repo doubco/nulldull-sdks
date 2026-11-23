@@ -214,6 +214,8 @@ internal class Transport(
             if (response.status in 200..299) return response
             val error = errorFrom(response)
             if (response.status !in RETRYABLE || retry >= maxRetries) throw error
+            // A paused public request allowance lasts until the month renews: never retry it.
+            if (error.isPublicRequestsPaused) throw error
             val retryAfter = error.retryAfter
             if (retryAfter != null && retryAfter > MAX_RETRY_AFTER_SECONDS) throw error
             retry++

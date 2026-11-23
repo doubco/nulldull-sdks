@@ -496,6 +496,37 @@ class TestErrors:
         )
 
 
+    def test_paused_public_requests_are_typed_and_not_retried(self) -> None:
+        body = fixture("errors/public-requests-paused.json")
+        mock = Mock([json_response(body, 429, {"retry-after": "691200"})])
+        client, sleeps = client_for("public", mock)
+        error = failure(lambda: client.grid.list_pages("nulldull-blog"))
+        assert (error.status, error.code, error.detail) == (429, "RATE_LIMITED", "PUBLIC_REQUESTS_PAUSED")
+        assert error.reason == nulldull.PUBLIC_REQUESTS_PAUSED == "PUBLIC_REQUESTS_PAUSED"
+        assert error.renews_at == "2026-12-01T00:00:00.000Z"
+        assert error.retry_after == 691200
+        assert error.public_requests_paused
+        assert nulldull.is_public_requests_paused(error)
+        assert (sleeps, len(mock.requests)) == ([], 1)
+        copy = pickle.loads(pickle.dumps(error))
+        assert (copy.reason, copy.renews_at, copy.public_requests_paused) == (error.reason, error.renews_at, True)
+
+    def test_paused_public_requests_without_retry_after_are_not_retried(self) -> None:
+        mock = Mock([json_response(fixture("errors/public-requests-paused.json"), 429)])
+        client, sleeps = client_for("public", mock)
+        error = failure(lambda: client.grid.list_pages("nulldull-blog"))
+        assert (error.public_requests_paused, error.retry_after, sleeps, len(mock.requests)) == (True, None, [], 1)
+
+    def test_other_errors_are_not_paused(self) -> None:
+        mock = Mock([json_response({"code": "RATE_LIMITED"}, 429, {"retry-after": "60"})])
+        client, _ = client_for("private", mock)
+        error = failure(lambda: client.memory.list_scopes())
+        assert (error.reason, error.renews_at, error.public_requests_paused) == (None, None, False)
+        assert not nulldull.is_public_requests_paused(error)
+        assert not nulldull.is_public_requests_paused(ValueError("x"))
+        assert not NullDullError(409, "CONFLICT", body={"reason": "QUOTA_EXCEEDED"}).public_requests_paused
+
+
 # --------------------------------------------------------------------------- 10. retries
 
 

@@ -441,6 +441,45 @@ class BehaviourTest {
             val error = failure { privateHarness(server).client.memory.listScopes() }
             assertEquals(60L, error.retryAfter)
             assertEquals("RATE_LIMITED", error.code)
+            assertNull(error.reason)
+            assertNull(error.renewsAt)
+            assertFalse(error.isPublicRequestsPaused)
+        }
+
+        @Test
+        fun `a paused public request allowance is typed and never retried`() {
+            server.enqueue(jsonFixture("errors/public-requests-paused.json", 429, "Retry-After" to "691200"))
+            val h = publicHarness(server)
+            val error = failure { h.client.grid.listPages("nulldull-blog") }
+            assertEquals(429, error.status)
+            assertEquals("RATE_LIMITED", error.code)
+            assertEquals(NullDullException.PUBLIC_REQUESTS_PAUSED, error.reason)
+            assertEquals("PUBLIC_REQUESTS_PAUSED", error.detail)
+            assertEquals("2026-12-01T00:00:00.000Z", error.renewsAt)
+            assertEquals(691_200L, error.retryAfter)
+            assertTrue(error.isPublicRequestsPaused)
+            assertEquals(1, server.requestCount)
+            assertEquals(emptyList<Long>(), h.sleeps)
+        }
+
+        @Test
+        fun `a paused public request allowance without Retry-After is not retried either`() {
+            server.enqueue(jsonFixture("errors/public-requests-paused.json", 429))
+            val h = publicHarness(server)
+            val error = failure { h.client.grid.listPages("nulldull-blog") }
+            assertTrue(error.isPublicRequestsPaused)
+            assertNull(error.retryAfter)
+            assertEquals(1, server.requestCount)
+            assertEquals(emptyList<Long>(), h.sleeps)
+        }
+
+        @Test
+        fun `reason alone does not mark another status as paused`() {
+            server.enqueue(json("""{"code":"CONFLICT","reason":"PUBLIC_REQUESTS_PAUSED","renewsAt":5}""", 409))
+            val error = failure { publicHarness(server).client.grid.listPages("nulldull-blog") }
+            assertEquals("PUBLIC_REQUESTS_PAUSED", error.reason)
+            assertNull(error.renewsAt)
+            assertFalse(error.isPublicRequestsPaused)
         }
 
         @Test

@@ -1,6 +1,6 @@
 import { afterEach, describe, expect, it, vi } from "vitest";
 import pkg from "../package.json";
-import { NullDullClient, NullDullError, VERSION } from "../src";
+import { NullDullClient, NullDullError, PUBLIC_REQUESTS_PAUSED, VERSION, isPublicRequestsPaused } from "../src";
 import { parseFilename, parseRetryAfter } from "../src/http";
 import { clientFor, fixture, manifest, mockFetch } from "./support";
 
@@ -267,6 +267,37 @@ describe("9. errors", () => {
     const { client } = clientFor("private", fetch);
     const error = await failure(client.memory.listScopes());
     expect(error).toMatchObject({ code: "INVALID_RESPONSE", status: 200 });
+  });
+
+  it("types a paused public request allowance and never retries it", async () => {
+    const paused = fixture("errors/public-requests-paused.json");
+    for (const headers of [{ "retry-after": "691200" }, {}] as Record<string, string>[]) {
+      const { fetch, requests } = mockFetch([json(paused, 429, headers), json(fixture("grid/page-list.json"))]);
+      const { client, sleeps } = clientFor("public", fetch);
+      const error = await failure(client.grid.listPages("nulldull-blog"));
+      expect(error).toMatchObject({
+        status: 429,
+        code: "RATE_LIMITED",
+        reason: PUBLIC_REQUESTS_PAUSED,
+        detail: PUBLIC_REQUESTS_PAUSED,
+        renewsAt: "2026-12-01T00:00:00.000Z",
+        retryAfter: "retry-after" in headers ? 691200 : null,
+        publicRequestsPaused: true,
+      });
+      expect(isPublicRequestsPaused(error)).toBe(true);
+      expect(requests).toHaveLength(1);
+      expect(sleeps).toEqual([]);
+    }
+  });
+
+  it("does not mark other errors as a paused allowance", async () => {
+    const { fetch } = mockFetch([json({ code: "RATE_LIMITED" }, 429, { "retry-after": "60" })]);
+    const { client } = clientFor("public", fetch);
+    const error = await failure(client.grid.listPages("nulldull-blog"));
+    expect(error).toMatchObject({ reason: null, renewsAt: null, publicRequestsPaused: false });
+    expect(isPublicRequestsPaused(error)).toBe(false);
+    expect(isPublicRequestsPaused(new Error("x"))).toBe(false);
+    expect(new NullDullError({ status: 409, code: "CONFLICT", body: { reason: PUBLIC_REQUESTS_PAUSED } }).publicRequestsPaused).toBe(false);
   });
 
   it("treats a redirect as an error instead of following it", async () => {

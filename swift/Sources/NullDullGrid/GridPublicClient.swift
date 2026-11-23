@@ -6,14 +6,59 @@ import Foundation
 
 /// An HTTP error from the delivery API, with its status and machine-readable `code`
 /// (`REQUEST_FAILED` when the body has none).
+///
+/// When the pool's workspace has used its monthly public requests, delivery answers `429`
+/// `RATE_LIMITED` with ``reason`` ``publicRequestsPausedReason``: check ``isPublicRequestsPaused``
+/// and show your own calm notice until ``renewsAt``. Equality compares `status` and `code` only.
 public struct GridPublicError: Error, Equatable, Sendable, LocalizedError {
   public let status: Int
   public let code: String
+  /// The body's `detail`, when it is a string.
+  public let detail: String?
+  /// The body's `reason`, when it is a string, for example ``publicRequestsPausedReason``.
+  public let reason: String?
+  /// The body's `renewsAt`: an ISO 8601 UTC time, sent with a paused allowance.
+  public let renewsAt: String?
+  /// `Retry-After` in seconds (delta-seconds or an HTTP date), when the response had one.
+  public let retryAfter: Int?
+
+  /// The `reason` of the `429` sent while the workspace's monthly public requests are used up.
+  public static let publicRequestsPausedReason = "PUBLIC_REQUESTS_PAUSED"
+
   public init(status: Int, code: String) {
+    self.init(status: status, code: code, detail: nil, reason: nil, renewsAt: nil, retryAfter: nil)
+  }
+
+  public init(status: Int, code: String, detail: String?, reason: String?, renewsAt: String?, retryAfter: Int?) {
     self.status = status
     self.code = code
+    self.detail = detail
+    self.reason = reason
+    self.renewsAt = renewsAt
+    self.retryAfter = retryAfter
   }
+
+  /// True while the pool's workspace has used its monthly public requests. Delivery resumes at
+  /// ``renewsAt`` (the start of the next UTC month) or a few minutes after the workspace upgrades.
+  public var isPublicRequestsPaused: Bool { status == 429 && reason == Self.publicRequestsPausedReason }
+
   public var errorDescription: String? { "Grid request failed (\(status): \(code))." }
+
+  public static func == (lhs: GridPublicError, rhs: GridPublicError) -> Bool {
+    lhs.status == rhs.status && lhs.code == rhs.code
+  }
+
+  /// Parses `Retry-After` as delta-seconds or an HTTP date (seconds from `now`, at least 0).
+  static func parseRetryAfter(_ value: String?, now: Date = Date()) -> Int? {
+    guard let value = value?.trimmingCharacters(in: .whitespaces), !value.isEmpty else { return nil }
+    if value.allSatisfy(\.isASCII), value.allSatisfy(\.isNumber) { return Int(value) }
+    let formatter = DateFormatter()
+    formatter.locale = Locale(identifier: "en_US_POSIX")
+    formatter.timeZone = TimeZone(identifier: "GMT")
+    formatter.dateFormat = "EEE, dd MMM yyyy HH:mm:ss zzz"
+    guard let date = formatter.date(from: value) else { return nil }
+    return max(0, Int((date.timeIntervalSince(now)).rounded(.up)))
+  }
 }
 
 /// Problems detected before or after a request, never sent to the server.
@@ -231,9 +276,15 @@ public struct GridPublicClient: Sendable {
     guard let http = response as? HTTPURLResponse else { throw GridClientError.invalidResponse }
     if (300..<400).contains(http.statusCode) { throw GridClientError.redirectRejected(status: http.statusCode) }
     guard (200..<300).contains(http.statusCode) else {
-      var code = "REQUEST_FAILED"
-      if let body = try? JSONValue.parse(data), case .string(let value)? = body["code"] { code = value }
-      throw GridPublicError(status: http.statusCode, code: code)
+      let body = try? JSONValue.parse(data)
+      func text(_ key: String) -> String? {
+        if case .string(let value)? = body?[key] { return value }
+        return nil
+      }
+      throw GridPublicError(
+        status: http.statusCode, code: text("code") ?? "REQUEST_FAILED", detail: text("detail"),
+        reason: text("reason"), renewsAt: text("renewsAt"),
+        retryAfter: GridPublicError.parseRetryAfter(http.value(forHTTPHeaderField: "Retry-After")))
     }
     do {
       return try JSONDecoder().decode(T.self, from: data)

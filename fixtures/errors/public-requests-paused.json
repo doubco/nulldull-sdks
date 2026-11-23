@@ -1,0 +1,8 @@
+{
+  "code": "RATE_LIMITED",
+  "reason": "PUBLIC_REQUESTS_PAUSED",
+  "detail": "PUBLIC_REQUESTS_PAUSED",
+  "message": "This workspace has used its monthly public requests. Public delivery resumes when the allowance renews.",
+  "period": "2026-11",
+  "renewsAt": "2026-12-01T00:00:00.000Z"
+}

@@ -145,9 +145,28 @@ try {
     error.requestId;  // CF-Ray, for support
     error.retryAfter; // seconds, on 429
     error.body;       // the full JSON error body
+    error.reason;     // e.g. "PUBLIC_REQUESTS_PAUSED"
+    error.renewsAt;   // ISO 8601 time the paused allowance renews
   }
 }
 ```
+
+### Paused public requests
+
+When a workspace on the Free plan has used its monthly public requests, Grid reads of its pools answer `429 RATE_LIMITED` with `reason` and `detail` `PUBLIC_REQUESTS_PAUSED`, a `renewsAt` time (the start of the next UTC month) and a `Retry-After` until then. The SDK never retries it. Show a calm notice instead of the content:
+
+```ts
+import { isPublicRequestsPaused } from "@nulldull/sdk";
+
+try {
+  return await nulldull.grid.getPage("my-blog", slug);
+} catch (error) {
+  if (isPublicRequestsPaused(error)) return { paused: true, until: error.renewsAt };
+  throw error;
+}
+```
+
+Delivery resumes at `renewsAt`, or within a few minutes after the workspace upgrades.
 
 | Code | Meaning |
 | --- | --- |
@@ -155,7 +174,7 @@ try {
 | `UNAUTHENTICATED`, `INVALID_KEY`, `KEY_REQUIRED` (401) | Missing, revoked or rotated key. |
 | `FORBIDDEN` (403) | Missing scope or wrong `workspaceId`. Unreadable documents and folders also answer 403. |
 | `NOT_FOUND` (404) | Missing or invisible resource, or a pool owned by another workspace. |
-| `RATE_LIMITED` (429) | See `retryAfter`. |
+| `RATE_LIMITED` (429) | See `retryAfter`. With `reason` `PUBLIC_REQUESTS_PAUSED`, the workspace's monthly public requests are used up (see below). |
 | `SERVICE_UNAVAILABLE`, `NOT_CONFIGURED` (503) | Temporary failure, or a feature not configured in this environment. |
 | `INVALID_ARGUMENT`, `WORKSPACE_REQUIRED`, `PRIVATE_KEY_REQUIRED` (0) | Caught before any request was sent. |
 | `NETWORK_ERROR`, `TIMEOUT`, `ABORTED`, `INVALID_RESPONSE` (0) | Transport problems. |
@@ -166,6 +185,7 @@ Requests are retried up to `maxRetries` times (default 2) on `429`, `502`, `503`
 
 - With `Retry-After` of 30 seconds or less, the SDK waits that long and retries.
 - With a longer `Retry-After`, it raises the error at once with `retryAfter` set.
+- A paused public request allowance (`PUBLIC_REQUESTS_PAUSED`) is never retried.
 - Otherwise it backs off 500 ms and then 1 s.
 
 Each attempt times out after `timeout` ms (default 30000). Every method accepts an `AbortSignal`:

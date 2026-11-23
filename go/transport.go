@@ -192,6 +192,8 @@ func (t *transport) errorFrom(r *rawResponse) *Error {
 	message, _ := body["message"].(string)
 	e := newError(r.status, code, message)
 	e.Detail, _ = body["detail"].(string)
+	e.Reason, _ = body["reason"].(string)
+	e.RenewsAt, _ = body["renewsAt"].(string)
 	e.RequestID = requestID(r.header)
 	e.RetryAfter = parseRetryAfter(r.header.Get("Retry-After"), t.now())
 	e.Body = body
@@ -244,7 +246,8 @@ func (t *transport) send(ctx context.Context, rawURL, accept string, authorize b
 			return r, nil
 		}
 		e := t.errorFrom(r)
-		if !retryable(r.status) || retry >= t.maxRetries {
+		// A paused allowance lasts until the month renews or an upgrade: never retried.
+		if !retryable(r.status) || retry >= t.maxRetries || e.PublicRequestsPaused() {
 			return nil, e
 		}
 		delay := backoff(retry + 1)

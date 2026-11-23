@@ -124,6 +124,45 @@ final class ClientTests: XCTestCase {
     }
   }
 
+  func testPausedPublicRequestsCarryReasonRenewalAndRetryAfter() async throws {
+    let body = Data(
+      #"{"code":"RATE_LIMITED","reason":"PUBLIC_REQUESTS_PAUSED","detail":"PUBLIC_REQUESTS_PAUSED","message":"This workspace has used its monthly public requests. Public delivery resumes when the allowance renews.","period":"2026-11","renewsAt":"2026-12-01T00:00:00.000Z"}"#
+        .utf8)
+    StubProtocol.handler = { _ in (429, ["Content-Type": "application/json", "Retry-After": "691200"], body) }
+    do {
+      _ = try await client().pages(pool: "demo")
+      XCTFail("expected error")
+    } catch let error as GridPublicError {
+      XCTAssertEqual(error, GridPublicError(status: 429, code: "RATE_LIMITED"))
+      XCTAssertTrue(error.isPublicRequestsPaused)
+      XCTAssertEqual(error.reason, GridPublicError.publicRequestsPausedReason)
+      XCTAssertEqual(error.detail, "PUBLIC_REQUESTS_PAUSED")
+      XCTAssertEqual(error.renewsAt, "2026-12-01T00:00:00.000Z")
+      XCTAssertEqual(error.retryAfter, 691200)
+    }
+    XCTAssertEqual(StubProtocol.requests.count, 1)
+
+    StubProtocol.handler = { _ in (429, ["Retry-After": "60"], Data(#"{"code":"RATE_LIMITED"}"#.utf8)) }
+    do {
+      _ = try await client().pages(pool: "demo")
+      XCTFail("expected error")
+    } catch let error as GridPublicError {
+      XCTAssertFalse(error.isPublicRequestsPaused)
+      XCTAssertNil(error.reason)
+      XCTAssertNil(error.renewsAt)
+      XCTAssertEqual(error.retryAfter, 60)
+    }
+  }
+
+  func testRetryAfterParsesSecondsAndHTTPDates() {
+    let now = Date(timeIntervalSince1970: 1_795_168_800)  // Fri, 20 Nov 2026 10:00:00 GMT
+    XCTAssertEqual(GridPublicError.parseRetryAfter("7"), 7)
+    XCTAssertEqual(GridPublicError.parseRetryAfter("Fri, 20 Nov 2026 10:00:05 GMT", now: now), 5)
+    XCTAssertEqual(GridPublicError.parseRetryAfter("Fri, 20 Nov 2026 09:00:00 GMT", now: now), 0)
+    XCTAssertNil(GridPublicError.parseRetryAfter("soon"))
+    XCTAssertNil(GridPublicError.parseRetryAfter(nil))
+  }
+
   func testRedirectsAreNotFollowed() async throws {
     StubProtocol.handler = { request in
       if request.url?.host == "elsewhere.example" { XCTFail("redirect followed") }

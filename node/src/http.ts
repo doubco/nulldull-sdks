@@ -165,6 +165,8 @@ export class Transport {
       const error = errorFrom(response);
       if (!RETRYABLE.has(response.status) || retry >= this.config.maxRetries) throw error;
       if (error.retryAfter !== null && error.retryAfter > MAX_RETRY_AFTER_SECONDS) throw error;
+      // A paused public request allowance lasts until the month renews or the workspace upgrades.
+      if (error.publicRequestsPaused) throw error;
       await this.config.sleep(error.retryAfter !== null ? error.retryAfter * 1000 : backoff(retry + 1), signal);
     }
   }

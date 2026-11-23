@@ -167,6 +167,8 @@ except NullDullError as error:
     error.message  # also str(error)
     error.request_id  # X-Request-Id or CF-Ray, for support
     error.retry_after  # seconds, on 429
+    error.reason  # e.g. "PUBLIC_REQUESTS_PAUSED", or None
+    error.renews_at  # ISO 8601 UTC time the paused allowance renews, or None
     error.body  # the full JSON error body
 ```
 
@@ -176,11 +178,27 @@ except NullDullError as error:
 | `UNAUTHENTICATED`, `INVALID_KEY`, `KEY_REQUIRED` (401) | Missing, revoked or rotated key. |
 | `FORBIDDEN` (403) | Missing scope or wrong `workspace_id`. Unreadable documents and folders also answer 403. |
 | `NOT_FOUND` (404) | Missing or invisible resource, or a pool owned by another workspace. |
-| `RATE_LIMITED` (429) | See `retry_after`. |
+| `RATE_LIMITED` (429) | See `retry_after`. With `reason` `PUBLIC_REQUESTS_PAUSED`, see below. |
 | `SERVICE_UNAVAILABLE`, `NOT_CONFIGURED` (503) | Temporary failure, or a feature not configured in this environment. |
 | `REQUEST_FAILED` | A non-JSON error body, or a redirect (redirects are never followed). |
 | `INVALID_ARGUMENT`, `WORKSPACE_REQUIRED`, `PRIVATE_KEY_REQUIRED` (0) | Caught before any request was sent. |
 | `NETWORK_ERROR`, `TIMEOUT`, `INVALID_RESPONSE` (0) | Transport problems. |
+
+### Paused public requests
+
+When a Free workspace has used its monthly public requests, Grid delivery answers `429 RATE_LIMITED` with `reason` and `detail` `PUBLIC_REQUESTS_PAUSED`, `renews_at` (the first instant of the next UTC month) and a `Retry-After` until then, so the SDK raises it at once without retrying. `HEAD` requests count too. Delivery resumes about two and a half minutes after an upgrade, or when the month renews. Show a calm message instead of a generic error:
+
+```python
+from nulldull import is_public_requests_paused
+
+try:
+    page = nulldull.grid.get_page("my-blog", "welcome")
+except NullDullError as error:
+    if is_public_requests_paused(error):  # or error.public_requests_paused
+        ...  # "This content is temporarily unavailable." Try again after error.renews_at.
+    else:
+        raise
+```
 
 ## Retries and timeouts
 

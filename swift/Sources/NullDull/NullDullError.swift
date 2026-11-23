@@ -53,6 +53,27 @@ public struct NullDullError: Error, Sendable, CustomStringConvertible, Localized
 
     public var description: String { message }
     public var errorDescription: String? { message }
+
+    /// The body's `reason`, for example ``publicRequestsPausedReason``.
+    public var reason: String? {
+        if case .string(let value)? = body?["reason"] { return value }
+        return nil
+    }
+
+    /// The body's `renewsAt`: an ISO 8601 UTC time, sent with a paused public request allowance.
+    public var renewsAt: String? {
+        if case .string(let value)? = body?["renewsAt"] { return value }
+        return nil
+    }
+
+    /// The `reason` (and `detail`) of the `429` public Grid delivery sends while the pool's workspace
+    /// has used its monthly public requests. It lasts until ``renewsAt`` or an upgrade and is never retried.
+    public static let publicRequestsPausedReason = "PUBLIC_REQUESTS_PAUSED"
+
+    /// True for the `429` public Grid delivery sends while the workspace's public requests are paused.
+    public var isPublicRequestsPaused: Bool {
+        status == 429 && reason == Self.publicRequestsPausedReason
+    }
 }
 
 extension NullDullError {

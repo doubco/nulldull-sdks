@@ -4,6 +4,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net"
 	"net/http"
 	"net/http/cookiejar"
@@ -574,6 +575,46 @@ func TestErrorsAsThroughWrapping(t *testing.T) {
 	var e *Error
 	if !errors.As(wrapped, &e) || e.Code != CodeInvalidArgument || e.Status != 0 {
 		t.Errorf("errors.As failed: %v", wrapped)
+	}
+}
+
+func TestPausedPublicRequestsAreTypedAndNotRetried(t *testing.T) {
+	c := newTestClient(t, "public", []responder{
+		respond(429, map[string]string{"content-type": "application/json", "retry-after": "691200"},
+			readFixture(t, "errors/public-requests-paused.json")),
+	})
+	_, err := c.Grid.ListPages(bg, "nulldull-blog", nil)
+	e := wantCode(t, err, "RATE_LIMITED")
+	if e.Status != 429 || e.Reason != ReasonPublicRequestsPaused || e.Detail != "PUBLIC_REQUESTS_PAUSED" ||
+		e.RenewsAt != "2026-12-01T00:00:00.000Z" || e.RetryAfter == nil || *e.RetryAfter != 691200 {
+		t.Errorf("error = %+v", e)
+	}
+	if !e.PublicRequestsPaused() || !IsPublicRequestsPaused(fmt.Errorf("wrapped: %w", err)) {
+		t.Error("not reported as paused")
+	}
+	if c.mock.count() != 1 || len(c.slept()) != 0 {
+		t.Errorf("requests = %d, sleeps = %v", c.mock.count(), c.slept())
+	}
+}
+
+func TestPausedPublicRequestsWithoutRetryAfterAreNotRetried(t *testing.T) {
+	c := newTestClient(t, "public", []responder{fixtureResponse(t, 429, "errors/public-requests-paused.json")})
+	_, err := c.Grid.ListPages(bg, "nulldull-blog", nil)
+	e := wantCode(t, err, "RATE_LIMITED")
+	if !e.PublicRequestsPaused() || e.RetryAfter != nil || c.mock.count() != 1 || len(c.slept()) != 0 {
+		t.Errorf("error = %+v, requests = %d, sleeps = %v", e, c.mock.count(), c.slept())
+	}
+}
+
+func TestOtherErrorsAreNotPublicRequestsPaused(t *testing.T) {
+	c := newTestClient(t, "private", []responder{jsonResponse(429, map[string]any{"code": "RATE_LIMITED"}, "retry-after", "60")})
+	_, err := c.Memory.ListScopes(bg, nil)
+	e := wantCode(t, err, "RATE_LIMITED")
+	if e.Reason != "" || e.RenewsAt != "" || e.PublicRequestsPaused() || IsPublicRequestsPaused(err) {
+		t.Errorf("error = %+v", e)
+	}
+	if IsPublicRequestsPaused(nil) || IsPublicRequestsPaused(errors.New("x")) || (&Error{Status: 409, Reason: "QUOTA_EXCEEDED"}).PublicRequestsPaused() {
+		t.Error("unexpected paused")
 	}
 }
 

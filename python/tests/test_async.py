@@ -126,6 +126,23 @@ def test_retries_and_errors() -> None:
     error = failure(lambda: client.memory.list_scopes())
     assert (error.code, error.retry_after, error.request_id, sleeps) == ("RATE_LIMITED", 60, "ray-1", [])
 
+    mock = Mock([json_response(fixture("errors/public-requests-paused.json"), 429, {"retry-after": "691200"})])
+    client, sleeps = async_client_for("public", mock)
+    error = failure(lambda: client.grid.list_pages("nulldull-blog"))
+    assert (error.reason, error.renews_at, error.retry_after, error.public_requests_paused, sleeps) == (
+        "PUBLIC_REQUESTS_PAUSED",
+        "2026-12-01T00:00:00.000Z",
+        691200,
+        True,
+        [],
+    )
+    assert len(mock.requests) == 1
+
+    mock = Mock([json_response(fixture("errors/public-requests-paused.json"), 429)])
+    client, sleeps = async_client_for("public", mock)
+    error = failure(lambda: client.grid.list_pages("nulldull-blog"))
+    assert (error.public_requests_paused, error.retry_after, sleeps, len(mock.requests)) == (True, None, [], 1)
+
     mock = Mock([httpx.Response(301, headers={"location": "https://evil.example/"})])
     client, _ = async_client_for("public", mock)
     assert failure(lambda: client.grid.list_pages("nulldull-blog")).code == "REQUEST_FAILED"

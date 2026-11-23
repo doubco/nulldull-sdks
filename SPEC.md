@@ -91,6 +91,10 @@ Every failure is raised as a single error type: `NullDullError` (Python `NullDul
 | `requestId` | string or null | The `X-Request-Id` response header, or else `CF-Ray`. Production responses carry `CF-Ray`. |
 | `retryAfter` | number or null | `Retry-After` in seconds, when the response had one. |
 | `body` | object or null | The whole decoded JSON error body. Locale errors put `key`, `language` and `issues` here; some `409`s put `reason` here. |
+| `reason` | string or null | The body's `reason` when it is a string, for example `PUBLIC_REQUESTS_PAUSED` (5.4) or `QUOTA_EXCEEDED`. |
+| `renewsAt` | string or null | The body's `renewsAt` when it is a string: an ISO 8601 UTC time, sent with `PUBLIC_REQUESTS_PAUSED`. |
+
+Every error type also offers a paused check, true when `status` is `429` and `reason` is `PUBLIC_REQUESTS_PAUSED` (Node `error.publicRequestsPaused` and `isPublicRequestsPaused(error)`, Python `public_requests_paused` and `is_public_requests_paused(error)`, Go `PublicRequestsPaused()` and `IsPublicRequestsPaused(err)`, Swift and Kotlin `isPublicRequestsPaused`). Language casing applies (`renews_at` in Python, `RenewsAt` in Go). `reason` and `renewsAt` were added after 0.1.0; they are also in `body`.
 
 The error's language-native message (`Error.message`, `str(e)`, `Error()`) is `message`.
 
@@ -106,7 +110,7 @@ Error bodies are JSON shaped like `{"code": "...", "message"?: "...", "detail"?:
 | 404 | `NOT_FOUND`, `NOT_AVAILABLE` | Missing or invisible resource or pool, or the platform is switched off. |
 | 409 | `CONFLICT`, … | Not expected on read routes. |
 | 413 | `REQUEST_TOO_LARGE` | Not expected on read routes. |
-| 429 | `RATE_LIMITED` | Rate limited per client IP. Comes with `Retry-After` (usually `60`). |
+| 429 | `RATE_LIMITED` | Rate limited per client IP. Comes with `Retry-After` (usually `60`). Grid delivery also answers `429` with `reason` `PUBLIC_REQUESTS_PAUSED` (5.4). |
 | 503 | `SERVICE_UNAVAILABLE`, `NOT_CONFIGURED`, `NOT_AVAILABLE` | Temporary failure, or a feature not configured in this environment. |
 
 A non-JSON error body (for example a router's plain-text `404 Not Found`, or an HTML `502`) gets code `REQUEST_FAILED`.
@@ -125,11 +129,22 @@ Note: `GET /documents/{id}` and `GET /folders/{id}` answer `403 FORBIDDEN` (not 
 | `ABORTED` | The caller cancelled (AbortSignal, context, Task cancellation). |
 | `INVALID_RESPONSE` | A `2xx` body was not valid JSON, or a cursor did not advance during iteration. |
 
+### 5.4 Paused public requests (`PUBLIC_REQUESTS_PAUSED`)
+
+Once early access has ended, every public Grid delivery (page, listing or asset, covers included; `GET` or `HEAD`; `200`, `206` or `304`) counts toward the pool's workspace's monthly public requests. A workspace on the Free plan that has used them is paused: every Grid read of its pools, keyed or anonymous, answers
+
+- status `429`, `Cache-Control: no-store`, and `Retry-After` in seconds until the first instant of the next UTC month (so far more than 30);
+- the body `{"code": "RATE_LIMITED", "reason": "PUBLIC_REQUESTS_PAUSED", "detail": "PUBLIC_REQUESTS_PAUSED", "message": "...", "period": "YYYY-MM", "renewsAt": "<ISO 8601 UTC>"}`. `detail` repeats `reason` for clients that keep only `detail`. Branch on `reason`, never on `message`.
+
+Base and Unlimited workspaces are never paused, and nothing is counted or refused while early access is open. The pause lifts at `renewsAt` (the start of the next UTC month), or within about two and a half minutes after the workspace upgrades or is gifted a plan. Memory and Locale routes never send it.
+
+SDKs MUST NOT retry it, whatever its `Retry-After` (6). Renderers and hooks MUST NOT show a misleading state for it (for example "not found" or an empty list): they surface the error so the app can show a calm notice until `renewsAt`.
+
 ## 6. Retries
 
 Only `GET` is retried, which covers every SDK call.
 
-- **Retryable:** HTTP `429`, `502`, `503` and `504`, and `NETWORK_ERROR`. Nothing else: not `TIMEOUT`, `ABORTED`, other `4xx`/`5xx` or `INVALID_RESPONSE`.
+- **Retryable:** HTTP `429`, `502`, `503` and `504`, and `NETWORK_ERROR`. Nothing else: not `TIMEOUT`, `ABORTED`, other `4xx`/`5xx` or `INVALID_RESPONSE`, and never a `429` whose `reason` is `PUBLIC_REQUESTS_PAUSED`, even without `Retry-After` (5.4).
 - **Budget:** at most `maxRetries` retries (default 2), so at most 3 attempts in total.
 - **Delay when the response has `Retry-After`** (delta-seconds or an HTTP date): wait exactly that long, but only if it is **30 seconds or less**. If it is longer, do not retry: raise the error at once with `retryAfter` set, so the caller can decide. (The platform rate limiter sends `60`, so most real `429`s are raised immediately.)
 - **Delay otherwise:** `500 ms × 2^(n−1)` before retry `n`, which gives 500 ms and then 1000 ms. No jitter in 0.1.0, so test timings are exact.
@@ -388,8 +403,8 @@ Every SDK MUST pass all manifest cases and MUST also test these behaviours:
 6. `grid.downloadAsset` sends `Authorization` only to the `baseUrl` origin.
 7. List results normalize `cover.url`; page results normalize `cover.url` and `assets[].url`.
 8. Iteration continues through an empty page that has a cursor, stops at `nextCursor: null`, starts from `after` when given, and raises `INVALID_RESPONSE` when a cursor repeats.
-9. Errors: every field in 5.1 is filled from the body and headers (`CF-Ray` becomes `requestId`, `Retry-After` becomes `retryAfter`). A non-JSON body gives `REQUEST_FAILED`. Invalid JSON on a `2xx` gives `INVALID_RESPONSE`.
-10. Retries: `429` with `Retry-After ≤ 30` waits that long and retries. `429` with `Retry-After > 30` is raised without a retry. `502`, `503` and `504` back off 500 ms and then 1000 ms. `maxRetries: 0` disables retries. `400`, `401`, `403` and `404` are never retried. Network errors are retried. Timeouts are not retried.
+9. Errors: every field in 5.1 is filled from the body and headers (`CF-Ray` becomes `requestId`, `Retry-After` becomes `retryAfter`, the body's `reason` and `renewsAt` become `reason` and `renewsAt`), and the paused check is true only for a `429` with `reason` `PUBLIC_REQUESTS_PAUSED`. A non-JSON body gives `REQUEST_FAILED`. Invalid JSON on a `2xx` gives `INVALID_RESPONSE`.
+10. Retries: `429` with `Retry-After ≤ 30` waits that long and retries. `429` with `Retry-After > 30` is raised without a retry. A `PUBLIC_REQUESTS_PAUSED` `429` is raised without a retry with or without `Retry-After` (manifest case `grid.listPages.publicRequestsPaused`, plus a test without the header). `502`, `503` and `504` back off 500 ms and then 1000 ms. `maxRetries: 0` disables retries. `400`, `401`, `403` and `404` are never retried. Network errors are retried. Timeouts are not retried.
 11. Timeouts raise `TIMEOUT`, and caller cancellation raises `ABORTED`.
 12. `memory` folder filters: `null` or root sends `root`, and an omitted filter sends nothing. `tags` become repeated `tag`. `downloadAsset({width})` sends `preview=true&w=`.
 13. `locale.export` always sends `format` (default `json`), comma-joins `languages` and `status`, and never sends `language`.

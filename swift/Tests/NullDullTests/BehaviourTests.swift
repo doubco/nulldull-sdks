@@ -409,6 +409,32 @@ struct RetryTests {
         #expect(h.transport.requests.count == 1)
     }
 
+    @Test(arguments: [["Retry-After": "691200"], [:]])
+    func pausedPublicRequestsAreTypedAndNeverRetried(headers: [String: String]) async throws {
+        let h = try harness(
+            "public",
+            [.fixture("errors/public-requests-paused.json", status: 429, headers: headers), .fixture("grid/page-list.json")])
+        let error = await failure { _ = try await h.client.grid.listPages("nulldull-blog") }
+        #expect(error.status == 429)
+        #expect(error.code == .rateLimited)
+        #expect(error.reason == NullDullError.publicRequestsPausedReason)
+        #expect(error.detail == "PUBLIC_REQUESTS_PAUSED")
+        #expect(error.renewsAt == "2026-12-01T00:00:00.000Z")
+        #expect(error.retryAfter == (headers.isEmpty ? nil : 691200))
+        #expect(error.isPublicRequestsPaused)
+        #expect(h.sleeper.sleeps.isEmpty)
+        #expect(h.transport.requests.count == 1)
+    }
+
+    @Test func otherErrorsAreNotPausedPublicRequests() async throws {
+        let h = try harness("private", [.json(["code": "RATE_LIMITED"], status: 429, headers: ["Retry-After": "60"])])
+        let error = await failure { _ = try await h.client.memory.listScopes() }
+        #expect(error.reason == nil)
+        #expect(error.renewsAt == nil)
+        #expect(!error.isPublicRequestsPaused)
+        #expect(!NullDullError(status: 409, code: .conflict, body: ["reason": "PUBLIC_REQUESTS_PAUSED"]).isPublicRequestsPaused)
+    }
+
     @Test func maxRetriesZeroDisablesRetries() async throws {
         let h = try harness("private", [.json(["code": "SERVICE_UNAVAILABLE"], status: 503)], maxRetries: 0)
         #expect(await failure { _ = try await h.client.memory.listScopes() }.code == .serviceUnavailable)

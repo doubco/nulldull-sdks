@@ -121,6 +121,39 @@ class ClientTest {
         val invalidDocument = Fixtures.text("delivery/page.json").replace("\"direction\": \"vertical\"", "\"direction\": \"diagonal\"")
         val invalid = GridClient(base, engine = Recorder { GridHttpResponse(200, emptyMap(), invalidDocument.toByteArray()) })
         assertTrue(assertFailsWith<GridResponseException> { invalid.getPage("a", "b") }.message!!.contains("Invalid option."))
+        assertFalse(error.isPublicRequestsPaused)
+        assertNull(error.reason)
+        assertNull(error.retryAfter)
+    }
+
+    @Test
+    fun aPausedPublicRequestAllowanceIsTypedAndNotRetried() = runTest {
+        val body = """{"code":"RATE_LIMITED","reason":"PUBLIC_REQUESTS_PAUSED","detail":"PUBLIC_REQUESTS_PAUSED",""" +
+            """"message":"This workspace has used its monthly public requests.","period":"2026-11","renewsAt":"2026-12-01T00:00:00.000Z"}"""
+        val engine = Recorder {
+            GridHttpResponse(429, mapOf("content-type" to "application/json", "retry-after" to "691200"), body.toByteArray())
+        }
+        val error = assertFailsWith<GridPublicException> { GridClient(base, publicKey, engine).listPages("example-pool") }
+        assertEquals(1, engine.calls.size)
+        assertEquals(429, error.status)
+        assertEquals("RATE_LIMITED", error.code)
+        assertEquals(GridPublicException.PUBLIC_REQUESTS_PAUSED, error.reason)
+        assertEquals("PUBLIC_REQUESTS_PAUSED", error.detail)
+        assertEquals("2026-12-01T00:00:00.000Z", error.renewsAt)
+        assertEquals(691_200L, error.retryAfter)
+        assertTrue(error.isPublicRequestsPaused)
+        // The original two-argument constructor still exists.
+        assertFalse(GridPublicException(429, "RATE_LIMITED").isPublicRequestsPaused)
+    }
+
+    @Test
+    fun retryAfterAcceptsSecondsAndHttpDates() {
+        val now = 1_764_547_200_000L // 2025-12-01T00:00:00Z
+        assertEquals(60L, GridClient.parseRetryAfter(" 60 ", now))
+        assertEquals(3_600L, GridClient.parseRetryAfter("Mon, 01 Dec 2025 01:00:00 GMT", now))
+        assertEquals(0L, GridClient.parseRetryAfter("Sun, 30 Nov 2025 23:00:00 GMT", now))
+        assertNull(GridClient.parseRetryAfter("soon", now))
+        assertNull(GridClient.parseRetryAfter(null, now))
     }
 
     @Test

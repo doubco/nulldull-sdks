@@ -142,6 +142,9 @@ Every failure is a `NullDullError`:
 | `requestID` | `X-Request-Id`, or else `CF-Ray`; include it when you report a problem |
 | `retryAfter` | `Retry-After` in seconds, when the response had one |
 | `body` | The whole JSON error body (`[String: JSONValue]`) |
+| `reason` | The body's `reason`, for example `PUBLIC_REQUESTS_PAUSED` |
+| `renewsAt` | The body's `renewsAt` (ISO 8601), sent with a paused allowance |
+| `isPublicRequestsPaused` | `true` for the `429` a Grid read gets while the workspace's monthly public requests are used up (Free plan). It lasts until `renewsAt`, the start of the next UTC month, or a few minutes after an upgrade, and is never retried |
 
 ```swift
 do {
@@ -161,6 +164,7 @@ Client codes (`status` 0): `INVALID_ARGUMENT` (bad options or arguments, before 
 
 - `429`, `502`, `503`, `504` and network errors are retried up to `maxRetries` times (default 2), after 500 ms and then 1000 ms.
 - A `Retry-After` of 30 seconds or less is waited for exactly. A longer one is thrown at once with `retryAfter` set, so you decide.
+- A paused public request allowance (`isPublicRequestsPaused`) is never retried.
 - Other statuses, timeouts and invalid responses are never retried.
 - `timeout` (default 30 s, `0` disables it) applies to each attempt.
 - Cancelling the calling task, including during a retry wait, throws `ABORTED`.
@@ -233,15 +237,23 @@ let grid = try GridPublicClient(
 struct ArticleView: View {
     let grid: GridPublicClient
     @State private var page: PublicGridPage?
+    @State private var paused = false
 
     var body: some View {
         ScrollView {
             if let page { PublishedGridPageView(page: page) }
+            else if paused { Text("This content is resting until next month.") }
         }
-        .task { page = try? await grid.page(pool: "my-blog", slug: "hello-world") }
+        .task {
+            do { page = try await grid.page(pool: "my-blog", slug: "hello-world") }
+            catch let error as GridPublicError where error.isPublicRequestsPaused { paused = true }
+            catch {}
+        }
     }
 }
 ```
+
+`GridView` and `PublishedGridPageView` only draw a page you have already loaded; they have no loading or error state of their own. API failures throw `GridPublicError` with `status`, `code`, `detail`, `reason`, `renewsAt` (ISO 8601) and `retryAfter` (seconds). When the workspace has used its monthly public requests (Free plan), every read fails with `429` and `isPublicRequestsPaused` until `renewsAt`, the start of the next UTC month, or a few minutes after an upgrade; the client never retries, so show your own calm notice. Equality compares `status` and `code` only.
 
 For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument(json:)` and render them with `GridView(document:resolveAsset:)`. `GridView` picks the breakpoint from its width: without `width:` it takes the width its container proposes and follows it as it changes (rotation, window resizing), starting from `initialWidth` (390) until the first layout; pass `width:` when you already know it. A document with a horizontal layout is shown in a horizontal `ScrollView` that scrolls only while the canvas is wider than the view, so node views keep their state (a playing embed, a custom node's `@State`) when rotation or resizing makes the canvas fit or overflow; `ImageRenderer` cannot draw a `ScrollView`, so it renders such a document blank. `theme:`, `customNodes:` (a `GridCustomNodeRegistry`), `embed:`, `embedLoading:`, `messages:` and `label:` customize it.
 

@@ -4,6 +4,16 @@ All NullDull SDKs share one version, the repository's release tag; the Kotlin Gr
 
 ## Unreleased
 
+### Paused public requests (all SDKs and both Grid content clients)
+
+When a workspace on the Free plan has used its monthly public requests, Grid delivery answers `429 RATE_LIMITED` with `reason` and `detail` `PUBLIC_REQUESTS_PAUSED`, a `renewsAt` time (the start of the next UTC month) and a `Retry-After` until then ([SPEC.md 5.4](SPEC.md#54-paused-public-requests-public_requests_paused)). The errors now carry that information, so an app can show a calm notice instead of a generic error. No breaking changes: existing fields, constructors and error handling are unchanged.
+
+- New error fields `reason` and `renewsAt` (the ISO 8601 string as sent), read from the body: Node and React `NullDullError.reason`/`renewsAt`; Python `NullDullError.reason`/`renews_at`; Go `Error.Reason`/`RenewsAt`; Swift `NullDullError.reason`/`renewsAt`; Kotlin `NullDullException.reason`/`renewsAt`.
+- A paused check, true for a `429` with that reason: Node `error.publicRequestsPaused`, `isPublicRequestsPaused(error)` and `PUBLIC_REQUESTS_PAUSED`; Python `public_requests_paused`, `is_public_requests_paused(error)` and `PUBLIC_REQUESTS_PAUSED`; Go `PublicRequestsPaused()`, `IsPublicRequestsPaused(err)` (works through wrapping) and `ReasonPublicRequestsPaused`; Swift `isPublicRequestsPaused` and `NullDullError.publicRequestsPausedReason`; Kotlin `isPublicRequestsPaused` and `NullDullException.PUBLIC_REQUESTS_PAUSED`.
+- This error is never retried, even if a proxy dropped its `Retry-After`. Before, its long `Retry-After` already stopped retries; a paused `429` without one would have been retried twice.
+- Grid content clients: Swift `GridPublicError` (`NullDullGrid`) and Kotlin `GridPublicException` (`nulldull-grid-core`) gain `detail`, `reason`, `renewsAt`, `retryAfter` (seconds, from delta-seconds or an HTTP date) and `isPublicRequestsPaused`. Their existing `(status, code)` initializer and constructor remain; Swift equality still compares `status` and `code` only. The clients still never retry. `GridView`, `PublishedGridPageView`, `GridRenderer` and `PublishedGridPage` only draw loaded pages and show no load errors, so the host app shows the notice.
+- `fixtures/`: new conformance case `grid.listPages.publicRequestsPaused` and body `errors/public-requests-paused.json`.
+
 ### Swift (`NullDullGridUI`)
 
 - Fixed: a horizontal Grid whose canvas width lies between two view widths (portrait and landscape, or a resized macOS or iPad window) rebuilt every node view each time the width crossed the canvas width, because the canvas moved in and out of its horizontal `ScrollView`. A tapped embed went back to its poster and its web view was torn down, and custom nodes lost their state. A document with a horizontal layout (base, breakpoint or `layout:`) is now always shown in the scroll view, which scrolls, bounces and shows indicators only while the canvas is wider than the view. Vertical and flow documents still render as a plain canvas. Because `ImageRenderer` cannot draw a `ScrollView`, it now renders horizontal documents blank even when they fit; before, only overflowing ones.

@@ -162,6 +162,8 @@ if errors.As(err, &apiErr) {
 	apiErr.Message    // also err.Error()
 	apiErr.RequestID  // X-Request-Id or CF-Ray, for support
 	apiErr.RetryAfter // *int seconds, on 429
+	apiErr.Reason     // e.g. "PUBLIC_REQUESTS_PAUSED", or ""
+	apiErr.RenewsAt   // ISO 8601 UTC time the paused allowance renews, or ""
 	apiErr.Body       // the full JSON error body
 }
 ```
@@ -174,11 +176,22 @@ if errors.As(err, &apiErr) {
 | `UNAUTHENTICATED`, `INVALID_KEY`, `KEY_REQUIRED` (401) | Missing, revoked or rotated key. |
 | `FORBIDDEN` (403) | Missing scope or wrong workspace ID. Unreadable documents and folders also answer 403. |
 | `NOT_FOUND` (404) | Missing or invisible resource, or a pool owned by another workspace. |
-| `RATE_LIMITED` (429) | See `RetryAfter`. |
+| `RATE_LIMITED` (429) | See `RetryAfter`. With `Reason` `PUBLIC_REQUESTS_PAUSED`, see below. |
 | `SERVICE_UNAVAILABLE`, `NOT_CONFIGURED` (503) | Temporary failure, or a feature not configured in this environment. |
 | `REQUEST_FAILED` | An HTTP error without a JSON `code`, including redirects. |
 | `INVALID_ARGUMENT`, `WORKSPACE_REQUIRED`, `PRIVATE_KEY_REQUIRED` (0) | Caught before any request was sent. |
 | `NETWORK_ERROR`, `TIMEOUT`, `ABORTED`, `INVALID_RESPONSE` (0) | Transport problems. |
+
+### Paused public requests
+
+When a Free workspace has used its monthly public requests, Grid delivery answers `429 RATE_LIMITED` with `Reason` and `Detail` `PUBLIC_REQUESTS_PAUSED`, `RenewsAt` (the first instant of the next UTC month) and a `Retry-After` until then, so the SDK returns it at once without retrying. `HEAD` requests count too. Delivery resumes about two and a half minutes after an upgrade, or when the month renews. Show a calm message instead of a generic error:
+
+```go
+page, err := client.Grid.GetPage(ctx, "my-blog", "welcome", nil)
+if nulldull.IsPublicRequestsPaused(err) { // or apiErr.PublicRequestsPaused()
+	// "This content is temporarily unavailable." Try again after apiErr.RenewsAt.
+}
+```
 
 ## Retries, timeouts and cancellation
 

@@ -294,6 +294,8 @@ struct Requester: Sendable {
             let error = errorFrom(data, response)
             guard retryableStatuses.contains(response.statusCode), retry < maxRetries else { throw error }
             if let retryAfter = error.retryAfter, retryAfter > maxRetryAfterSeconds { throw error }
+            // A paused public request allowance lasts until the month renews or the workspace upgrades.
+            if error.isPublicRequestsPaused { throw error }
             retry += 1
             // The failed attempt's body is discarded here.
             try await wait(error.retryAfter.map { $0 * 1000 } ?? backoff(retry))

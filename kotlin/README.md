@@ -163,7 +163,17 @@ try {
     e.detail     // e.g. "LOCALE_EXPORT_TOO_LARGE"
     e.requestId  // X-Request-Id or CF-Ray: quote it in support requests
     e.retryAfter // seconds, when the server sent Retry-After
+    e.reason     // the body's reason, e.g. "PUBLIC_REQUESTS_PAUSED"
+    e.renewsAt   // the body's renewsAt (ISO 8601 UTC), when present
     e.body       // the whole JSON error body (Locale errors add key, language, issues)
+}
+```
+
+When a Free workspace has used its monthly public requests, Grid delivery answers `429 RATE_LIMITED` with `reason` `PUBLIC_REQUESTS_PAUSED` until the allowance renews at the start of the next UTC month (or shortly after an upgrade). `e.isPublicRequestsPaused` is then true, `e.renewsAt` says when it renews and `retryAfter` is days long, so the SDK does not retry. Show a calm "temporarily unavailable" message rather than a generic error:
+
+```kotlin
+} catch (e: NullDullException) {
+    if (e.isPublicRequestsPaused) showPaused(e.renewsAt) else throw e
 }
 ```
 
@@ -181,7 +191,7 @@ try {
 | `UNAUTHENTICATED`, `INVALID_KEY`, `KEY_REQUIRED` | 401 | Missing, revoked or rotated key |
 | `FORBIDDEN` | 403 | Missing scope, wrong workspace, or an unreadable document or folder |
 | `NOT_FOUND`, `NOT_AVAILABLE` | 404 | Missing resource or pool |
-| `RATE_LIMITED` | 429 | Too many requests |
+| `RATE_LIMITED` | 429 | Too many requests, or (with `reason` `PUBLIC_REQUESTS_PAUSED`) the workspace's monthly public requests are used up |
 | `SERVICE_UNAVAILABLE`, `NOT_CONFIGURED` | 503 | Temporary failure, or a feature not configured |
 
 ### Retries, timeouts and cancellation
@@ -234,6 +244,7 @@ fun Article(slug: String) {
 For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument.decode(json)` (throws `GridValidationException`) and render them with `GridRenderer(document, resolveAsset = { id -> urls[id] })`.
 
 - `GridClient` follows the same key rules as the SDK: a private `nd_sec_` key is refused unless `allowPrivateKey = true` (server-side JVM use) and is never put in a URL; a public key is added as `key=` only to asset URLs on the API's own origin. `GridHttpEngine` is a one-method interface, so you can inject OkHttp, Ktor or a test double; engines must not follow redirects, send cookies or cache.
+- An HTTP error throws `GridPublicException` with `status`, `code`, `detail`, `reason`, `renewsAt` and `retryAfter` (seconds). The client never retries. When the workspace's public requests are paused (`isPublicRequestsPaused`: `429` with `reason` `PUBLIC_REQUESTS_PAUSED`), show your own calm "temporarily unavailable" state until `renewsAt`. `GridRenderer` and `PublishedGridPage` only render a page you already loaded, so they never show a load error themselves.
 - Links and assets must be credential-free `http`/`https` URLs. Custom node properties are inert. Downloaded SVG files pass the same static allowlist as the web renderer before AndroidSVG draws them.
 - TalkBack descriptions, system font scale for flowing text, and light and dark themes (`GridTheme`) are supported. Video and audio never autoplay. Each node has the test tag `grid:<node id>`.
 - Restricted embeds (YouTube on `youtube-nocookie.com`, and Vimeo) play inline, in a WebView inside the node. The `embedLoading` parameter of `GridRenderer` and `PublishedGridPage` sets when the player loads:

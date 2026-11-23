@@ -1,4 +1,4 @@
-import { NullDullClient, NullDullError, type GridPage, type GridPageList } from "@nulldull/sdk";
+import { NullDullClient, NullDullError, isPublicRequestsPaused, type GridPage, type GridPageList } from "@nulldull/sdk";
 import { act, cleanup, render, renderHook, screen, waitFor } from "@testing-library/react";
 import { StrictMode } from "react";
 import { afterEach, describe, expect, it } from "vitest";
@@ -110,6 +110,18 @@ describe("useGridPage", () => {
     expect(error.requestId).toBe("ray-123");
     expect(result.current.isLoading).toBe(false);
     expect(result.current.data).toBeUndefined();
+  });
+
+  it("reports a paused public request allowance once, with its reason and renewal time", async () => {
+    const mock = mockFetch([fromFixture("errors/public-requests-paused.json", 429, { "retry-after": "691200" })]);
+    const { result } = renderHook(() => useGridPage("nulldull-blog", "missing"), { wrapper: wrapperFor(makeClient("public", mock.fetch)) });
+    await waitFor(() => expect(result.current.error).not.toBeNull());
+    const error = result.current.error!;
+    expect(isPublicRequestsPaused(error)).toBe(true);
+    expect(error.reason).toBe("PUBLIC_REQUESTS_PAUSED");
+    expect(error.renewsAt).toBe("2026-12-01T00:00:00.000Z");
+    expect(error.retryAfter).toBe(691200);
+    expect(mock.requests).toHaveLength(1);
   });
 
   it("reports client-side validation errors without a request", async () => {

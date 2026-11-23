@@ -340,6 +340,54 @@
       }
     },
     {
+      "id": "grid.listPages.publicRequestsPaused",
+      "key": "public",
+      "call": {
+        "method": "grid.listPages",
+        "args": [
+          "nulldull-blog"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/nulldull-blog/pages",
+            "query": {
+              "locale": [
+                "en"
+              ]
+            }
+          },
+          "response": {
+            "status": 429,
+            "headers": {
+              "content-type": "application/json",
+              "cache-control": "no-store",
+              "retry-after": "691200"
+            },
+            "bodyFile": "errors/public-requests-paused.json"
+          }
+        }
+      ],
+      "expect": {
+        "error": {
+          "status": 429,
+          "code": "RATE_LIMITED",
+          "detail": "PUBLIC_REQUESTS_PAUSED",
+          "message": "This workspace has used its monthly public requests. Public delivery resumes when the allowance renews.",
+          "retryAfter": 691200,
+          "body": {
+            "reason": "PUBLIC_REQUESTS_PAUSED",
+            "renewsAt": "2026-12-01T00:00:00.000Z",
+            "period": "2026-11"
+          }
+        },
+        "attempts": 1,
+        "sleeps": []
+      }
+    },
+    {
       "id": "memory.listScopes",
       "key": "private",
       "call": {

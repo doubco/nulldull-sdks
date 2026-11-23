@@ -1,6 +1,7 @@
 package com.nulldull.sdk
 
 import kotlinx.serialization.json.JsonObject
+import kotlinx.serialization.json.JsonPrimitive
 
 /**
  * The one exception type every SDK call throws.
@@ -24,6 +25,10 @@ import kotlinx.serialization.json.JsonObject
  * @property retryAfter `Retry-After` in seconds when the response had one. A `429` with more than 30
  *   seconds is thrown at once instead of retried, so you can decide when to try again.
  * @property body The whole decoded JSON error body. Locale errors put `key`, `language` and `issues` here.
+ *
+ * A Free workspace that has used its monthly public requests gets `429 RATE_LIMITED` from Grid delivery
+ * with [reason] [PUBLIC_REQUESTS_PAUSED] ([isPublicRequestsPaused]), [renewsAt] and a [retryAfter] of
+ * days, so it is never retried. Show a calm "temporarily unavailable" state until [renewsAt].
  */
 public class NullDullException(
     public val status: Int,
@@ -39,9 +44,26 @@ public class NullDullException(
     /** Always the error's message: the body's `message`, or a generated one. */
     override val message: String get() = super.message!!
 
+    /** The error body's `reason` when it is a string, for example [PUBLIC_REQUESTS_PAUSED]. */
+    public val reason: String? get() = stringField("reason")
+
+    /**
+     * The error body's `renewsAt` when it is a string: an ISO 8601 UTC time, as the API sends it.
+     * For [PUBLIC_REQUESTS_PAUSED] it is the first instant of the next UTC month.
+     */
+    public val renewsAt: String? get() = stringField("renewsAt")
+
+    /** True for a `429` whose [reason] is [PUBLIC_REQUESTS_PAUSED]: the workspace's public requests are paused. */
+    public val isPublicRequestsPaused: Boolean get() = status == 429 && reason == PUBLIC_REQUESTS_PAUSED
+
+    private fun stringField(name: String): String? =
+        (body?.get(name) as? JsonPrimitive)?.takeIf { it.isString }?.content
+
     override fun toString(): String = buildString {
         append("NullDullException(status=").append(status).append(", code=").append(code)
         if (detail != null) append(", detail=").append(detail)
+        reason?.let { append(", reason=").append(it) }
+        renewsAt?.let { append(", renewsAt=").append(it) }
         if (requestId != null) append(", requestId=").append(requestId)
         if (retryAfter != null) append(", retryAfter=").append(retryAfter)
         append("): ").append(message)
@@ -68,6 +90,12 @@ public class NullDullException(
 
         /** A `2xx` body was not the expected JSON, or a cursor did not advance during iteration. */
         public const val INVALID_RESPONSE: String = "INVALID_RESPONSE"
+
+        /**
+         * The `reason` of a `429` from Grid delivery when a Free workspace has used its monthly
+         * public requests. Delivery resumes when the allowance renews ([renewsAt]) or soon after an upgrade.
+         */
+        public const val PUBLIC_REQUESTS_PAUSED: String = "PUBLIC_REQUESTS_PAUSED"
 
         /** An error response without a JSON body, or a redirect (redirects are never followed). */
         public const val REQUEST_FAILED: String = "REQUEST_FAILED"

@@ -12,13 +12,44 @@ import kotlinx.serialization.json.decodeFromJsonElement
 import java.io.IOException
 import java.net.URI
 import java.net.URLEncoder
+import java.text.SimpleDateFormat
+import java.util.Locale
+import java.util.TimeZone
 
 /** Base class of every failure the client reports. Coroutine cancellation is never wrapped. */
 public sealed class GridClientException(message: String, cause: Throwable? = null) : Exception(message, cause)
 
-/** The API answered with a non-success status. [code] is the API error code, or `REQUEST_FAILED`. */
-public class GridPublicException(public val status: Int, public val code: String) :
-    GridClientException("Grid request failed ($status: $code).")
+/**
+ * The API answered with a non-success status. [code] is the API error code, or `REQUEST_FAILED`.
+ *
+ * A Free workspace that has used its monthly public requests gets `429 RATE_LIMITED` with [reason]
+ * [PUBLIC_REQUESTS_PAUSED] ([isPublicRequestsPaused]), [renewsAt] and a [retryAfter] until the next UTC
+ * month. The client never retries it; show a calm "temporarily unavailable" state instead of the page.
+ *
+ * @property detail The error body's `detail`, when it is a string.
+ * @property reason The error body's `reason`, when it is a string (for example [PUBLIC_REQUESTS_PAUSED]).
+ * @property renewsAt The error body's `renewsAt` (ISO 8601 UTC, as sent), when it is a string.
+ * @property retryAfter `Retry-After` in seconds (delta-seconds or an HTTP date), when the response had one.
+ */
+public class GridPublicException(
+    public val status: Int,
+    public val code: String,
+    public val detail: String?,
+    public val reason: String?,
+    public val renewsAt: String?,
+    public val retryAfter: Long?,
+) : GridClientException("Grid request failed ($status: $code).") {
+    /** The original constructor, kept for source and binary compatibility. */
+    public constructor(status: Int, code: String) : this(status, code, null, null, null, null)
+
+    /** True for a `429` whose [reason] is [PUBLIC_REQUESTS_PAUSED]. */
+    public val isPublicRequestsPaused: Boolean get() = status == 429 && reason == PUBLIC_REQUESTS_PAUSED
+
+    public companion object {
+        /** The `reason` of a `429` when the workspace's monthly public requests are paused. */
+        public const val PUBLIC_REQUESTS_PAUSED: String = "PUBLIC_REQUESTS_PAUSED"
+    }
+}
 
 /** The request could not complete (connection, timeout, redirect, or oversized response). */
 public class GridNetworkException(message: String, cause: Throwable? = null) : GridClientException(message, cause)
@@ -131,11 +162,12 @@ public class GridClient(
         }
         if (response.status in 300..399) throw GridNetworkException("Grid request was redirected; redirects are not followed.")
         if (response.status !in 200..299) {
-            val code = runCatching {
-                ((GridJson.parse(response.body.decodeToString()) as? JsonObject)?.get("code") as? JsonPrimitive)
-                    ?.takeIf { it.isString }?.content
-            }.getOrNull()
-            throw GridPublicException(response.status, code ?: "REQUEST_FAILED")
+            val body = runCatching { GridJson.parse(response.body.decodeToString()) as? JsonObject }.getOrNull()
+            fun field(name: String) = (body?.get(name) as? JsonPrimitive)?.takeIf { it.isString }?.content
+            throw GridPublicException(
+                response.status, field("code") ?: "REQUEST_FAILED", field("detail"), field("reason"), field("renewsAt"),
+                parseRetryAfter(response.headers["retry-after"]),
+            )
         }
         return try {
             GridJson.parse(response.body.decodeToString()) as? JsonObject
@@ -170,6 +202,20 @@ public class GridClient(
         public fun publicLocale(value: String): String {
             require(LOCALE.matches(value) && value.length <= 35) { "Use a lowercase language tag, such as en or pt-br." }
             return value
+        }
+
+        /** `Retry-After` in seconds: delta-seconds, or an HTTP date counted from [now] (never negative). */
+        internal fun parseRetryAfter(value: String?, now: Long = System.currentTimeMillis()): Long? {
+            val text = value?.trim()?.takeIf { it.isNotEmpty() } ?: return null
+            text.toLongOrNull()?.let { return if (it >= 0) it else null }
+            // SimpleDateFormat, not java.time, which Android only has from API 26 (minSdk is 24).
+            return runCatching {
+                val format = SimpleDateFormat("EEE, dd MMM yyyy HH:mm:ss zzz", Locale.US)
+                format.timeZone = TimeZone.getTimeZone("GMT")
+                format.isLenient = false
+                val millis = format.parse(text)!!.time - now
+                if (millis <= 0) 0L else (millis + 999) / 1000
+            }.getOrNull()
         }
 
         /** application/x-www-form-urlencoded, as URLSearchParams serializes. */

@@ -65,7 +65,7 @@ Every hook takes the SDK method's parameters plus two hook options:
 
 IDs may be `null`, `undefined` or `""` while they are not known yet; the hook then stays idle. Parameters are compared by value, so passing a fresh `{ locale: "en" }` object each render does not refetch.
 
-`error` is always a `NullDullError` from the SDK (`status`, `code`, `message`, `detail`, `requestId`, `retryAfter`, `body`), or `null`. Cancellations are never reported as errors. `refetch()` cancels any request in flight and resolves when the new one settles; it never rejects.
+`error` is always a `NullDullError` from the SDK (`status`, `code`, `message`, `detail`, `reason`, `renewsAt`, `requestId`, `retryAfter`, `body`), or `null`. `isPublicRequestsPaused(error)` (from `@nulldull/sdk`) is true when the workspace has used its monthly public requests; show a calm notice then, since the content returns at `error.renewsAt` or after an upgrade. Hooks never refetch on their own, so a paused workspace is not asked again until `refetch()` or a parameter change. Cancellations are never reported as errors. `refetch()` cancels any request in flight and resolves when the new one settles; it never rejects.
 
 `isLoading` is `true` while the first page (or the only resource) is loading, including the first render before the request starts. During a `refetch()` the previous `data` stays visible. When parameters change, `data` resets to `undefined` so you never show the previous page under a new slug.
 

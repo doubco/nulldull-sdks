@@ -41,7 +41,9 @@
 // # Errors
 //
 // Every failure is an *Error with Status (0 for client-side errors), Code,
-// Message, Detail, RequestID, RetryAfter and Body. Use errors.As to read it.
+// Message, Detail, RequestID, RetryAfter, Reason, RenewsAt and Body. Use
+// errors.As to read it. IsPublicRequestsPaused reports the 429 that Grid
+// delivery returns while a Free workspace has used its monthly public requests.
 //
 // # Retries
 //
