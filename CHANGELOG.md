@@ -2,6 +2,12 @@
 
 All NullDull SDKs share one version, the repository's release tag; the Kotlin Grid renderer artifacts have their own version, given in each entry. This project follows [Semantic Versioning](https://semver.org); `0.x` releases may contain breaking changes in minor versions.
 
+## Unreleased
+
+### Swift (`NullDullGridUI`)
+
+- Fixed: a horizontal Grid whose canvas width lies between two view widths (portrait and landscape, or a resized macOS or iPad window) rebuilt every node view each time the width crossed the canvas width, because the canvas moved in and out of its horizontal `ScrollView`. A tapped embed went back to its poster and its web view was torn down, and custom nodes lost their state. A document with a horizontal layout (base, breakpoint or `layout:`) is now always shown in the scroll view, which scrolls, bounces and shows indicators only while the canvas is wider than the view. Vertical and flow documents still render as a plain canvas. Because `ImageRenderer` cannot draw a `ScrollView`, it now renders horizontal documents blank even when they fit; before, only overflowing ones.
+
 ## 0.3.0 (22 November 2026)
 
 Grid renderers, still alpha: Swift tag `0.3.0` (`NullDullGrid`, `NullDullGridUI`) and Kotlin `com.nulldull:nulldull-grid-core:0.2.0` and `com.nulldull:nulldull-grid-compose:0.2.0`. The SDK packages are unchanged: `@nulldull/sdk`, `@nulldull/react`, `nulldull` (Python), the Go module and `com.nulldull:nulldull-sdk` are not re-released, and the Swift `NullDull` product in tag `0.3.0` is the same code as in `0.1.0` (it still reports version `0.1.0`).

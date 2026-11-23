@@ -210,11 +210,30 @@ struct GridCanvasView: View {
     .environment(\.layoutDirection, .leftToRight)
     .task(id: fonts) { for url in fonts { await store.loadFont(url) } }
 
-    if preview.canvasWidth > Double(viewport) + 0.5 {
-      ScrollView(.horizontal) { canvas }.frame(width: viewport)
+    let overflows = preview.canvasWidth > Double(viewport) + 0.5
+    if mayScroll || overflows {
+      // One scroll view whether or not the canvas fits, so crossing the canvas width (rotation,
+      // window resizing) keeps every node view and its state: a tapped embed keeps playing and
+      // custom nodes keep their `@State`. Scrolling, bounce and indicators are off while it fits.
+      ScrollView(.horizontal) { canvas.frame(minWidth: viewport) }
+        .scrollDisabled(!overflows)
+        .scrollIndicators(overflows ? .automatic : .hidden)
+        .fixedSize(horizontal: false, vertical: true)
+        .frame(width: viewport)
     } else {
       canvas.frame(width: viewport)
     }
+  }
+
+  /// Whether a horizontal layout could make the canvas wider than the view at some width.
+  ///
+  /// Decided per document, not per width, so the view's structure does not change as the width
+  /// does. `ImageRenderer` cannot draw a `ScrollView`, so vertical and flow documents, which fit
+  /// their columns to the width, keep a plain canvas. Their cells stop shrinking at 8 points, so
+  /// only at a width narrower than that minimum do they still switch to a scroll view.
+  var mayScroll: Bool {
+    let layouts = override.map { [$0.layout] } ?? [document.layout] + document.breakpoints.map(\.layout)
+    return layouts.contains { $0.direction == .horizontal }
   }
 
   /// Uploaded fonts of visible text nodes: at most eight distinct URLs, like the web renderer.
