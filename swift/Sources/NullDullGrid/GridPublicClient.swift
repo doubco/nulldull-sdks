@@ -271,6 +271,9 @@ public struct GridPublicClient: Sendable {
       (data, response) = try await session.data(for: request, delegate: NoRedirects.shared)
     } catch let error as URLError where error.code == .cancelled {
       throw CancellationError()
+    } catch let error as URLError {
+      try Task.checkCancellation()
+      throw GridNetworkError(code: error.code)
     }
     try Task.checkCancellation()
     guard let http = response as? HTTPURLResponse else { throw GridClientError.invalidResponse }
@@ -307,4 +310,9 @@ final class NoRedirects: NSObject, URLSessionTaskDelegate, Sendable {
   ) async -> URLRequest? {
     nil
   }
+}
+
+/// A transport failure before Grid returned an HTTP response.
+public struct GridNetworkError: Error, Sendable {
+  public let code: URLError.Code
 }
