@@ -99,7 +99,7 @@ struct GridEmbedPoster: View {
       .multilineTextAlignment(.center)
       .padding(8)
       .frame(maxWidth: .infinity, maxHeight: .infinity)
-      .background(Color.primary.opacity(0.06))
+      .background(Color.primary.opacity(0.12))
       .contentShape(Rectangle())
     }
     .buttonStyle(.plain)

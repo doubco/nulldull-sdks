@@ -4,6 +4,8 @@ All NullDull SDKs share one version, the repository's release tag; the Kotlin Gr
 
 ## Unreleased
 
+- Increased the tap poster tint from 6% to 12% to make its frame easier to distinguish on a light canvas.
+
 - Immediate-mode players load on first visibility on Android and on Apple platforms with scroll visibility tracking (iOS 18, macOS 15, visionOS 2). Earlier Apple releases keep appearance-based loading.
 
 - Swift pauses embedded media when the scene loses activity. Android releases the embedded player when its lifecycle stops and reloads without autoplay on return.
