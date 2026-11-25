@@ -108,6 +108,8 @@ class GridRendererTest {
         compose.onAllNodes(link("Inline", moved)).assertCountEquals(0)
         compose.onAllNodes(link("Read the guide", "/handbook/tr/new#chapter")).assertCountEquals(0)
         compose.onNodeWithText("Inline and Missing.").assertExists()
+        compose.onNodeWithText("grid-page:v1:~1 and grid-page:v1:~2").assertExists()
+        compose.onAllNodes(link("grid-page:v1:~1", "/handbook/tr/new")).assertCountEquals(0)
         compose.onNodeWithText("Read the guide").assertExists()
     }
 
