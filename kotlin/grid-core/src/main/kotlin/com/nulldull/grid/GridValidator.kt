@@ -63,7 +63,7 @@ public object GridValidator {
     public fun link(value: JsonElement?): String {
         if (value is JsonPrimitive && value.isString && value.content.isEmpty()) return ""
         val v = text(value, 2048, "URL")
-        return GridUrl.normalizeHttp(v) ?: fail("Use an http or https URL.")
+        return GridUrl.documentLink(v) ?: fail("Use an http or https URL.")
     }
 
     /** `gridId`: 1–128 letters, digits, `_` or `-`. */
@@ -215,7 +215,7 @@ public object GridValidator {
             1
         }
         val pageLink = n["pageLink"]?.let {
-            if (!link.isNullOrEmpty()) fail("Choose a URL or a Grid page.")
+            if (link != null && n["link"] != JsonPrimitive("")) fail("Choose a URL or a Grid page.")
             val fields = it as? JsonObject ?: fail("Invalid Grid page reference.")
             if (fields.keys.any { key -> key !in setOf("version", "entryId", "anchor") } ||
                 numberOf(fields["version"]) != 1.0) fail("Invalid Grid page reference.")

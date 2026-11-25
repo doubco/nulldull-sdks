@@ -45,9 +45,13 @@ final class PageLinkTests: XCTestCase {
     }
     let link = try XCTUnwrap(GridPageLink(destination: "grid-page:v1:~64#A-._~9"))
     let targets = ["~64": PublishedGridPageTarget(entryId: "guide", pool: "manual", slug: "guide", locale: "en")]
-    struct Route: Decodable { let input: String; let href: String? }
+    struct Route: Decodable { let input: String; let href: String?; let external: Bool? }
     for route in try JSONDecoder().decode([Route].self, from: Fixtures.data("page-links/routes.json")) {
       XCTAssertEqual(link.resolvedURL(in: targets) { _, _ in route.input }?.absoluteString, route.href, route.input)
+      if route.external == true {
+        let opened = GridURL.safeHref(route.input).flatMap { URL(string: $0) }
+        XCTAssertEqual(opened?.absoluteString, route.href, route.input)
+      }
     }
   }
 }

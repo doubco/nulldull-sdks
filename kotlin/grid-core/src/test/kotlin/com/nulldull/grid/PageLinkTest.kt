@@ -72,7 +72,11 @@ class PageLinkTest {
         val targets = mapOf("~64" to page.pageTargets.getValue("~1"))
         for (raw in Fixtures.json("page-links/routes.json").jsonArray) {
             val input = raw.jsonObject.getValue("input").jsonPrimitive.content
-            val expected = raw.jsonObject["href"]?.jsonPrimitive?.contentOrNull
+            val href = raw.jsonObject.getValue("href").jsonPrimitive.contentOrNull
+            val expected = if (raw.jsonObject["jvmDefaultDeclines"]?.jsonPrimitive?.boolean == true) {
+                assertNotNull(href, "Only a browser-openable route can document a JVM decline")
+                null
+            } else href
             assertEquals(expected, link.resolve(targets) { _, _ -> input }, input)
             if (raw.jsonObject["external"]?.jsonPrimitive?.boolean == true) {
                 assertEquals(expected, GridUrl.safe(input), input)

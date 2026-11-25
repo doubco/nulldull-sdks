@@ -1,6 +1,6 @@
 package com.nulldull.grid
 
-import com.ibm.icu.text.IDNA
+import java.util.ServiceLoader
 
 /**
  * URL safety rules shared with `@nulldull/grid-react/rendering`. Only credential-free
@@ -37,7 +37,6 @@ public object GridUrl {
         val authority = rest.takeWhile { it !in "/?#" }
         val host = authority.substringAfterLast('@')
         if ('@' in authority && authority.substringBeforeLast('@') !in listOf("", ":")) return null
-        if (host.startsWith('[') && ('%' in host || runCatching { java.net.URI("$scheme://$host/").host }.getOrNull() == null)) return null
         val href = normalizeHttp("$scheme://$host" + rest.substring(authority.length), pageRoute = true) ?: return null
         if (host.startsWith('[')) return href
         val domain = href.substringAfter("://").takeWhile { it !in ":/?#" }
@@ -96,7 +95,10 @@ public object GridUrl {
      */
     public fun normalizeHttp(input: String): String? = normalizeHttp(input, pageRoute = false)
 
-    private fun normalizeHttp(input: String, pageRoute: Boolean): String? {
+    /** A declined internationalized node link is empty so its document can still render. */
+    internal fun documentLink(input: String): String? = normalizeHttp(input, pageRoute = false, inertIdn = true)
+
+    private fun normalizeHttp(input: String, pageRoute: Boolean, inertIdn: Boolean = false): String? {
         val value = input.trim { it <= ' ' }.filterNot { it == '\t' || it == '\n' || it == '\r' }
         val colon = value.indexOf(':')
         if (colon <= 0) return null
@@ -110,7 +112,8 @@ public object GridUrl {
         var tail = rest.substring(authorityEnd)
         if ('@' in authority) return null
         val (rawHost, port) = splitPort(authority, pageRoute) ?: return null
-        val host = normalizeHost(rawHost) ?: return null
+        val host = normalizeHost(rawHost, inertIdn) ?: return null
+        if (host.isEmpty()) return ""
         val portPart = when {
             port == null -> ""
             (scheme == "http" && port == 80) || (scheme == "https" && port == 443) -> ""
@@ -153,23 +156,31 @@ public object GridUrl {
         return digits.takeIf { it.length <= 5 && it.all(Char::isDigit) }?.toIntOrNull()?.takeIf { it <= 65535 }
     }
 
-    // WHATWG domain-to-ASCII uses nontransitional UTS 46, checks bidi and joiners,
-    // and disables STD3, hyphen checks and DNS label/domain length verification.
-    private val idna = IDNA.getUTS46Instance(IDNA.NONTRANSITIONAL_TO_ASCII or IDNA.CHECK_BIDI or IDNA.CHECK_CONTEXTJ)
-    private val nonStrictErrors = setOf(
-        IDNA.Error.LEADING_HYPHEN, IDNA.Error.TRAILING_HYPHEN, IDNA.Error.HYPHEN_3_4,
-        IDNA.Error.EMPTY_LABEL, IDNA.Error.LABEL_TOO_LONG, IDNA.Error.DOMAIN_NAME_TOO_LONG,
-    )
-
-    private fun normalizeHost(host: String): String? {
-        if (host.isEmpty()) return null
-        if (host.startsWith("[")) return host.lowercase()
-        val decoded = try { java.net.URLDecoder.decode(host.replace("+", "%2B"), "UTF-8") } catch (_: IllegalArgumentException) { return null }
-        val info = IDNA.Info()
-        val ascii = idna.nameToASCII(decoded, StringBuilder(), info).toString()
-        if (info.errors.any { it !in nonStrictErrors }) return null
-        return ascii.takeIf { it.isNotEmpty() && it.none { c -> c <= ' ' || c == '\u007F' || c in "#%/:<>?@[\\]^|" } }
+    // Resolve the renderer's provider before document decoding as well as before rendering.
+    private val hostNormalizer: GridHostNormalizer by lazy {
+        ServiceLoader.load(GridHostNormalizer::class.java, GridHostNormalizer::class.java.classLoader)
+            .firstOrNull() ?: JdkGridHostNormalizer
     }
+
+    private fun normalizeHost(raw: String, inertIdn: Boolean): String? {
+        if (raw.startsWith("[")) {
+            if ('%' in raw || runCatching { java.net.URI("http://$raw/").host }.getOrNull() == null) return null
+            return raw.lowercase()
+        }
+        val host = try {
+            java.net.URLDecoder.decode(raw.replace("+", "%2B"), "UTF-8")
+        } catch (_: IllegalArgumentException) { return null }
+        if (host.isEmpty() || host.any(::forbiddenHostChar)) return null
+        val ace = host.split('.').filter { it.startsWith("xn--", ignoreCase = true) }
+        if (ace.isEmpty() && host.all { it.code < 128 }) return host.lowercase()
+
+        // A trailing Punycode delimiter encodes only basic characters, never an international label.
+        if (ace.any { it.endsWith('-') }) return if (inertIdn) "" else null
+        val ascii = hostNormalizer.toAscii(host) ?: return if (inertIdn) "" else null
+        return ascii.takeIf { it.isNotEmpty() && it.all { c -> c.code < 128 && !forbiddenHostChar(c) } }
+    }
+
+    private fun forbiddenHostChar(c: Char): Boolean = c <= ' ' || c == '\u007F' || c in "#%/:<>?@[\\]^|"
 
     private fun removeDotSegments(path: String): String {
         if (path.isEmpty()) return path

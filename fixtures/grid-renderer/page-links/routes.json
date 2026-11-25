@@ -157,16 +157,19 @@
   },
   {
     "input": "https://faß.de/guide",
+    "jvmDefaultDeclines": true,
     "href": "https://xn--fa-hia.de/guide",
     "external": true
   },
   {
     "input": "https://fa%C3%9F.de/guide",
+    "jvmDefaultDeclines": true,
     "href": "https://xn--fa-hia.de/guide",
     "external": true
   },
   {
     "input": "https://βόλος.gr/guide",
+    "jvmDefaultDeclines": true,
     "href": "https://xn--nxasmm1c.gr/guide",
     "external": true
   },
@@ -182,11 +185,13 @@
   },
   {
     "input": "https://نامه‌ای.ir/guide",
+    "jvmDefaultDeclines": true,
     "href": "https://xn--mgba3gch31f060k.ir/guide",
     "external": true
   },
   {
     "input": "https://क्‍ष.test/guide",
+    "jvmDefaultDeclines": true,
     "href": "https://xn--11b2ezcw70k.test/guide",
     "external": true
   },
@@ -198,6 +203,18 @@
   {
     "input": "https://xn--fa-hia.de/guide",
     "href": "https://xn--fa-hia.de/guide",
+    "external": true
+  },
+  {
+    "input": "https://ab\u00adcd.example/guide",
+    "jvmDefaultDeclines": true,
+    "href": "https://abcd.example/guide",
+    "external": true
+  },
+  {
+    "input": "https://🍕.example/guide",
+    "jvmDefaultDeclines": true,
+    "href": "https://xn--vi8h.example/guide",
     "external": true
   }
 ]
