@@ -56,8 +56,12 @@ public struct PublicGridPage: Hashable, Sendable, Codable {
   public var slug: String { summary.slug }
   public var cover: PublicGridCover? { summary.cover }
 
+  public init(summary: PublicGridPageSummary, document: GridDocument, assets: [PublicGridAsset]) {
+    self.init(summary: summary, document: document, assets: assets, pageTargets: [:])
+  }
+
   public init(summary: PublicGridPageSummary, document: GridDocument, assets: [PublicGridAsset],
-    pageTargets: [String: PublishedGridPageTarget] = [:]) {
+    pageTargets: [String: PublishedGridPageTarget]) {
     self.pageTargets = pageTargets
     self.summary = summary
     self.document = document

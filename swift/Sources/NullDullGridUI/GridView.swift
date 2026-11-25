@@ -64,7 +64,28 @@ public struct GridView: View {
   ///     as the embed appears, or `.tap` after the viewer taps a local poster. Ignored when `embed:` is set.
   public init(
     document: GridDocument,
-    pageTargets: [String: PublishedGridPageTarget] = [:], resolvePageLink: GridPageLinkResolver? = nil,
+    resolveAsset: @escaping (String) -> URL? = { _ in nil },
+    width: CGFloat? = nil,
+    initialWidth: CGFloat = 390,
+    layout: GridLayoutSettings? = nil,
+    breakpointId: String? = nil,
+    theme: GridTheme = GridTheme(),
+    customNodes: GridCustomNodeRegistry = GridCustomNodeRegistry(),
+    embed: ((GridBuiltinNode) -> AnyView)? = nil,
+    embedLoading: GridEmbedLoading = .immediate,
+    messages: GridMessages = GridMessages(),
+    label: String? = nil,
+    dynamicType: GridDynamicType = .contentFlowText
+  ) {
+    self.init(
+      document: document, pageTargets: [:], resolvePageLink: nil, resolveAsset: resolveAsset, width: width,
+      initialWidth: initialWidth, layout: layout, breakpointId: breakpointId, theme: theme, customNodes: customNodes,
+      embed: embed, embedLoading: embedLoading, messages: messages, label: label, dynamicType: dynamicType)
+  }
+
+  public init(
+    document: GridDocument,
+    pageTargets: [String: PublishedGridPageTarget], resolvePageLink: GridPageLinkResolver?,
     resolveAsset: @escaping (String) -> URL? = { _ in nil },
     width: CGFloat? = nil,
     initialWidth: CGFloat = 390,
@@ -150,7 +171,18 @@ public struct PublishedGridPageView: View {
   let content: GridView
 
   public init(
-    page: PublicGridPage, resolvePageLink: GridPageLinkResolver? = nil, width: CGFloat? = nil, initialWidth: CGFloat = 390, theme: GridTheme = GridTheme(),
+    page: PublicGridPage, width: CGFloat? = nil, initialWidth: CGFloat = 390, theme: GridTheme = GridTheme(),
+    customNodes: GridCustomNodeRegistry = GridCustomNodeRegistry(), embed: ((GridBuiltinNode) -> AnyView)? = nil,
+    embedLoading: GridEmbedLoading = .immediate, messages: GridMessages = GridMessages(),
+    dynamicType: GridDynamicType = .contentFlowText
+  ) {
+    self.init(
+      page: page, resolvePageLink: nil, width: width, initialWidth: initialWidth, theme: theme,
+      customNodes: customNodes, embed: embed, embedLoading: embedLoading, messages: messages, dynamicType: dynamicType)
+  }
+
+  public init(
+    page: PublicGridPage, resolvePageLink: GridPageLinkResolver?, width: CGFloat? = nil, initialWidth: CGFloat = 390, theme: GridTheme = GridTheme(),
     customNodes: GridCustomNodeRegistry = GridCustomNodeRegistry(), embed: ((GridBuiltinNode) -> AnyView)? = nil,
     embedLoading: GridEmbedLoading = .immediate, messages: GridMessages = GridMessages(),
     dynamicType: GridDynamicType = .contentFlowText
