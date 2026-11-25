@@ -1,6 +1,6 @@
 package com.nulldull.grid
 
-import java.net.IDN
+import com.ibm.icu.text.IDNA
 
 /**
  * URL safety rules shared with `@nulldull/grid-react/rendering`. Only credential-free
@@ -111,8 +111,6 @@ public object GridUrl {
         if ('@' in authority) return null
         val (rawHost, port) = splitPort(authority, pageRoute) ?: return null
         val host = normalizeHost(rawHost) ?: return null
-        // IDN mapping can turn Unicode punctuation into an ASCII authority delimiter.
-        if (pageRoute && !rawHost.startsWith('[') && host.any { it <= ' ' || it == '\u007F' || it in "#%/:<>?@[\\]^|" }) return null
         val portPart = when {
             port == null -> ""
             (scheme == "http" && port == 80) || (scheme == "https" && port == 443) -> ""
@@ -155,13 +153,22 @@ public object GridUrl {
         return digits.takeIf { it.length <= 5 && it.all(Char::isDigit) }?.toIntOrNull()?.takeIf { it <= 65535 }
     }
 
+    // WHATWG domain-to-ASCII uses nontransitional UTS 46, checks bidi and joiners,
+    // and disables STD3, hyphen checks and DNS label/domain length verification.
+    private val idna = IDNA.getUTS46Instance(IDNA.NONTRANSITIONAL_TO_ASCII or IDNA.CHECK_BIDI or IDNA.CHECK_CONTEXTJ)
+    private val nonStrictErrors = setOf(
+        IDNA.Error.LEADING_HYPHEN, IDNA.Error.TRAILING_HYPHEN, IDNA.Error.HYPHEN_3_4,
+        IDNA.Error.EMPTY_LABEL, IDNA.Error.LABEL_TOO_LONG, IDNA.Error.DOMAIN_NAME_TOO_LONG,
+    )
+
     private fun normalizeHost(host: String): String? {
         if (host.isEmpty()) return null
         if (host.startsWith("[")) return host.lowercase()
         val decoded = try { java.net.URLDecoder.decode(host.replace("+", "%2B"), "UTF-8") } catch (_: IllegalArgumentException) { return null }
-        if (decoded.any { it <= ' ' || it in "#%/:<>?@[\\]^|" }) return null
-        return try { IDN.toASCII(decoded, IDN.ALLOW_UNASSIGNED).lowercase() } catch (_: IllegalArgumentException) { null }
-            ?.takeIf { it.isNotEmpty() }
+        val info = IDNA.Info()
+        val ascii = idna.nameToASCII(decoded, StringBuilder(), info).toString()
+        if (info.errors.any { it !in nonStrictErrors }) return null
+        return ascii.takeIf { it.isNotEmpty() && it.none { c -> c <= ' ' || c == '\u007F' || c in "#%/:<>?@[\\]^|" } }
     }
 
     private fun removeDotSegments(path: String): String {

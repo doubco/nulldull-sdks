@@ -66,7 +66,11 @@ class PageLinkTest {
         val targets = mapOf("~64" to page.pageTargets.getValue("~1"))
         for (raw in Fixtures.json("page-links/routes.json").jsonArray) {
             val input = raw.jsonObject.getValue("input").jsonPrimitive.content
-            assertEquals(raw.jsonObject["href"]?.jsonPrimitive?.contentOrNull, link.resolve(targets) { _, _ -> input }, input)
+            val expected = raw.jsonObject["href"]?.jsonPrimitive?.contentOrNull
+            assertEquals(expected, link.resolve(targets) { _, _ -> input }, input)
+            if (raw.jsonObject["external"]?.jsonPrimitive?.boolean == true) {
+                assertEquals(expected, GridUrl.safe(input), input)
+            }
         }
     }
 }

@@ -25,6 +25,7 @@ kotlin {
 dependencies {
     api(libs.kotlinx.serialization.json)
     api(libs.kotlinx.coroutines.core)
+    implementation(libs.icu4j)
     implementation(libs.jetbrains.markdown)
     testImplementation(libs.kotlin.test.junit)
     testImplementation(libs.junit4)
