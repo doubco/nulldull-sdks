@@ -1,6 +1,6 @@
 # NullDull SDK specification
 
-Version 0.1.0 (early access). This is the one contract every NullDull SDK implements: Node/TypeScript (`node/`, the reference implementation), React, Python, Go, Swift and Kotlin. The facts below are taken from the NullDull API source. Where this document and an SDK disagree, the SDK is wrong. Where this document and the live API disagree, open an issue and fix this document first.
+Version 0.4.0 (prepared for early access). This is the one contract every NullDull SDK implements: Node/TypeScript (`node/`, the reference implementation), React, Python, Go, Swift and Kotlin. The facts below are taken from the NullDull API source. Where this document and an SDK disagree, the SDK is wrong. Where this document and the live API disagree, open an issue and fix this document first.
 
 The words MUST, MUST NOT, SHOULD and MAY are used as in RFC 2119.
 
@@ -64,7 +64,7 @@ Headers on every request:
 
 - `Authorization: Bearer <apiKey>`
 - `Accept: application/json` for JSON calls and `*/*` for downloads.
-- `User-Agent: nulldull-sdk-<lang>/<version>`, for example `nulldull-sdk-node/0.1.0`, `nulldull-sdk-python/0.1.0` or `nulldull-sdk-go/0.1.0`. Browser JavaScript MUST NOT set it: browsers ignore or forbid it, and Grid's CORS policy only allows `Authorization`, `Range` and `If-None-Match`. Do not add other custom headers, for the same CORS reason.
+- `User-Agent: nulldull-sdk-<lang>/<version>`, for example `nulldull-sdk-node/0.4.0`, `nulldull-sdk-python/0.4.0` or `nulldull-sdk-go/0.4.0`. Browser JavaScript MUST NOT set it: browsers ignore or forbid it, and Grid's CORS policy only allows `Authorization`, `Range` and `If-None-Match`. Do not add other custom headers, for the same CORS reason.
 
 Other request rules:
 
@@ -280,11 +280,16 @@ GridPageSummary = {
   version: number;        // publication version
   sourceVersion: number;  // editor version that was published
   publishedAt: number; folderId?: string | null; cover?: GridCover | null }
-GridPage = GridPageSummary & { document: GridDocument; assets: GridAssetRef[] }
+GridPageTarget = { entryId: string; published: true; pool: string; slug: string; locale: string }
+GridPage = GridPageSummary & { document: GridDocument; assets: GridAssetRef[]; pageTargets?: Record<string, GridPageTarget> }
 GridPageList = { pool: { key: string; name: string }; items: GridPageSummary[]; nextCursor: string | null }
 GridDocument = { layout: object; breakpoints: object[]; baseLayoutIndex?: number; baseLayoutName?: string; nodes: object[] }
                // The full schema belongs to @nulldull/grid-core. SDKs treat nested values as opaque JSON.
 ```
+
+A published built-in node can carry `pageLink: {version: 1, entryId: "~1", anchor?: string}`. A text node with `pageLinkVersion: 1` can also contain Markdown destinations such as `grid-page:v1:~1#intro`, including reference definitions. Aliases range from `~1` through `~64` and are local to one document. Anchors contain 1–128 ASCII letters, digits, periods, underscores, tildes or hyphens.
+
+Use the matching detail response’s `pageTargets` for every render. Each entry contains a currently readable publication. A move or slug change updates that entry, and withdrawal removes it. An empty map can be omitted. Renderers pass the entry and the link’s optional anchor to the customer resolver. Its result may be a credential-free HTTP(S) URL or a root-relative path starting with a single slash. Whitespace or backslashes anywhere disqualify the result. If the entry, resolver or accepted result is absent, the label stays inert.
 
 ### Memory
 

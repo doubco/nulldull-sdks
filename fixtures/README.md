@@ -12,4 +12,6 @@ Conformance data reused by every SDK's test suite. See [SPEC.md, section 11](../
   - `delivery/*.json`: public Grid delivery API samples for the renderers' content clients.
   - `icons/grid-icons.json`: the shared icon catalog as path data (the Kotlin renderer generates its icons from it).
 
+The page-link corpus in `grid-renderer/page-links/published.json` contains the 17 published documents produced by `snapshotGridPageLinks` from `packages/domain/test/grid-page-link-corpus.ts` in the app repository. Its final case reaches the 180,000-byte document limit and the 16,000-character text limit. `page-links/routes.json` records the React resolver’s output for URL safety cases. `grid/page-links.json` and `grid-renderer/page-links/legacy.json` exercise delivery with and without the extension.
+
 The keys and IDs are fake. Never put real keys here.

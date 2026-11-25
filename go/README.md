@@ -6,7 +6,7 @@ The official NullDull SDK for Go. It reads NullDull with **workspace API keys**:
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** `0.1.0` may change before `1.0`. The SDK only reads data.
+> **Early access.** Version 0.4.0 is in preparation. The SDK only reads data.
 
 Standard library only. Go 1.23 or newer (iterators use `iter.Seq2`).
 
@@ -18,7 +18,7 @@ Documentation: <https://nulldull.com/docs> · Specification: [`SPEC.md`](https:/
 go get github.com/doubco/nulldull-sdks/go@latest
 ```
 
-Releases are tagged `go/vX.Y.Z` (for example `go/v0.1.0`) in the `nulldull-sdks` monorepo.
+Releases are tagged `go/vX.Y.Z` (for example `go/v0.4.0`) in the `nulldull-sdks` monorepo.
 
 ```go
 import nulldull "github.com/doubco/nulldull-sdks/go"
@@ -69,6 +69,7 @@ for summary, err := range grid.IteratePages(ctx, "my-blog", &nulldull.ListPagesP
 // One page with its document and asset manifest
 page, err := grid.GetPage(ctx, "my-blog", "hello-world", nil)
 page.Document // json.RawMessage: render it with @nulldull/grid-react, or decode what you need
+target, ok := page.PageTargets["~1"] // current readable target for this document's alias
 page.Assets   // []GridAssetRef{ID, Version, URL, Filename, MediaType, ByteSize, Checksum}
 ```
 
@@ -213,7 +214,7 @@ Each attempt times out after 30 seconds (`WithTimeout`), returning `TIMEOUT`, wh
 | `WithTimeout` | `30 * time.Second` | Per attempt; `0` disables it. |
 | `WithMaxRetries` | `2` | `0` disables retries. |
 | `WithHTTPClient` | `&http.Client{}` | Proxies, custom transports or test mocks. The SDK uses a copy that never follows redirects and has no cookie jar. |
-| `WithUserAgent` | none | Appended to `nulldull-sdk-go/0.1.0`. |
+| `WithUserAgent` | none | Appended to `nulldull-sdk-go/0.4.0`. |
 | `WithSleep` | real timer | Replaces the wait between retries, for tests. |
 
 ## Unknown fields

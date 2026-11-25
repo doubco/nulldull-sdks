@@ -4,7 +4,7 @@ build-backend = "hatchling.build"
 
 [project]
 name = "nulldull"
-version = "0.1.0"
+version = "0.4.0"
 description = "Official NullDull SDK for Python: Grid published content, read-only Memory and Locale export with workspace API keys."
 readme = "README.md"
 license = "MIT"

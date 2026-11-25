@@ -423,7 +423,7 @@ class NullDull:
         max_retries: Retries for 429/502/503/504 and network errors (default 2). ``0`` disables them.
         transport: An ``httpx.BaseTransport`` (for example ``httpx.MockTransport`` in tests).
         http_client: An ``httpx.Client`` to send requests with. The SDK does not close it.
-        user_agent: Appended to ``nulldull-sdk-python/0.1.0``.
+        user_agent: Appended to ``nulldull-sdk-python/0.4.0``.
         sleep: Replaces the retry wait (receives seconds), for tests.
     """
 

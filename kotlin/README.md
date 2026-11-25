@@ -241,11 +241,32 @@ fun Article(slug: String) {
 }
 ```
 
+### Routing Grid page links (prepared for Kotlin Grid 0.3.0)
+
+The resolver receives the target's stable `entryId`, current pool, slug and locale, and the link's optional anchor. Return a credential-free HTTP(S) URL for the platform URI handler, or a path beginning with one slash for your own navigation handler.
+
+```kotlin
+PublishedGridPage(
+    page = page,
+    resolvePageLink = { target, anchor ->
+        if (target.pool == "manual") {
+            "/${target.locale}/${target.slug}" + (anchor?.let { "#$it" } ?: "")
+        } else null
+    },
+    onOpenUrl = { href ->
+        if (href.startsWith("/")) router.navigate(href)
+        else uriHandler.openUri(href)
+    },
+)
+```
+
+Here `router` is the app's navigator and `uriHandler` is `LocalUriHandler.current` captured in the composable. The resolver runs during rendering. Only the tap handler navigates. A missing binding, a missing resolver, a `null` result, or unsafe output leaves the label as text. With a separately decoded document, pass its matching `pageTargets` and `resolvePageLink` to `GridRenderer`.
+
 For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument.decode(json)` (throws `GridValidationException`) and render them with `GridRenderer(document, resolveAsset = { id -> urls[id] })`.
 
 - `GridClient` follows the same key rules as the SDK: a private `nd_sec_` key is refused unless `allowPrivateKey = true` (server-side JVM use) and is never put in a URL; a public key is added as `key=` only to asset URLs on the API's own origin. `GridHttpEngine` is a one-method interface, so you can inject OkHttp, Ktor or a test double; engines must not follow redirects, send cookies or cache.
 - An HTTP error throws `GridPublicException` with `status`, `code`, `detail`, `reason`, `renewsAt` and `retryAfter` (seconds). The client never retries. When the workspace's public requests are paused (`isPublicRequestsPaused`: `429` with `reason` `PUBLIC_REQUESTS_PAUSED`), show your own calm "temporarily unavailable" state until `renewsAt`. `GridRenderer` and `PublishedGridPage` only render a page you already loaded, so they never show a load error themselves.
-- Links and assets must be credential-free `http`/`https` URLs. Custom node properties are inert. Downloaded SVG files pass the same static allowlist as the web renderer before AndroidSVG draws them.
+- External links and assets must be credential-free `http`/`https` URLs. Custom node properties are inert. Downloaded SVG files pass the same static allowlist as the web renderer before AndroidSVG draws them.
 - TalkBack descriptions, system font scale for flowing text, and light and dark themes (`GridTheme`) are supported. Video and audio never autoplay. Each node has the test tag `grid:<node id>`.
 - Restricted embeds (YouTube on `youtube-nocookie.com`, and Vimeo) play inline, in a WebView inside the node. The `embedLoading` parameter of `GridRenderer` and `PublishedGridPage` sets when the player loads:
   - `GridEmbedLoading.Immediate` (the default) loads the player as soon as the embed is composed, without a tap. This means a request to YouTube or Vimeo happens as soon as the embed is shown. `GridRenderer` composes every node of the page, so this includes embeds further down a long page that the viewer has not scrolled to yet. The video does not autoplay: the viewer starts it with the player's own play button.

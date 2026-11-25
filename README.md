@@ -43,6 +43,8 @@ Native renderers for Grid documents, for apps that show published pages without 
 
 See the Grid renderer sections of [`swift/README.md`](swift/README.md#grid-renderer-alpha) and [`kotlin/README.md`](kotlin/README.md#grid-renderer-alpha).
 
+The prepared 0.4.0 workspace SDKs expose `pageTargets` on page detail responses. Swift Grid 0.4.0 and Kotlin Grid 0.3.0 add a `resolvePageLink` hook. Pass it to `PublishedGridPageView` or `PublishedGridPage` to route a published target using its current coordinates and the link’s optional anchor. Both SDK guides include a routing example.
+
 Each directory has its own README with a quick start for Grid, Memory and Locale, errors and pagination. All six implement [`SPEC.md`](SPEC.md) and pass the same conformance fixtures.
 
 ### Quick look (Node)

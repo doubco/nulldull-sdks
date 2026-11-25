@@ -124,7 +124,7 @@ class BehaviourTest {
             assertEquals("GET", first.method)
             assertEquals("Bearer $PRIVATE_KEY", first.getHeader("Authorization"))
             assertEquals("application/json", first.getHeader("Accept"))
-            assertEquals("nulldull-sdk-kotlin/0.1.0 my-app/2.0", first.getHeader("User-Agent"))
+            assertEquals("nulldull-sdk-kotlin/0.4.0 my-app/2.0", first.getHeader("User-Agent"))
             assertEquals("*/*", second.getHeader("Accept"))
             assertEquals("Bearer $PRIVATE_KEY", second.getHeader("Authorization"))
         }
@@ -133,7 +133,7 @@ class BehaviourTest {
         fun `sends the bare User-Agent without a suffix`() = runBlocking<Unit> {
             server.enqueue(jsonFixture("grid/page-list-last.json"))
             Harness(server, PUBLIC_KEY).client.grid.listPages("nulldull-blog")
-            assertEquals("nulldull-sdk-kotlin/0.1.0", server.takeRequest().getHeader("User-Agent"))
+            assertEquals("nulldull-sdk-kotlin/0.4.0", server.takeRequest().getHeader("User-Agent"))
         }
 
         @Test
@@ -287,6 +287,14 @@ class BehaviourTest {
         }
     }
 
+    @Test
+    fun `page targets are optional and keyed by document alias`() {
+        val linked = GridPage(fixture("grid/page-links.json").jsonObject)
+        assertEquals("guide", linked.pageTargets.getValue("~1").entryId)
+        assertEquals("getting-started", linked.pageTargets.getValue("~1").slug)
+        assertTrue(GridPage(fixture("grid/page.json").jsonObject).pageTargets.isEmpty())
+    }
+
     @Nested
     inner class `6 grid downloadAsset` {
         @Test
@@ -299,11 +307,7 @@ class BehaviourTest {
                 other.enqueue(bytes())
                 val base = server.url("/").toString()
                 val priv = NullDullClient(PRIVATE_KEY, baseUrl = base).grid
-                val linked = GridPage(fixture("grid/page-links.json").jsonObject)
-                assertEquals("guide", linked.pageTargets.getValue("~1").entryId)
-                assertEquals("getting-started", linked.pageTargets.getValue("~1").slug)
                 val page = GridPage(fixture("grid/page.json").jsonObject)
-                assertTrue(page.pageTargets.isEmpty())
                 val own = priv.downloadAsset(page.assets[0])
                 assertEquals("image/png", own.contentType)
                 assertEquals("cover.png", own.filename)

@@ -2,7 +2,13 @@
 
 All NullDull SDKs share one version, the repository's release tag; the Kotlin Grid renderer artifacts have their own version, given in each entry. This project follows [Semantic Versioning](https://semver.org); `0.x` releases may contain breaking changes in minor versions.
 
-## Unreleased
+## 0.4.0 (unreleased)
+
+Swift Grid and the workspace SDKs are prepared at `0.4.0`. The separately versioned Kotlin Grid core and Compose artifacts are prepared at `0.3.0`.
+
+- SwiftUI and Compose resolve published node and formatted Markdown page links through the host's `resolvePageLink(target, anchor)`. Links follow the target’s current pool, slug and locale. Missing targets, declined routes and unsafe URLs render as inert labels. Active routes use the platform link accessibility and tap handlers.
+- Page detail models expose `pageTargets` in Swift, Kotlin, Node, Python and Go. React’s `useGridPage` inherits the Node type. The Go release tag for this version is `go/v0.4.0` when published.
+- Recompile Kotlin consumers when upgrading. The published page and node data classes have additional defaulted properties. The old Compose renderer overloads remain available, including their trailing `onOpenUrl` lambda.
 
 - Increased the tap poster tint from 6% to 12% to make its frame easier to distinguish on a light canvas.
 

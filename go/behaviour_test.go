@@ -133,7 +133,7 @@ func TestRequestHeaders(t *testing.T) {
 	if got := second.Header.Get("Accept"); got != "*/*" {
 		t.Errorf("download Accept = %q", got)
 	}
-	if got := first.Header.Get("User-Agent"); got != "nulldull-sdk-go/0.1.0 my-app/2.0" {
+	if got := first.Header.Get("User-Agent"); got != "nulldull-sdk-go/0.4.0 my-app/2.0" {
 		t.Errorf("User-Agent = %q", got)
 	}
 	if strings.Contains(second.URL, "submissionId") {
@@ -142,7 +142,7 @@ func TestRequestHeaders(t *testing.T) {
 }
 
 func TestDefaultUserAgentAndVersion(t *testing.T) {
-	if Version != "0.1.0" {
+	if Version != "0.4.0" {
 		t.Errorf("Version = %q", Version)
 	}
 	c := newTestClient(t, "public", []responder{fixtureResponse(t, 200, "grid/page-list-last.json")})

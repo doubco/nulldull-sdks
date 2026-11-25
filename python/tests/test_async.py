@@ -42,7 +42,7 @@ def test_sends_headers_and_downloads() -> None:
     first, second = mock.requests
     assert first.headers["authorization"] == f"Bearer {PRIVATE_KEY}"
     assert first.headers["accept"] == "application/json"
-    assert first.headers["user-agent"] == "nulldull-sdk-python/0.1.0 my-app/2.0"
+    assert first.headers["user-agent"] == "nulldull-sdk-python/0.4.0 my-app/2.0"
     assert second.headers["accept"] == "*/*"
     assert second.url.query == b"preview=true&w=64"
 

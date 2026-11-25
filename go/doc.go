@@ -5,7 +5,7 @@
 //   - Memory: read-only documents, folders, search, tags and assets.
 //   - Locale: export translation catalogs at build time.
 //
-// Early access: version 0.1.0 may change before 1.0. The SDK only reads data.
+// Early access: version 0.4.0 may change before 1.0. The SDK only reads data.
 // It uses the standard library only.
 //
 // # Keys

@@ -255,11 +255,25 @@ struct ArticleView: View {
 
 `GridView` and `PublishedGridPageView` only draw a page you have already loaded; they have no loading or error state of their own. API failures throw `GridPublicError` with `status`, `code`, `detail`, `reason`, `renewsAt` (ISO 8601) and `retryAfter` (seconds). When the workspace has used its monthly public requests (Free plan), every read fails with `429` and `isPublicRequestsPaused` until `renewsAt`, the start of the next UTC month, or a few minutes after an upgrade; the client never retries, so show your own calm notice. Equality compares `status` and `code` only.
 
+### Routing Grid page links (prepared for Swift 0.4.0)
+
+Pass a resolver when the app knows the routes for published pages. It receives the target's stable `entryId`, current pool, slug and locale, and the link's optional anchor.
+
+```swift
+PublishedGridPageView(page: page, resolvePageLink: { target, anchor in
+    guard target.pool == "manual" else { return nil }
+    return "https://docs.example.com/\(target.locale)/\(target.slug)"
+        + (anchor.map { "#" + $0 } ?? "")
+})
+```
+
+SwiftUI sends active links to the environment's `openURL`. For in-app navigation, return a path beginning with one slash and handle it in the app's `OpenURLAction`. The resolver runs while rendering, so perform navigation in the tap handler. Missing bindings, a missing resolver, a `nil` result, or unsafe URLs leave the label as text. With a separately decoded document, pass its matching `pageTargets:` and `resolvePageLink:` to `GridView`.
+
 For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument(json:)` and render them with `GridView(document:resolveAsset:)`. `GridView` picks the breakpoint from its width: without `width:` it takes the width its container proposes and follows it as it changes (rotation, window resizing), starting from `initialWidth` (390) until the first layout; pass `width:` when you already know it. A document with a horizontal layout is shown in a horizontal `ScrollView` that scrolls only while the canvas is wider than the view, so node views keep their state (a playing embed, a custom node's `@State`) when rotation or resizing makes the canvas fit or overflow; `ImageRenderer` cannot draw a `ScrollView`, so it renders such a document blank. `theme:`, `customNodes:` (a `GridCustomNodeRegistry`), `embed:`, `embedLoading:`, `messages:` and `label:` customize it.
 
 - `NullDull` and `NullDullGrid` both declare `GridDocument` and `JSONValue`. In a file that imports both modules, qualify the name (`NullDullGrid.GridDocument`).
 - The client follows the same key rules as the SDK: only public `nd_pub_` keys belong in apps (iOS, tvOS and visionOS reject `nd_sec_` keys), a key is added as `key=` only to asset URLs on the API's own origin, and redirects are refused.
-- Links and assets must be credential-free `http`/`https` URLs. Markdown HTML is shown as text. Custom node properties are inert strings, and only views registered in `GridCustomNodeRegistry` run. Uploaded SVG files pass a static allowlist and are drawn natively; nothing in them is executed or fetched.
+- External links and assets must be credential-free `http`/`https` URLs. Markdown HTML is shown as text. Custom node properties are inert strings, and only views registered in `GridCustomNodeRegistry` run. Uploaded SVG files pass a static allowlist and are drawn natively; nothing in them is executed or fetched.
 - VoiceOver labels, Dynamic Type for flowing text, and light and dark appearance are supported. Video and audio never autoplay.
 - Restricted embeds (YouTube on `youtube-nocookie.com`, and Vimeo) play inline in a `WKWebView`. `embedLoading:` on `GridView` and `PublishedGridPageView` chooses when the player loads:
   - `.immediate` (the default): the player loads as soon as the embed appears, without a tap, so the app contacts YouTube or Vimeo when the page is shown. `GridView` lays out every node of the page, so this includes embeds further down a long page that the viewer has not scrolled to yet. The video starts only when the viewer presses the player's play button.

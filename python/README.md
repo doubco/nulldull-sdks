@@ -6,7 +6,7 @@ The official NullDull SDK for Python. It reads NullDull with **workspace API key
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** `0.1.0` may change before `1.0`. The SDK only reads data.
+> **Early access.** Version 0.4.0 is in preparation. The SDK only reads data.
 
 Sync and asyncio clients, full type hints (`py.typed`), one runtime dependency ([httpx](https://www.python-httpx.org)). Python 3.9+.
 
@@ -76,6 +76,7 @@ for summary in grid.iterate_pages("my-blog", q="launch"):
 # One page with its document and asset manifest
 page = grid.get_page("my-blog", "hello-world")
 page["document"]  # opaque JSON; render it with @nulldull/grid-react's GridRenderer
+page.get("pageTargets", {}).get("~1")  # current readable target for this document's alias
 page["assets"]  # [{"id", "version", "url", "filename", "mediaType", "byteSize", "checksum"}]
 ```
 
@@ -221,7 +222,7 @@ Timeouts are not retried. Each attempt times out after `timeout` seconds (defaul
 | `max_retries` | `2` | `0` disables retries. |
 | `transport` | httpx default | An `httpx.BaseTransport` (`httpx.AsyncBaseTransport` for async), e.g. `httpx.MockTransport` in tests. |
 | `http_client` | none | Your own `httpx.Client` / `httpx.AsyncClient`. The SDK does not close it. |
-| `user_agent` | none | Appended to `nulldull-sdk-python/0.1.0`. |
+| `user_agent` | none | Appended to `nulldull-sdk-python/0.4.0`. |
 
 The SDK sends only `Authorization`, `Accept` and `User-Agent`, never cookies, and does not follow redirects.
 

@@ -51,7 +51,7 @@ public enum class KeyKind {
  * @param maxRetries Retries after the first attempt. `0` turns retries off. Default 2.
  * @param httpClient An [OkHttpClient] to share connection pools, add interceptors or proxies. The SDK
  *   derives its own client from it with redirects, cookies and caching turned off.
- * @param userAgent Optional suffix, sent as `nulldull-sdk-kotlin/0.1.0 <suffix>`.
+ * @param userAgent Optional suffix, sent as `nulldull-sdk-kotlin/0.4.0 <suffix>`.
  * @throws NullDullException `INVALID_ARGUMENT` for a malformed key, base URL, workspace ID, timeout
  *   or retry count.
  */

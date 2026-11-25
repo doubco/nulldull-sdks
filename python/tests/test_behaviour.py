@@ -120,7 +120,7 @@ class TestHeaders:
         assert first.method == "GET"
         assert first.headers["authorization"] == f"Bearer {PRIVATE_KEY}"
         assert first.headers["accept"] == "application/json"
-        assert first.headers["user-agent"] == "nulldull-sdk-python/0.1.0 my-app/2.0"
+        assert first.headers["user-agent"] == "nulldull-sdk-python/0.4.0 my-app/2.0"
         assert second.headers["accept"] == "*/*"
         assert second.headers["authorization"] == f"Bearer {PRIVATE_KEY}"
         assert "cookie" not in first.headers
@@ -129,7 +129,7 @@ class TestHeaders:
         mock = Mock([json_response(fixture("grid/page-list-last.json"))])
         client, _ = client_for("public", mock)
         client.grid.list_pages("nulldull-blog")
-        assert mock.requests[0].headers["user-agent"] == "nulldull-sdk-python/0.1.0"
+        assert mock.requests[0].headers["user-agent"] == "nulldull-sdk-python/0.4.0"
 
     def test_sends_no_cookies_and_no_extra_headers(self) -> None:
         set_cookie = json_response(fixture("memory/scopes.json"), headers={"set-cookie": "session=abc; Path=/"})
@@ -141,7 +141,7 @@ class TestHeaders:
         assert set(mock.requests[1].headers.keys()) <= {"host", "accept", "authorization", "user-agent"}
 
     def test_version_matches_pyproject(self) -> None:
-        assert nulldull.__version__ == nulldull.VERSION == "0.1.0"
+        assert nulldull.__version__ == nulldull.VERSION == "0.4.0"
         if tomllib is not None:
             data = tomllib.loads((Path(__file__).parents[1] / "pyproject.toml").read_text())
             assert data["project"]["version"] == nulldull.__version__

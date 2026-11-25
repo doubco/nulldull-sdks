@@ -2,7 +2,7 @@
 
 React hooks for [NullDull](https://nulldull.com), on top of [`@nulldull/sdk`](../node). Read published Grid pages in your site or app, and read Memory and Locale formats in internal tools, with workspace API keys.
 
-> **Early access.** NullDull and this package are in early access. Version `0.1.0` may change before `1.0`. The hooks only read data; they never write.
+> **Early access.** Version 0.4.0 is in preparation. The hooks only read data.
 
 - One provider, one hook per read call, each returning `{ data, error, isLoading, refetch }`.
 - Paginated hooks add `fetchNextPage`, `hasNextPage` and `isFetchingNextPage`.
@@ -18,7 +18,7 @@ Documentation: <https://nulldull.com/docs>
 npm install @nulldull/react @nulldull/sdk
 ```
 
-`@nulldull/sdk` (^0.1.0) and `react` (>=18) are peer dependencies.
+The peer dependencies are `@nulldull/sdk` (`^0.1.0` or `^0.4.0`) and `react` (>=18). The SDK 0.4.0 types include `pageTargets`.
 
 ## Security: which key goes where
 
@@ -102,7 +102,7 @@ function Blog() {
 
 ### `useGridPage(pool, slug, options?)` (public key)
 
-One published page with its `document` and version-pinned `assets`. Options: `locale`, `enabled`, `initialData`.
+One published page with its `document`, version-pinned `assets` and optional `pageTargets` keyed by document-local alias. Options: `locale`, `enabled`, `initialData`.
 
 ```tsx
 const { data: page, error, isLoading } = useGridPage("my-blog", slug, { locale: "en" });

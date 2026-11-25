@@ -6,7 +6,7 @@ The official NullDull SDK for Node.js and browsers. It reads NullDull with **wor
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** `0.1.0` may change before `1.0`. The SDK only reads data.
+> **Early access.** Version 0.4.0 is in preparation. The SDK only reads data.
 
 ESM and CommonJS, full TypeScript types, zero runtime dependencies. Runs on Node.js 18+, modern browsers, Deno, Bun and Cloudflare Workers (anything with `fetch`).
 
@@ -58,6 +58,7 @@ for await (const summary of grid.iteratePages("my-blog", { q: "launch" })) {
 // One page with its document and asset manifest
 const page = await grid.getPage("my-blog", "hello-world");
 page.document; // render with @nulldull/grid-react's GridRenderer
+page.pageTargets?.["~1"]; // current readable target for this document's alias
 page.assets;   // [{ id, version, url, filename, mediaType, byteSize, checksum }]
 ```
 
@@ -204,7 +205,7 @@ await nulldull.grid.getPage("my-blog", "hello", { signal: AbortSignal.timeout(50
 | `timeout` | `30000` | Milliseconds per attempt; `0` disables it. |
 | `maxRetries` | `2` | `0` disables retries. |
 | `fetch` | `globalThis.fetch` | Inject a custom or mocked `fetch`. |
-| `userAgent` | none | Appended to `nulldull-sdk-node/0.1.0` (server runtimes only). |
+| `userAgent` | none | Appended to `nulldull-sdk-node/0.4.0` (server runtimes only). |
 | `dangerouslyAllowPrivateKeyInBrowser` | `false` | The client refuses a private key in a browser unless you set this. |
 
 ## Browsers

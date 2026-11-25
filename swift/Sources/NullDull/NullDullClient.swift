@@ -4,7 +4,7 @@ import FoundationNetworking
 #endif
 
 /// The SDK version, sent in `User-Agent` as `nulldull-sdk-swift/<version>`.
-public let nullDullSDKVersion = "0.1.0"
+public let nullDullSDKVersion = "0.4.0"
 
 /// The NullDull client for workspace API keys.
 ///
@@ -52,7 +52,7 @@ public final class NullDullClient: Sendable {
     ///   - session: The session to use. The default has no cookies and no cache. Redirects are always refused.
     ///   - timeout: Per-attempt timeout in seconds. Default 30; `0` disables it.
     ///   - maxRetries: Retries for 429/502/503/504 and network errors. Default 2; `0` disables them.
-    ///   - userAgent: Appended to `User-Agent: nulldull-sdk-swift/0.1.0`.
+    ///   - userAgent: Appended to `User-Agent: nulldull-sdk-swift/0.4.0`.
     /// - Throws: ``NullDullError`` with code ``NullDullError/Code/invalidArgument`` for bad options.
     public convenience init(
         apiKey: String,
@@ -83,7 +83,7 @@ public final class NullDullClient: Sendable {
     ///   - transport: Sends each attempt. It must not follow redirects.
     ///   - timeout: Per-attempt timeout in seconds. Default 30; `0` disables it.
     ///   - maxRetries: Retries for 429/502/503/504 and network errors. Default 2.
-    ///   - userAgent: Appended to `User-Agent: nulldull-sdk-swift/0.1.0`.
+    ///   - userAgent: Appended to `User-Agent: nulldull-sdk-swift/0.4.0`.
     ///   - sleep: Replaces the wait between retries (milliseconds), for tests.
     public init(
         apiKey: String,
