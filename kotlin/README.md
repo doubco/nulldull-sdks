@@ -220,7 +220,7 @@ dependencies {
 }
 ```
 
-Requirements: `nulldull-grid-core` targets Java 17 bytecode (Kotlin 2.2, kotlinx.serialization 1.9, kotlinx.coroutines 1.10, ICU4J, `org.jetbrains:markdown`). `nulldull-grid-compose` needs minSdk 24 and compileSdk 36, uses Compose BOM 2025.08.00 (no Material dependency) and Coil 3.3 for images and SVG, and declares `INTERNET`. Packages are `com.nulldull.grid` and `com.nulldull.grid.compose`.
+Requirements: `nulldull-grid-core` targets Java 17 bytecode (Kotlin 2.2, kotlinx.serialization 1.9, kotlinx.coroutines 1.10, `org.jetbrains:markdown`). `nulldull-grid-compose` needs minSdk 24 and compileSdk 36, uses Compose BOM 2025.08.00 (no Material dependency) and Coil 3.3 for images and SVG, and declares `INTERNET`. Packages are `com.nulldull.grid` and `com.nulldull.grid.compose`.
 
 ```kotlin
 val grid = GridClient(
@@ -260,7 +260,9 @@ PublishedGridPage(
 )
 ```
 
-Here `router` is the app's navigator and `uriHandler` is `LocalUriHandler.current` captured in the composable. The resolver runs during rendering. Only the tap handler navigates. A missing binding, a missing resolver, a `null` result, or unsafe output leaves the label as text. With a separately decoded document, pass its matching `pageTargets` and `resolvePageLink` to `GridRenderer`.
+Here `router` is the app's navigator and `uriHandler` is `LocalUriHandler.current` captured in the composable. The resolver runs during rendering. Only the tap handler navigates. A missing binding, a missing resolver, a `null` result, or unsafe output leaves the label as text. Android uses the device’s nontransitional UTS 46 implementation for both external links and resolver output. Including `grid-compose` installs it automatically, including during document decoding. Core-only JVM apps use the JDK and decline Unicode hosts containing sharp s, final sigma or joiners, names outside IDNA 2003, names that fail a lowercase NFC round trip, and known browser mapping or bidirectional conflicts. For example, Android opens `faß.de` as `xn--fa-hia.de`. The JVM leaves that link inert. Both accept the pre-encoded host `xn--fa-hia.de`.
+
+With a separately decoded document, pass its matching `pageTargets` and `resolvePageLink` to `GridRenderer`.
 
 For documents obtained elsewhere (for example from `NullDullClient.grid.getPage`), decode them with `GridDocument.decode(json)` (throws `GridValidationException`) and render them with `GridRenderer(document, resolveAsset = { id -> urls[id] })`.
 
