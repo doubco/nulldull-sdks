@@ -1,5 +1,12 @@
 package com.nulldull.grid.compose
 
+import androidx.compose.foundation.gestures.detectTapGestures
+import androidx.compose.foundation.text.BasicText
+import androidx.compose.ui.input.pointer.pointerInput
+import androidx.compose.ui.text.LinkAnnotation
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.withLink
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.horizontalScroll
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -36,6 +43,8 @@ import androidx.compose.ui.unit.dp
 import com.nulldull.grid.GridBuiltinNode
 import com.nulldull.grid.GridCustomNode
 import com.nulldull.grid.GridDocument
+import com.nulldull.grid.GridPageLinkResolver
+import com.nulldull.grid.PublishedGridPageTarget
 import com.nulldull.grid.GridLayout
 import com.nulldull.grid.GridLayoutEngine
 import com.nulldull.grid.GridLimits
@@ -85,9 +94,40 @@ public fun GridRenderer(
     label: String? = null,
     embedLoading: GridEmbedLoading = GridEmbedLoading.Immediate,
     onOpenUrl: ((String) -> Unit)? = null,
+): Unit = GridRenderer(
+    document = document, modifier = modifier, resolveAsset = resolveAsset, customNodes = customNodes,
+    renderUnknownNode = renderUnknownNode, renderEmbed = renderEmbed, renderVideo = renderVideo,
+    renderAudio = renderAudio, width = width, layout = layout, breakpointId = breakpointId,
+    theme = theme, messages = messages, options = options, label = label, embedLoading = embedLoading,
+    onOpenUrl = onOpenUrl, pageTargets = emptyMap(), resolvePageLink = null,
+)
+
+/** Resolves published aliases before rendering links. Return null from the resolver for plain text. */
+@Composable
+public fun GridRenderer(
+    document: GridDocument,
+    modifier: Modifier = Modifier,
+    resolveAsset: (String) -> String? = { null },
+    customNodes: Map<String, @Composable (GridCustomNode) -> Unit> = emptyMap(),
+    renderUnknownNode: (@Composable (GridCustomNode) -> Unit)? = null,
+    renderEmbed: (@Composable (GridBuiltinNode) -> Unit)? = null,
+    renderVideo: (@Composable (GridBuiltinNode, String) -> Unit)? = null,
+    renderAudio: (@Composable (GridBuiltinNode, String) -> Unit)? = null,
+    width: androidx.compose.ui.unit.Dp? = null,
+    layout: GridLayout? = null,
+    breakpointId: String? = null,
+    theme: GridTheme = GridTheme(),
+    messages: GridMessages = GridMessages(),
+    options: GridRenderOptions = GridRenderOptions(),
+    label: String? = null,
+    embedLoading: GridEmbedLoading = GridEmbedLoading.Immediate,
+    resolvePageLink: GridPageLinkResolver?,
+    pageTargets: Map<String, PublishedGridPageTarget> = emptyMap(),
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val uriHandler = LocalUriHandler.current
-    val openUrl: (String) -> Unit = { url -> GridUrl.safe(url)?.let { safe -> onOpenUrl?.invoke(safe) ?: runCatching { uriHandler.openUri(safe) } } }
+    // Each link is validated at its source (node, Markdown, embed or asset).
+    val openUrl: (String) -> Unit = { url -> onOpenUrl?.invoke(url) ?: runCatching { uriHandler.openUri(url) } }
     val asset: (String?) -> String? = { id -> id?.let(resolveAsset)?.let(GridUrl::safe) }
     val dark = isSystemInDarkTheme()
     CompositionLocalProvider(LocalGridOptions provides options) {
@@ -130,6 +170,7 @@ public fun GridRenderer(
                                     messages = messages, asset = asset, fontUrls = fontUrls, openUrl = openUrl, customNodes = customNodes,
                                     renderUnknownNode = renderUnknownNode, renderEmbed = renderEmbed, renderVideo = renderVideo,
                                     renderAudio = renderAudio, embedLoading = embedLoading,
+                                    pageTargets = pageTargets, resolvePageLink = resolvePageLink,
                                 )
                             }
                         }
@@ -187,12 +228,34 @@ public fun PublishedGridPage(
     label: String? = page.title,
     embedLoading: GridEmbedLoading = GridEmbedLoading.Immediate,
     onOpenUrl: ((String) -> Unit)? = null,
+): Unit = PublishedGridPage(
+    page = page, modifier = modifier, customNodes = customNodes, renderUnknownNode = renderUnknownNode,
+    renderEmbed = renderEmbed, theme = theme, messages = messages, options = options, label = label,
+    embedLoading = embedLoading, onOpenUrl = onOpenUrl, resolvePageLink = null,
+)
+
+/** Resolves published aliases before rendering links. Return null from the resolver for plain text. */
+@Composable
+public fun PublishedGridPage(
+    page: PublicGridPage,
+    modifier: Modifier = Modifier,
+    customNodes: Map<String, @Composable (GridCustomNode) -> Unit> = emptyMap(),
+    renderUnknownNode: (@Composable (GridCustomNode) -> Unit)? = null,
+    renderEmbed: (@Composable (GridBuiltinNode) -> Unit)? = null,
+    theme: GridTheme = GridTheme(),
+    messages: GridMessages = GridMessages(),
+    options: GridRenderOptions = GridRenderOptions(),
+    label: String? = page.title,
+    embedLoading: GridEmbedLoading = GridEmbedLoading.Immediate,
+    resolvePageLink: GridPageLinkResolver?,
+    onOpenUrl: ((String) -> Unit)? = null,
 ) {
     val assets = remember(page) { page.assets.associate { it.id to it.url } }
     GridRenderer(
         document = page.document, modifier = modifier, resolveAsset = { assets[it] }, customNodes = customNodes,
         renderUnknownNode = renderUnknownNode, renderEmbed = renderEmbed, theme = theme, messages = messages,
         options = options, label = label, embedLoading = embedLoading, onOpenUrl = onOpenUrl,
+        pageTargets = page.pageTargets, resolvePageLink = resolvePageLink,
     )
 }
 
@@ -213,6 +276,8 @@ private fun GridNodeView(
     renderVideo: (@Composable (GridBuiltinNode, String) -> Unit)?,
     renderAudio: (@Composable (GridBuiltinNode, String) -> Unit)?,
     embedLoading: GridEmbedLoading,
+    pageTargets: Map<String, PublishedGridPageTarget>,
+    resolvePageLink: GridPageLinkResolver?,
 ) {
     val builtin = node as? GridBuiltinNode
     val radius = (builtin?.radius ?: 0).dp
@@ -257,7 +322,7 @@ private fun GridNodeView(
                     val uploaded = builtin.fontAssetId?.let(asset)?.takeIf { it in fontUrls }
                     val loaded = rememberGridFont(uploaded)
                     GridTextContent(
-                        builtin, color, contentSized, loaded ?: theme.family(builtin.fontFamily), theme.mono, openUrl,
+                        builtin, color, contentSized, loaded ?: theme.family(builtin.fontFamily), theme.mono, openUrl, pageTargets, resolvePageLink,
                     )
                 }
                 builtin.kind == GridNodeKind.Separator -> GridSeparatorContent(builtin, foreground)
@@ -278,7 +343,17 @@ private fun GridNodeView(
                 }
             }
             val link = GridUrl.safe(builtin?.link)
-            if (link != null) Box(
+            val pageLink = builtin?.pageLink
+            if (pageLink != null) {
+                pageLink.resolve(pageTargets, resolvePageLink)?.let { href ->
+                    // A real annotated link supplies TalkBack's URLSpan. The whole node is a tap target.
+                    BasicText(
+                        buildAnnotatedString { withLink(LinkAnnotation.Url(href) { openUrl(href) }) { append(node.name) } },
+                        Modifier.matchParentSize().pointerInput(href, openUrl) { detectTapGestures { openUrl(href) } },
+                        style = TextStyle(color = Color.Transparent),
+                    )
+                }
+            } else if (link != null) Box(
                 Modifier.matchParentSize()
                     .clickable(role = Role.Button, onClickLabel = node.name) { openUrl(link) }
                     .semantics { contentDescription = node.name; role = Role.Button },

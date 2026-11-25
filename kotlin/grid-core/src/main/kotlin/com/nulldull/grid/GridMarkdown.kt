@@ -41,10 +41,13 @@ public sealed interface MdInline {
 public object GridMarkdown {
     private val flavour = GFMFlavourDescriptor()
 
-    public fun parse(markdown: String): List<MdBlock> {
+    public fun parse(markdown: String): List<MdBlock> = parse(markdown, emptyMap(), null)
+
+    /** Use the current detail's target map only for text nodes declaring pageLinkVersion 1. */
+    public fun parse(markdown: String, targets: Map<String, PublishedGridPageTarget>, resolver: GridPageLinkResolver?): List<MdBlock> {
         val tree = MarkdownParser(flavour).buildMarkdownTreeFromString(markdown)
         val links = LinkMap.buildLinkMap(tree, markdown)
-        return Converter(markdown, links).blocks(tree.children)
+        return Converter(markdown, links, targets, resolver).blocks(tree.children)
     }
 
     /** Plain text of inlines, for accessibility labels and measuring. */
@@ -62,7 +65,12 @@ public object GridMarkdown {
         }
     }
 
-    private class Converter(val source: String, val links: LinkMap) {
+    private class Converter(val source: String, val links: LinkMap, val targets: Map<String, PublishedGridPageTarget>,
+                            val resolver: GridPageLinkResolver?) {
+        fun href(destination: String): String? =
+            if (destination.startsWith("grid-page:")) GridPageLink.parse(destination)?.resolve(targets, resolver)
+            else GridUrl.safe(destination)
+
         fun text(node: ASTNode) = node.getTextInNode(source).toString()
         fun unescape(value: String) = EntityConverter.replaceEntities(value, processEntities = true, processEscapes = true)
 
@@ -147,7 +155,23 @@ public object GridMarkdown {
                 val last = out.lastOrNull()
                 if (last is MdInline.Text) out[out.lastIndex] = MdInline.Text(last.text + value) else out.add(MdInline.Text(value))
             }
+            var consumed = 0
             for (node in nodes) {
+                if (node.startOffset < consumed) continue
+                // This parser tokenizes angle autolinks with custom schemes as separate punctuation and text.
+                // Only inspect a literal opening token, so code spans, escapes, images and HTML stay inert.
+                if (resolver != null && node.type == T.LT && source.startsWith("<grid-page:v1:", node.startOffset)) {
+                    val end = source.indexOf('>', node.endOffset)
+                    if (end >= 0) {
+                        val label = source.substring(node.endOffset, end)
+                        val url = GridPageLink.parse(label)?.resolve(targets, resolver)
+                        if (url != null) {
+                            out.add(MdInline.Link(url, listOf(MdInline.Text(label))))
+                            consumed = end + 1
+                            continue
+                        }
+                    }
+                }
                 val type = node.type
                 if (afterEol && type == T.WHITE_SPACE) continue
                 afterEol = false
@@ -166,7 +190,7 @@ public object GridMarkdown {
                     }
                     E.AUTOLINK -> {
                         val raw = text(node).removePrefix("<").removeSuffix(">")
-                        GridUrl.safe(raw)?.let { out.add(MdInline.Link(it, listOf(MdInline.Text(raw)))) } ?: appendText(raw)
+                        href(raw)?.let { out.add(MdInline.Link(it, listOf(MdInline.Text(raw)))) } ?: appendText(raw)
                     }
                     GFMTokenTypes.GFM_AUTOLINK -> {
                         val raw = text(node)
@@ -209,7 +233,7 @@ public object GridMarkdown {
         fun link(node: ASTNode, destination: String?, out: MutableList<MdInline>) {
             val label = node.children.firstOrNull { it.type == E.LINK_TEXT } ?: node.children.firstOrNull { it.type == E.LINK_LABEL }
             val children = label?.let { inlines(it.children.filter { c -> c.type != T.LBRACKET && c.type != T.RBRACKET }) } ?: emptyList()
-            val href = destination?.trim()?.removePrefix("<")?.removeSuffix(">")?.let { unescape(it) }?.let(GridUrl::safe)
+            val href = destination?.trim()?.removePrefix("<")?.removeSuffix(">")?.let { unescape(it) }?.let(::href)
             if (href != null) out.add(MdInline.Link(href, children))
             else children.forEach { inline ->
                 val last = out.lastOrNull()

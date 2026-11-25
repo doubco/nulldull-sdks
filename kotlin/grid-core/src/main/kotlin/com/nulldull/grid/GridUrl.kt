@@ -27,6 +27,51 @@ public object GridUrl {
         return safe(value)
     }
 
+    /** Customer routes accept single-slash paths or credential-free HTTP(S), without whitespace or backslashes. */
+    public fun safePageHref(value: String?): String? {
+        if (value.isNullOrEmpty() || value.any { it == '\\' || it.isWhitespace() || it == '\uFEFF' }) return null
+        if (value.startsWith('/')) return value.takeUnless { it.startsWith("//") }
+        val scheme = value.substringBefore(':').lowercase()
+        if (scheme != "http" && scheme != "https" || ':' !in value) return null
+        val rest = value.substringAfter(':').trimStart('/')
+        val authority = rest.takeWhile { it !in "/?#" }
+        val host = authority.substringAfterLast('@')
+        if ('@' in authority && authority.substringBeforeLast('@') !in listOf("", ":")) return null
+        if (host.startsWith('[') && ('%' in host || runCatching { java.net.URI("$scheme://$host/").host }.getOrNull() == null)) return null
+        val href = safe("$scheme://$host" + rest.substring(authority.length)) ?: return null
+        if (host.startsWith('[')) return href
+        val domain = href.substringAfter("://").takeWhile { it !in ":/?#" }
+        val labels = domain.removeSuffix(".").split('.')
+        val last = labels.last()
+        if (!(last.isNotEmpty() && last.all { it in '0'..'9' }) && !hexNumber.matches(last)) return href
+        val canonical = ipv4(labels) ?: return null
+        return "$scheme://$canonical" + href.substringAfter("://").substring(domain.length)
+    }
+
+    private val hexNumber = Regex("0x[0-9a-f]*")
+
+    /** WHATWG IPv4 permits one to four decimal, octal or hexadecimal parts. */
+    private fun ipv4(labels: List<String>): String? {
+        if (labels.size > 4) return null
+        var address = 0L
+        for ((index, label) in labels.withIndex()) {
+            if (label.isEmpty()) return null
+            val radix = when {
+                label.startsWith("0x") -> 16
+                label.length > 1 && label.startsWith('0') -> 8
+                else -> 10
+            }
+            val digits = (if (radix == 16) label.drop(2) else label).trimStart('0')
+            if (digits.any { it !in "0123456789abcdef".take(radix) }) return null
+            val number = if (digits.isEmpty()) 0L else digits.toLongOrNull(radix) ?: return null
+            val last = index == labels.lastIndex
+            val bits = if (last) 8 * (4 - index) else 8
+            if (number >= (1L shl bits)) return null
+            address += if (last) number else number shl (8 * (3 - index))
+        }
+        return listOf(24, 16, 8, 0).joinToString(".") { ((address shr it) and 255L).toString() }
+    }
+
     /** `gridEmbedUrl`: privacy-enhanced YouTube or Vimeo player URL for an allowed video page, else null. */
     public fun embed(value: String?): String? {
         val href = safe(value) ?: return null
@@ -88,7 +133,7 @@ public object GridUrl {
             val end = authority.indexOf(']')
             if (end < 0) return null
             val after = authority.substring(end + 1)
-            if (after.isEmpty()) return authority.substring(0, end + 1) to null
+            if (after.isEmpty() || after == ":") return authority.substring(0, end + 1) to null
             if (!after.startsWith(":")) return null
             return authority.substring(0, end + 1) to (parsePort(after.substring(1)) ?: return null)
         }

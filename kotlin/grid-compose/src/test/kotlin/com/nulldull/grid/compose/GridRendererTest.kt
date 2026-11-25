@@ -14,6 +14,10 @@ import androidx.compose.ui.test.junit4.createComposeRule
 import androidx.compose.ui.test.onAllNodesWithText
 import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
+import androidx.compose.ui.test.performFirstLinkClick
+import androidx.compose.ui.text.LinkAnnotation
+import com.nulldull.grid.GridJson
+import com.nulldull.grid.client.PublicGridPage
 import androidx.compose.ui.test.performClick
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.height
@@ -63,6 +67,48 @@ class GridRendererTest {
         // Node links open through the host, with the node name as their accessible label.
         compose.onNode(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf("Open the docs"))).performClick()
         assertEquals(listOf("https://example.com/docs"), opened)
+    }
+
+    @Test
+    fun pageLinkSemanticsAndTapHandlersFollowRefreshedTargets() {
+        val original = GridJson.format.decodeFromString<PublicGridPage>(
+            File(System.getProperty("grid.fixtures"), "../grid/page-links.json").readText(),
+        )
+        val page = mutableStateOf(original)
+        val opened = mutableListOf<String>()
+        compose.setContent {
+            PublishedGridPage(
+                page.value, resolvePageLink = { target, anchor ->
+                    "/${target.pool}/${target.locale}/${target.slug}" + (anchor?.let { "#$it" } ?: "")
+                }, onOpenUrl = { opened += it },
+            )
+        }
+        fun link(label: String, url: String) = SemanticsMatcher("link '$label' to '$url'") { node ->
+            node.config.getOrElse(SemanticsProperties.Text) { emptyList() }.any { text ->
+                text.getLinkAnnotations(0, text.length).any {
+                    it.item is LinkAnnotation.Url && (it.item as LinkAnnotation.Url).url == url &&
+                        text.text.substring(it.start, it.end) == label
+                }
+            }
+        }
+        val base = "/manual/en/getting-started"
+        compose.onNode(link("Inline", "$base#intro")).performFirstLinkClick()
+        compose.onNode(link("Read", "$base#list")).performFirstLinkClick()
+        compose.onNode(link("Cell", base)).performFirstLinkClick()
+        compose.onNode(link("Read the guide", "$base#chapter")).performFirstLinkClick()
+        assertEquals(listOf("$base#intro", "$base#list", base, "$base#chapter"), opened)
+        compose.runOnIdle {
+            val moved = original.pageTargets.getValue("~1").copy(pool = "handbook", slug = "new", locale = "tr")
+            page.value = original.copy(pageTargets = mapOf("~1" to moved))
+        }
+        val moved = "/handbook/tr/new#intro"
+        compose.onNode(link("Inline", moved)).performFirstLinkClick()
+        assertEquals(moved, opened.last())
+        compose.runOnIdle { page.value = original.copy(pageTargets = emptyMap()) }
+        compose.onAllNodes(link("Inline", moved)).assertCountEquals(0)
+        compose.onAllNodes(link("Read the guide", "/handbook/tr/new#chapter")).assertCountEquals(0)
+        compose.onNodeWithText("Inline and Missing.").assertExists()
+        compose.onNodeWithText("Read the guide").assertExists()
     }
 
     @Test

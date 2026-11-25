@@ -101,6 +101,8 @@ public object GridJson {
             n.strokeStyle?.let { put("strokeStyle", it.wire) }
             n.link?.let { put("link", it) }
             n.url?.let { put("url", it) }
+            n.pageLinkVersion?.let { put("pageLinkVersion", it) }
+            n.pageLink?.let { put("pageLink", format.encodeToJsonElement(GridPageLink.serializer(), it)) }
             n.rotation?.let { put("rotation", num(it)) }
             n.lineHeight?.let { put("lineHeight", num(it)) }
             if (n.fontAssetId != null) put("fontAssetId", n.fontAssetId) else if (n.fontAssetCleared) put("fontAssetId", JsonNull)

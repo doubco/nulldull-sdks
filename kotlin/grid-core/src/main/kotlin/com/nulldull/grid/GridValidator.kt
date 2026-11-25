@@ -210,6 +210,21 @@ public object GridValidator {
         val strokeStyle = if (n.containsKey("strokeStyle")) choice<GridStrokeStyle>(n["strokeStyle"]) else null
         val link = if (n.containsKey("link")) link(n["link"]) else null
         val url = if (n.containsKey("url")) link(n["url"]) else null
+        val pageLinkVersion = n["pageLinkVersion"]?.let {
+            if (n["kind"] != JsonPrimitive("text") || numberOf(it) != 1.0) fail("Invalid formatted page link version.")
+            1
+        }
+        val pageLink = n["pageLink"]?.let {
+            if (!link.isNullOrEmpty()) fail("Choose a URL or a Grid page.")
+            val fields = it as? JsonObject ?: fail("Invalid Grid page reference.")
+            if (fields.keys.any { key -> key !in setOf("version", "entryId", "anchor") } ||
+                numberOf(fields["version"]) != 1.0) fail("Invalid Grid page reference.")
+            fun string(key: String) = (fields[key] as? JsonPrimitive)?.takeIf { p -> p.isString }?.content
+                ?: fail("Invalid Grid page reference.")
+            try {
+                GridPageLink(1, string("entryId"), if ("anchor" in fields) string("anchor") else null)
+            } catch (_: IllegalArgumentException) { fail("Invalid Grid page reference.") }
+        }
         val rotation = if (n.containsKey("rotation")) number(n["rotation"], -360.0, 360.0) else null
         val lineHeight = if (n.containsKey("lineHeight")) number(n["lineHeight"], 0.5, 4.0) else null
         var fontAssetId: String? = null
@@ -241,6 +256,7 @@ public object GridValidator {
             borderOpacity = opacities["borderOpacity"], strokeOpacity = opacities["strokeOpacity"],
             borderColor = colors["borderColor"], borderWidth = widths["borderWidth"], borderStyle = borderStyle,
             lineHeight = lineHeight, fontAssetId = fontAssetId, fontAssetCleared = fontCleared, fontFamily = fontFamily,
+            pageLinkVersion = pageLinkVersion, pageLink = pageLink,
             verticalAlign = verticalAlign, dropcap = flags["dropcap"], fitToBox = flags["fitToBox"], link = link, url = url,
             iconName = iconName, polygonSides = polygonSides, strokeColor = colors["strokeColor"],
             strokeWidth = widths["strokeWidth"], strokeStyle = strokeStyle, separatorStyle = separatorStyle,

@@ -139,6 +139,8 @@ public data class GridBuiltinNode(
     override val padding: Int? = null,
     override val backgroundOpacity: Double? = null,
     override val colorOpacity: Double? = null,
+    val pageLink: GridPageLink? = null,
+    val pageLinkVersion: Int? = null,
 ) : GridNode, GridAppearance
 
 /** One inert string pair of a custom node. Values are data, never markup or code. */

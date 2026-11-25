@@ -52,6 +52,8 @@ import com.nulldull.grid.GridLimits
 import com.nulldull.grid.GridMarkdown
 import com.nulldull.grid.GridVerticalAlign
 import com.nulldull.grid.MdBlock
+import com.nulldull.grid.GridPageLinkResolver
+import com.nulldull.grid.PublishedGridPageTarget
 import com.nulldull.grid.MdInline
 import kotlin.math.ceil
 import kotlin.math.max
@@ -82,6 +84,8 @@ internal fun GridTextContent(
     fontFamily: FontFamily,
     mono: FontFamily,
     openUrl: (String) -> Unit,
+    pageTargets: Map<String, PublishedGridPageTarget>,
+    resolvePageLink: GridPageLinkResolver?,
 ) {
     val options = LocalGridOptions.current
     val scaled = when (options.fontScaling) {
@@ -89,7 +93,9 @@ internal fun GridTextContent(
         GridFontScaling.Never -> false
         GridFontScaling.FlowOnly -> contentSized
     }
-    val blocks = remember(node.text) { GridMarkdown.parse(node.text) }
+    val blocks = if (node.pageLinkVersion == 1 && resolvePageLink != null) {
+        GridMarkdown.parse(node.text, pageTargets, resolvePageLink)
+    } else remember(node.text) { GridMarkdown.parse(node.text) }
     val lineHeight = node.lineHeight ?: GridLimits.DEFAULT_LINE_HEIGHT
     val alignment = when (node.verticalAlign) {
         GridVerticalAlign.Middle -> Alignment.CenterVertically
@@ -188,11 +194,11 @@ private fun MarkdownBlocks(blocks: List<MdBlock>, env: TextEnv, dropcap: Boolean
 private fun MarkdownBlock(block: MdBlock, env: TextEnv, dropcap: Boolean, inListItem: Boolean, depth: Int) {
     when (block) {
         is MdBlock.Paragraph -> {
-            val text = remember(block, env.mono) { inlineText(block.inlines, env) }
+            val text = remember(block, env.mono, env.openUrl) { inlineText(block.inlines, env) }
             if (dropcap && text.isNotEmpty()) DropCapParagraph(text, env) else BasicText(text, Modifier.fillMaxWidth(), style = env.style)
         }
         is MdBlock.Heading -> BasicText(
-            remember(block, env.mono) { inlineText(block.inlines, env) },
+            remember(block, env.mono, env.openUrl) { inlineText(block.inlines, env) },
             Modifier.fillMaxWidth(), style = env.style.copy(fontWeight = FontWeight.Bold),
         )
         is MdBlock.Html -> BasicText(block.text, Modifier.fillMaxWidth(), style = env.style)
@@ -260,7 +266,7 @@ private fun MarkdownTable(table: MdBlock.Table, env: TextEnv) {
                         },
                     )
                     Box(Modifier.weight(weights[c]).fillMaxHeight().cellBorder(border, top = false, left = false).padding(pad)) {
-                        BasicText(remember(inlines, env.mono) { inlineText(inlines, env) }, Modifier.fillMaxWidth(), style = style)
+                        BasicText(remember(inlines, env.mono, env.openUrl) { inlineText(inlines, env) }, Modifier.fillMaxWidth(), style = style)
                     }
                 }
             }

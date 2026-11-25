@@ -1,6 +1,7 @@
 package com.nulldull.grid.client
 
 import com.nulldull.grid.GridDocument
+import com.nulldull.grid.PublishedGridPageTarget
 import kotlinx.serialization.Serializable
 
 /** A pinned, published asset. Use [url] exactly as returned (the client resolves it to an absolute URL). */
@@ -61,6 +62,7 @@ public data class PublicGridPage(
     val cover: PublicGridCover? = null,
     val document: GridDocument,
     val assets: List<PublicGridAsset>,
+    val pageTargets: Map<String, PublishedGridPageTarget> = emptyMap(),
 ) {
     /** Asset URL lookup for the renderer; unknown ids resolve to null. */
     public fun assetUrl(id: String): String? = assets.firstOrNull { it.id == id }?.url
