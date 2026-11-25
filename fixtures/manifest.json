@@ -261,6 +261,40 @@
       }
     },
     {
+      "id": "grid.getPage.pageTargets",
+      "key": "public",
+      "call": {
+        "method": "grid.getPage",
+        "args": [
+          "manual",
+          "source"
+        ]
+      },
+      "exchanges": [
+        {
+          "request": {
+            "method": "GET",
+            "path": "/api/grid/v1/pools/manual/pages/source",
+            "query": {
+              "locale": [
+                "en"
+              ]
+            }
+          },
+          "response": {
+            "status": 200,
+            "headers": {
+              "content-type": "application/json"
+            },
+            "bodyFile": "grid/page-links.json"
+          }
+        }
+      ],
+      "expect": {
+        "resultFile": "grid/page-links.json"
+      }
+    },
+    {
       "id": "grid.getPage.notFound",
       "key": "public",
       "call": {
