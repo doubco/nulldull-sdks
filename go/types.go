@@ -60,19 +60,30 @@ type GridPageSummary struct {
 	Extra    Extra      `json:"-"`
 }
 
+// GridPageTarget contains a readable target's current publication coordinates.
+type GridPageTarget struct {
+	EntryID   string `json:"entryId"`
+	Published bool   `json:"published"`
+	Pool      string `json:"pool"`
+	Slug      string `json:"slug"`
+	Locale    string `json:"locale"`
+	Extra     Extra  `json:"-"`
+}
+
 // GridPage is a published page with its document and asset manifest.
 type GridPage struct {
-	ID            string     `json:"id"`
-	Pool          string     `json:"pool"`
-	Slug          string     `json:"slug"`
-	Locale        string     `json:"locale"`
-	Title         string     `json:"title"`
-	Summary       string     `json:"summary"`
-	Version       int        `json:"version"`
-	SourceVersion int        `json:"sourceVersion"`
-	PublishedAt   int64      `json:"publishedAt"`
-	FolderID      *string    `json:"folderId,omitempty"`
-	Cover         *GridCover `json:"cover,omitempty"`
+	ID            string                    `json:"id"`
+	Pool          string                    `json:"pool"`
+	Slug          string                    `json:"slug"`
+	Locale        string                    `json:"locale"`
+	Title         string                    `json:"title"`
+	Summary       string                    `json:"summary"`
+	Version       int                       `json:"version"`
+	SourceVersion int                       `json:"sourceVersion"`
+	PublishedAt   int64                     `json:"publishedAt"`
+	FolderID      *string                   `json:"folderId,omitempty"`
+	Cover         *GridCover                `json:"cover,omitempty"`
+	PageTargets   map[string]GridPageTarget `json:"pageTargets,omitempty"`
 	// Document is the published Grid document as raw JSON. Its schema belongs
 	// to @nulldull/grid-core; the SDK does not validate or render it.
 	Document json.RawMessage `json:"document"`

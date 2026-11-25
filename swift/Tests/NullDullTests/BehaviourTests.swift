@@ -685,7 +685,11 @@ struct DecodingTests {
 
     @Test func gridDocumentDecodesIntoCustomModels() throws {
         struct Minimal: Decodable { let nodes: [Node]; struct Node: Decodable { let id: String; let kind: String } }
+        let linked = try Fixtures.json("grid/page-links.json").decode(GridPage.self)
+        #expect(linked.pageTargets["~1"]?.entryId == "guide")
+        #expect(linked.pageTargets["~1"]?.slug == "getting-started")
         let page = try Fixtures.json("grid/page.json").decode(GridPage.self)
+        #expect(page.pageTargets.isEmpty)
         let minimal = try page.document.decode(Minimal.self)
         #expect(minimal.nodes.first?.id == "markdown-0")
         #expect(page.document.layout["columns"] == 12)

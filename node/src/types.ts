@@ -60,7 +60,16 @@ export interface GridDocument {
   [key: string]: unknown;
 }
 
+export interface GridPageTarget {
+  entryId: string;
+  published: true;
+  pool: string;
+  slug: string;
+  locale: string;
+}
+
 export interface GridPage extends GridPageSummary {
+  pageTargets?: Record<string, GridPageTarget>;
   document: GridDocument;
   assets: GridAssetRef[];
 }

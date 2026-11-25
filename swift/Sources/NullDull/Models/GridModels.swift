@@ -136,6 +136,15 @@ public struct GridDocument: Codable, Hashable, Sendable {
 
 /// A published page with its document and version-pinned asset manifest.
 public struct GridPage: NullDullModel {
+    public struct Target: Codable, Hashable, Sendable {
+        public let entryId: String
+        public let published: Bool
+        public let pool: String
+        public let slug: String
+        public let locale: String
+    }
+
+    public let pageTargets: [String: Target]
     public let id: String
     public let pool: String
     public let slug: String
@@ -154,7 +163,7 @@ public struct GridPage: NullDullModel {
     public let raw: JSONValue
 
     private enum CodingKeys: String, CodingKey {
-        case id, pool, slug, locale, title, summary, version, sourceVersion, publishedAt, cover, document, assets
+        case id, pool, slug, locale, title, summary, version, sourceVersion, publishedAt, cover, document, assets, pageTargets
         case folderID = "folderId"
     }
 
@@ -171,6 +180,7 @@ public struct GridPage: NullDullModel {
         publishedAt = try c.req(.publishedAt)
         folderID = try c.opt(.folderID)
         cover = try c.opt(.cover)
+        pageTargets = try c.opt(.pageTargets) ?? [:]
         document = try c.req(.document)
         assets = try c.opt(.assets) ?? []
         raw = try JSONValue(from: decoder)

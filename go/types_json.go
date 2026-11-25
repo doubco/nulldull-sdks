@@ -40,6 +40,18 @@ func (v GridPageSummary) MarshalJSON() ([]byte, error) {
 }
 
 // UnmarshalJSON keeps unknown fields in Extra.
+func (v *GridPageTarget) UnmarshalJSON(data []byte) error {
+	type plain GridPageTarget
+	return decodeObject(data, (*plain)(v), &v.Extra)
+}
+
+// MarshalJSON writes the known fields and Extra.
+func (v GridPageTarget) MarshalJSON() ([]byte, error) {
+	type plain GridPageTarget
+	return encodeObject(plain(v), v.Extra)
+}
+
+// UnmarshalJSON keeps unknown fields in Extra.
 func (v *GridPage) UnmarshalJSON(data []byte) error {
 	type plain GridPage
 	return decodeObject(data, (*plain)(v), &v.Extra)

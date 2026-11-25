@@ -33,6 +33,7 @@ __all__ = [
     "GridPage",
     "GridPageList",
     "GridPageSummary",
+    "GridPageTarget",
     "GridPool",
     "LinkResolution",
     "LocaleExport",
@@ -107,7 +108,19 @@ class GridDocument(_GridDocumentBase, total=False):
     baseLayoutName: str
 
 
-class GridPage(GridPageSummary):
+class GridPageTarget(TypedDict):
+    entryId: str
+    published: bool
+    pool: str
+    slug: str
+    locale: str
+
+
+class _GridPageLinks(TypedDict, total=False):
+    pageTargets: Dict[str, GridPageTarget]
+
+
+class GridPage(GridPageSummary, _GridPageLinks):
     document: GridDocument
     assets: List[GridAssetRef]
 

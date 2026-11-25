@@ -81,6 +81,16 @@ describe("stableKey", () => {
 });
 
 describe("useGridPage", () => {
+  it("returns the current published targets by document alias", async () => {
+    const mock = mockFetch([fromFixture("grid/page-links.json")]);
+    const { result } = renderHook(() => useGridPage("manual", "source"), {
+      wrapper: wrapperFor(makeClient("public", mock.fetch)),
+    });
+    await waitFor(() => expect(result.current.data?.pageTargets?.["~1"]).toEqual({
+      entryId: "guide", published: true, pool: "manual", slug: "getting-started", locale: "en",
+    }));
+  });
+
   it("goes from loading to success with normalised asset URLs", async () => {
     const mock = mockFetch([fromFixture("grid/page.json")]);
     const { result } = renderHook(() => useGridPage("nulldull-blog", "context-that-survives-the-chat"), {

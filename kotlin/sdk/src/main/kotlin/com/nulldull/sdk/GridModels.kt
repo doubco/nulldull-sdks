@@ -48,6 +48,15 @@ public open class GridPageSummary(json: JsonObject) : JsonModel(json) {
     public val cover: GridCover? get() = json.model("cover", ::GridCover)
 }
 
+/** The current readable publication bound to a document-local alias. */
+public class GridPageTarget(json: JsonObject) : JsonModel(json) {
+    public val entryId: String get() = json.string("entryId")
+    public val published: Boolean get() = json.boolean("published")
+    public val pool: String get() = json.string("pool")
+    public val slug: String get() = json.string("slug")
+    public val locale: String get() = json.string("locale")
+}
+
 /** A published page with its document and version-pinned asset manifest. */
 public class GridPage(json: JsonObject) : GridPageSummary(json) {
     /**
@@ -55,6 +64,8 @@ public class GridPage(json: JsonObject) : GridPageSummary(json) {
      * JSON (`{layout, breakpoints, nodes, ...}`).
      */
     public val document: JsonElement get() = json["document"] ?: JsonNull
+    public val pageTargets: Map<String, GridPageTarget> get() = json.objectOrNull("pageTargets").orEmpty()
+        .mapNotNull { (alias, item) -> (item as? JsonObject)?.let { alias to GridPageTarget(it) } }.toMap()
     public val assets: List<GridAssetRef> get() = json.models("assets", ::GridAssetRef)
 }
 

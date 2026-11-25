@@ -299,7 +299,11 @@ class BehaviourTest {
                 other.enqueue(bytes())
                 val base = server.url("/").toString()
                 val priv = NullDullClient(PRIVATE_KEY, baseUrl = base).grid
+                val linked = GridPage(fixture("grid/page-links.json").jsonObject)
+                assertEquals("guide", linked.pageTargets.getValue("~1").entryId)
+                assertEquals("getting-started", linked.pageTargets.getValue("~1").slug)
                 val page = GridPage(fixture("grid/page.json").jsonObject)
+                assertTrue(page.pageTargets.isEmpty())
                 val own = priv.downloadAsset(page.assets[0])
                 assertEquals("image/png", own.contentType)
                 assertEquals("cover.png", own.filename)
