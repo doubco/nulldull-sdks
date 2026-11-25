@@ -962,3 +962,29 @@ func TestQueryEscapingMatchesEncodeURIComponent(t *testing.T) {
 		}
 	}
 }
+
+func TestGridPageTargetsPreserveLegacyLiteralAndExtra(t *testing.T) {
+	page := GridPage{"id", "pool", "slug", "en", "title", "", 1, 1, 0, nil, nil, nil, nil, nil}
+	if _, ok := page.PageTarget("~1"); ok {
+		t.Fatal("unexpected alias in legacy literal")
+	}
+	if err := json.Unmarshal(readFixture(t, "grid/page-links.json"), &page); err != nil {
+		t.Fatal(err)
+	}
+	targets := page.PageTargets()
+	if targets["~1"].EntryID != "guide" || !targets["~1"].Published {
+		t.Fatalf("unexpected targets: %#v", targets)
+	}
+	delete(targets, "~1")
+	data, err := json.Marshal(page)
+	if err != nil {
+		t.Fatal(err)
+	}
+	var restored GridPage
+	if err := json.Unmarshal(data, &restored); err != nil {
+		t.Fatal(err)
+	}
+	if target, ok := restored.PageTarget("~1"); !ok || target.Slug != "getting-started" {
+		t.Fatalf("lost binding: %#v", target)
+	}
+}

@@ -2,6 +2,7 @@ package nulldull_test
 
 import (
 	"context"
+	"encoding/json"
 	"errors"
 	"fmt"
 	"log"
@@ -138,4 +139,16 @@ func ExampleError() {
 		fmt.Println(apiErr.Status, apiErr.Code, apiErr.Message, apiErr.RequestID)
 	}
 	// Output: 404 NOT_FOUND Resource not found. 8f1e2d3c4b5a6978-AMS
+}
+
+func ExampleGridPage_PageTarget() {
+	var page nulldull.GridPage
+	err := json.Unmarshal([]byte(`{"pageTargets":{"~1":{"entryId":"guide","published":true,"pool":"manual","slug":"guide","locale":"en"}}}`), &page)
+	if err != nil {
+		log.Fatal(err)
+	}
+	if target, ok := page.PageTarget("~1"); ok {
+		fmt.Println(target.Pool, target.Slug, target.Locale)
+	}
+	// Output: manual guide en
 }

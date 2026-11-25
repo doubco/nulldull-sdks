@@ -56,7 +56,10 @@ grid := client.Grid
 
 // One page of results (newest first)
 list, err := grid.ListPages(ctx, "my-blog", &nulldull.ListPagesParams{Locale: "en", Limit: 20})
-// list.Pool, list.Items, list.NextCursor
+if err != nil {
+	return err
+}
+fmt.Println(list.Pool.Name, len(list.Items))
 
 // Every page, following cursors
 for summary, err := range grid.IteratePages(ctx, "my-blog", &nulldull.ListPagesParams{Q: "launch"}) {
@@ -68,9 +71,13 @@ for summary, err := range grid.IteratePages(ctx, "my-blog", &nulldull.ListPagesP
 
 // One page with its document and asset manifest
 page, err := grid.GetPage(ctx, "my-blog", "hello-world", nil)
-page.Document // json.RawMessage: render it with @nulldull/grid-react, or decode what you need
-target, ok := page.PageTargets["~1"] // current readable target for this document's alias
-page.Assets   // []GridAssetRef{ID, Version, URL, Filename, MediaType, ByteSize, Checksum}
+if err != nil {
+	return err
+}
+fmt.Println(page.Title, len(page.Document), len(page.Assets))
+if target, ok := page.PageTarget("~1"); ok {
+	fmt.Println(target.Pool, target.Slug, target.Locale)
+}
 ```
 
 `Locale` defaults to `"en"` and is always sent. Returned cover and asset URLs are absolute. With a public key they already carry `key=…`, so they work in `<img>`, CSS fonts and `<video>`, which cannot send headers. To resolve a URL yourself, call `grid.AssetURL(url)`. It adds a public key only to URLs on the API's own origin, and never adds a private key.

@@ -72,23 +72,42 @@ type GridPageTarget struct {
 
 // GridPage is a published page with its document and asset manifest.
 type GridPage struct {
-	ID            string                    `json:"id"`
-	Pool          string                    `json:"pool"`
-	Slug          string                    `json:"slug"`
-	Locale        string                    `json:"locale"`
-	Title         string                    `json:"title"`
-	Summary       string                    `json:"summary"`
-	Version       int                       `json:"version"`
-	SourceVersion int                       `json:"sourceVersion"`
-	PublishedAt   int64                     `json:"publishedAt"`
-	FolderID      *string                   `json:"folderId,omitempty"`
-	Cover         *GridCover                `json:"cover,omitempty"`
-	PageTargets   map[string]GridPageTarget `json:"pageTargets,omitempty"`
+	ID            string     `json:"id"`
+	Pool          string     `json:"pool"`
+	Slug          string     `json:"slug"`
+	Locale        string     `json:"locale"`
+	Title         string     `json:"title"`
+	Summary       string     `json:"summary"`
+	Version       int        `json:"version"`
+	SourceVersion int        `json:"sourceVersion"`
+	PublishedAt   int64      `json:"publishedAt"`
+	FolderID      *string    `json:"folderId,omitempty"`
+	Cover         *GridCover `json:"cover,omitempty"`
 	// Document is the published Grid document as raw JSON. Its schema belongs
 	// to @nulldull/grid-core; the SDK does not validate or render it.
 	Document json.RawMessage `json:"document"`
 	Assets   []GridAssetRef  `json:"assets"`
 	Extra    Extra           `json:"-"`
+}
+
+// PageTargets decodes this document's current target bindings from Extra.
+// The returned map is a snapshot. Missing or malformed bindings return nil.
+func (p GridPage) PageTargets() map[string]GridPageTarget {
+	raw := p.Extra["pageTargets"]
+	if len(raw) == 0 {
+		return nil
+	}
+	var targets map[string]GridPageTarget
+	if err := json.Unmarshal(raw, &targets); err != nil {
+		return nil
+	}
+	return targets
+}
+
+// PageTarget looks up a single document-local alias.
+func (p GridPage) PageTarget(alias string) (GridPageTarget, bool) {
+	target, ok := p.PageTargets()[alias]
+	return target, ok
 }
 
 // GridPool identifies the pool of a page list.
