@@ -45,6 +45,12 @@ class PageLinkTest {
         val cell = (blocks[2] as MdBlock.Table).rows.single().single()
         assertEquals("/manual/en/getting-started", (cell.single() as MdInline.Link).href)
         assertTrue((GridMarkdown.parse(node.text)[0] as MdBlock.Paragraph).inlines.none { it is MdInline.Link })
+        for (resolver in listOf(route, null)) {
+            val angles = (GridMarkdown.parse(node.text, page.pageTargets, resolver).last() as MdBlock.Paragraph).inlines
+            assertEquals("grid-page:v1:~1 and grid-page:v1:~2", GridMarkdown.plainText(angles))
+            val expected = if (resolver == null) emptyList() else listOf("/manual/en/getting-started")
+            assertEquals(expected, angles.filterIsInstance<MdInline.Link>().map { it.href })
+        }
         val sample = "<grid-page:v1:~1> and `[code](grid-page:v1:~1)` and [web](https://example.org)"
         val runs = (GridMarkdown.parse(sample, page.pageTargets, route).single() as MdBlock.Paragraph).inlines
         assertEquals(listOf("/manual/en/getting-started", "https://example.org/"), runs.filterIsInstance<MdInline.Link>().map { it.href })

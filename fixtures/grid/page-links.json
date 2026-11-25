@@ -40,7 +40,7 @@
         "id": "para",
         "kind": "text",
         "name": "Text",
-        "text": "[Inline](grid-page:v1:~1#intro) and [Missing](grid-page:v1:~2).\n\n- [Read][ref]\n\n| Header |\n| --- |\n| [Cell](grid-page:v1:~1) |\n\n[ref]: <grid-page:v1:~1#list>",
+        "text": "[Inline](grid-page:v1:~1#intro) and [Missing](grid-page:v1:~2).\n\n- [Read][ref]\n\n| Header |\n| --- |\n| [Cell](grid-page:v1:~1) |\n\n<grid-page:v1:~1> and <grid-page:v1:~2>\n\n[ref]: <grid-page:v1:~1#list>",
         "assetId": null,
         "frame": {
           "x": 0,

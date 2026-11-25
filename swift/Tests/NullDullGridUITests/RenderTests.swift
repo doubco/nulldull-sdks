@@ -163,6 +163,12 @@ final class RenderTests: XCTestCase {
     XCTAssertEqual(rows[0][0].first?.link?.absoluteString, "/getting-started")
     guard case .paragraph(let inert) = GridMarkdown.parse(node.text)[0] else { return XCTFail() }
     XCTAssertTrue(inert.allSatisfy { $0.link == nil })
+    for useResolver in [false, true] {
+      let parsed = GridMarkdown.parse(node.text, pageURL: useResolver ? resolve : nil)
+      guard case .paragraph(let angles) = parsed.last else { return XCTFail("missing autolinks") }
+      XCTAssertEqual(angles.map(\.text).joined(), "grid-page:v1:~1 and grid-page:v1:~2")
+      XCTAssertEqual(angles.compactMap { $0.link?.absoluteString }, useResolver ? ["/getting-started"] : [])
+    }
     let refs = "[Full][ref], [ref][] and [ref].\n\n[ref]: <grid-page:v1:~1#intro>\n[ref]: grid-page:v1:~2"
     guard case .paragraph(let references) = GridMarkdown.parse(refs, pageURL: resolve)[0] else { return XCTFail() }
     XCTAssertEqual(references.filter { $0.link != nil }.map(\.text), ["Full", "ref", "ref"])

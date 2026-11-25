@@ -160,13 +160,15 @@ public object GridMarkdown {
                 if (node.startOffset < consumed) continue
                 // This parser tokenizes angle autolinks with custom schemes as separate punctuation and text.
                 // Only inspect a literal opening token, so code spans, escapes, images and HTML stay inert.
-                if (resolver != null && node.type == T.LT && source.startsWith("<grid-page:v1:", node.startOffset)) {
+                if (node.type == T.LT && source.startsWith("<grid-page:v1:", node.startOffset)) {
                     val end = source.indexOf('>', node.endOffset)
                     if (end >= 0) {
                         val label = source.substring(node.endOffset, end)
-                        val url = GridPageLink.parse(label)?.resolve(targets, resolver)
-                        if (url != null) {
-                            out.add(MdInline.Link(url, listOf(MdInline.Text(label))))
+                        val link = GridPageLink.parse(label)
+                        if (link != null) {
+                            val url = link.resolve(targets, resolver)
+                            if (url == null) appendText(label) else out.add(MdInline.Link(url, listOf(MdInline.Text(label))))
+                            afterEol = false
                             consumed = end + 1
                             continue
                         }
