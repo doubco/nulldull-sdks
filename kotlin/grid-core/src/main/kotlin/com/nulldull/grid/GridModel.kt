@@ -141,7 +141,63 @@ public data class GridBuiltinNode(
     override val colorOpacity: Double? = null,
     val pageLink: GridPageLink? = null,
     val pageLinkVersion: Int? = null,
-) : GridNode, GridAppearance
+) : GridNode, GridAppearance {
+    // Bridge the constructor, copy and their Kotlin default-argument entry points from Grid 0.2.0.
+    internal constructor(
+        id: String, kind: GridNodeKind, name: String, text: String, assetId: String?, frame: GridFrame,
+        frames: Map<String, GridFrame>, color: String, background: String, fontSize: Int, radius: Int,
+        align: GridAlign, fit: GridFit, shape: GridShape, hidden: Boolean, ignoreFlow: Boolean? = null,
+        rotation: Double? = null, opacity: Double? = null, borderOpacity: Double? = null,
+        strokeOpacity: Double? = null, borderColor: String? = null, borderWidth: Int? = null,
+        borderStyle: GridBorderStyle? = null, lineHeight: Double? = null, fontAssetId: String? = null,
+        fontAssetCleared: Boolean = false, fontFamily: GridFontFamily? = null,
+        verticalAlign: GridVerticalAlign? = null, dropcap: Boolean? = null, fitToBox: Boolean? = null,
+        link: String? = null, url: String? = null, iconName: String? = null, polygonSides: Int? = null,
+        strokeColor: String? = null, strokeWidth: Int? = null, strokeStyle: GridStrokeStyle? = null,
+        separatorStyle: GridSeparatorStyle? = null, backgroundImageId: String? = null,
+        backgroundImageCleared: Boolean = false, backgroundFit: GridFit? = null, padding: Int? = null,
+        backgroundOpacity: Double? = null, colorOpacity: Double? = null,
+    ) : this(
+        id, kind, name, text, assetId, frame, frames, color, background, fontSize, radius, align, fit, shape,
+        hidden, ignoreFlow, rotation, opacity, borderOpacity, strokeOpacity, borderColor, borderWidth,
+        borderStyle, lineHeight, fontAssetId, fontAssetCleared, fontFamily, verticalAlign, dropcap, fitToBox,
+        link, url, iconName, polygonSides, strokeColor, strokeWidth, strokeStyle, separatorStyle,
+        backgroundImageId, backgroundImageCleared, backgroundFit, padding, backgroundOpacity, colorOpacity,
+        pageLink = null, pageLinkVersion = null,
+    )
+
+    @JvmName("copy")
+    internal fun copyV020(
+        id: String = this.id, kind: GridNodeKind = this.kind, name: String = this.name,
+        text: String = this.text, assetId: String? = this.assetId, frame: GridFrame = this.frame,
+        frames: Map<String, GridFrame> = this.frames, color: String = this.color,
+        background: String = this.background, fontSize: Int = this.fontSize, radius: Int = this.radius,
+        align: GridAlign = this.align, fit: GridFit = this.fit, shape: GridShape = this.shape,
+        hidden: Boolean = this.hidden, ignoreFlow: Boolean? = this.ignoreFlow,
+        rotation: Double? = this.rotation, opacity: Double? = this.opacity,
+        borderOpacity: Double? = this.borderOpacity, strokeOpacity: Double? = this.strokeOpacity,
+        borderColor: String? = this.borderColor, borderWidth: Int? = this.borderWidth,
+        borderStyle: GridBorderStyle? = this.borderStyle, lineHeight: Double? = this.lineHeight,
+        fontAssetId: String? = this.fontAssetId, fontAssetCleared: Boolean = this.fontAssetCleared,
+        fontFamily: GridFontFamily? = this.fontFamily, verticalAlign: GridVerticalAlign? = this.verticalAlign,
+        dropcap: Boolean? = this.dropcap, fitToBox: Boolean? = this.fitToBox, link: String? = this.link,
+        url: String? = this.url, iconName: String? = this.iconName, polygonSides: Int? = this.polygonSides,
+        strokeColor: String? = this.strokeColor, strokeWidth: Int? = this.strokeWidth,
+        strokeStyle: GridStrokeStyle? = this.strokeStyle,
+        separatorStyle: GridSeparatorStyle? = this.separatorStyle,
+        backgroundImageId: String? = this.backgroundImageId,
+        backgroundImageCleared: Boolean = this.backgroundImageCleared,
+        backgroundFit: GridFit? = this.backgroundFit, padding: Int? = this.padding,
+        backgroundOpacity: Double? = this.backgroundOpacity, colorOpacity: Double? = this.colorOpacity,
+    ): GridBuiltinNode = copy(
+        id, kind, name, text, assetId, frame, frames, color, background, fontSize, radius, align, fit, shape,
+        hidden, ignoreFlow, rotation, opacity, borderOpacity, strokeOpacity, borderColor, borderWidth,
+        borderStyle, lineHeight, fontAssetId, fontAssetCleared, fontFamily, verticalAlign, dropcap, fitToBox,
+        link, url, iconName, polygonSides, strokeColor, strokeWidth, strokeStyle, separatorStyle,
+        backgroundImageId, backgroundImageCleared, backgroundFit, padding, backgroundOpacity, colorOpacity,
+        pageLink = this.pageLink, pageLinkVersion = this.pageLinkVersion,
+    )
+}
 
 /** One inert string pair of a custom node. Values are data, never markup or code. */
 @Serializable
