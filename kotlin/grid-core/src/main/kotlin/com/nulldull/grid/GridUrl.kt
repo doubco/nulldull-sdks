@@ -109,7 +109,7 @@ public object GridUrl {
         val authority = rest.substring(0, authorityEnd)
         var tail = rest.substring(authorityEnd)
         if ('@' in authority) return null
-        val (rawHost, port) = splitPort(authority) ?: return null
+        val (rawHost, port) = splitPort(authority, pageRoute) ?: return null
         val host = normalizeHost(rawHost) ?: return null
         // IDN mapping can turn Unicode punctuation into an ASCII authority delimiter.
         if (pageRoute && !rawHost.startsWith('[') && host.any { it <= ' ' || it == '\u007F' || it in "#%/:<>?@[\\]^|" }) return null
@@ -132,25 +132,28 @@ public object GridUrl {
         }
     }
 
-    private fun splitPort(authority: String): Pair<String, Int?>? {
+    private fun splitPort(authority: String, pageRoute: Boolean): Pair<String, Int?>? {
         if (authority.startsWith("[")) {
             val end = authority.indexOf(']')
             if (end < 0) return null
             val after = authority.substring(end + 1)
             if (after.isEmpty() || after == ":") return authority.substring(0, end + 1) to null
             if (!after.startsWith(":")) return null
-            return authority.substring(0, end + 1) to (parsePort(after.substring(1)) ?: return null)
+            return authority.substring(0, end + 1) to (parsePort(after.substring(1), pageRoute) ?: return null)
         }
         val colon = authority.lastIndexOf(':')
         if (colon < 0) return authority to null
         val portText = authority.substring(colon + 1)
         if (portText.isEmpty()) return authority.substring(0, colon) to null
-        val port = parsePort(portText) ?: return null
+        val port = parsePort(portText, pageRoute) ?: return null
         return authority.substring(0, colon) to port
     }
 
-    private fun parsePort(text: String): Int? =
-        if (text.all { it.isDigit() } && text.length <= 5) text.toInt().takeIf { it <= 65535 } else null
+    private fun parsePort(text: String, pageRoute: Boolean): Int? {
+        if (pageRoute && text.any { it !in '0'..'9' }) return null
+        val digits = if (pageRoute) text.trimStart('0').ifEmpty { "0" } else text
+        return digits.takeIf { it.length <= 5 && it.all(Char::isDigit) }?.toIntOrNull()?.takeIf { it <= 65535 }
+    }
 
     private fun normalizeHost(host: String): String? {
         if (host.isEmpty()) return null

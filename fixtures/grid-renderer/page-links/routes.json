@@ -48,11 +48,11 @@
     "href": null
   },
   {
-    "input": "/a b",
+    "input": "/a\u00a0b",
     "href": null
   },
   {
-    "input": "/a﻿b",
+    "input": "/a\ufeffb",
     "href": null
   },
   {
@@ -132,19 +132,27 @@
     "href": null
   },
   {
-    "input": "https://user＠example.org",
+    "input": "https://user\uff20example.org",
     "href": null
   },
   {
-    "input": "https://example.１２３",
+    "input": "https://example.\uff11\uff12\uff13",
     "href": null
   },
   {
-    "input": "https://a／b",
+    "input": "https://a\uff0fb",
     "href": null
   },
   {
-    "input": "https://badhost",
+    "input": "https://bad\u007fhost",
     "href": null
+  },
+  {
+    "input": "https://example.org:\u0661\u0662",
+    "href": null
+  },
+  {
+    "input": "https://example.org:000443/",
+    "href": "https://example.org/"
   }
 ]
