@@ -8,7 +8,10 @@ Swift Grid and the workspace SDKs are prepared at `0.4.0`. The separately versio
 
 - SwiftUI and Compose resolve published node and formatted Markdown page links through the host's `resolvePageLink(target, anchor)`. Links follow the target’s current pool, slug and locale. Missing targets, declined routes and unsafe URLs render as inert labels. Active routes use the platform link accessibility and tap handlers.
 - Page detail models expose `pageTargets` in Swift, Kotlin, Node, Python and Go. React’s `useGridPage` inherits the Node type. The Go release tag for this version is `go/v0.4.0` when published.
-- Recompile Kotlin consumers when upgrading. The published page and node data classes have additional defaulted properties. The old Compose renderer overloads remain available, including their trailing `onOpenUrl` lambda.
+- Kotlin Grid preserves the 0.2.0 JVM constructors, copy methods, default arguments and component order for published pages and built-in nodes. Copying a page or node from a previously compiled app retains its page links. Existing Compose renderer overloads still accept the trailing `onOpenUrl` lambda.
+- Kotlin Grid uses nontransitional UTS 46 for internationalized hosts in page routes and external links. Earlier external links could open a different domain, for example `fass.de` for `faß.de`. Invalid joiner contexts now leave the link inert.
+- Swift retains the 0.3.0 page and view initializer names for callers using them as functions. Go retains the original 14-field `GridPage` struct and reads typed bindings through `PageTargets()` and `PageTarget(alias)`.
+- Compose renders an unresolved Markdown angle autolink such as `<grid-page:v1:~1>` as the plain label `grid-page:v1:~1`, matching SwiftUI and the web.
 
 - Increased the tap poster tint from 6% to 12% to make its frame easier to distinguish on a light canvas.
 

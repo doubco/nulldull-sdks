@@ -6,7 +6,7 @@ The official NullDull SDK for Kotlin and Android. It reads NullDull with **works
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** `0.1.0` may change before `1.0`. The SDK only reads data.
+> **Early access.** Version `0.4.0` is in preparation. The SDK only reads data.
 
 Kotlin/JVM library with `suspend` functions and `Flow` pagination. Java 11 bytecode, usable from Android (minSdk 24) and any JVM 11+. Dependencies: OkHttp 4, kotlinx.serialization JSON and kotlinx.coroutines.
 
@@ -17,7 +17,7 @@ Documentation: <https://nulldull.com/docs> · Specification: [`SPEC.md`](https:/
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("com.nulldull:nulldull-sdk:0.1.0")
+    implementation("com.nulldull:nulldull-sdk:0.4.0")
 }
 ```
 
@@ -206,21 +206,21 @@ When a Free workspace has used its monthly public requests, Grid delivery answer
 
 Two further artifacts render Grid documents natively on Android. They are versioned separately from `nulldull-sdk` and do not depend on it.
 
-> **Alpha.** The Grid renderer artifacts are in early access, at version `0.2.0` (22 November 2026), and their API may change before `1.0`. Version `0.1.0` was the first release on Maven Central, on 20 November 2026.
+> **Alpha.** The Grid renderer artifacts are in early access. The following coordinates are for the prepared `0.3.0` release.
 
 | Artifact | Kind | Contents |
 | --- | --- | --- |
-| `com.nulldull:nulldull-grid-core:0.2.0` | JVM library (no Android dependency) | Document model and validation, layout engine, Markdown model, URL and SVG safety rules, coroutine content client |
-| `com.nulldull:nulldull-grid-compose:0.2.0` | Android library (AAR) | Jetpack Compose renderer |
+| `com.nulldull:nulldull-grid-core:0.3.0` | JVM library (no Android dependency) | Document model and validation, layout engine, Markdown model, URL and SVG safety rules, coroutine content client |
+| `com.nulldull:nulldull-grid-compose:0.3.0` | Android library (AAR) | Jetpack Compose renderer |
 
 ```kotlin
 // build.gradle.kts
 dependencies {
-    implementation("com.nulldull:nulldull-grid-compose:0.2.0") // brings nulldull-grid-core
+    implementation("com.nulldull:nulldull-grid-compose:0.3.0") // brings nulldull-grid-core
 }
 ```
 
-Requirements: `nulldull-grid-core` targets Java 17 bytecode (Kotlin 2.2, kotlinx.serialization 1.9, kotlinx.coroutines 1.10, `org.jetbrains:markdown`). `nulldull-grid-compose` needs minSdk 24 and compileSdk 36, uses Compose BOM 2025.08.00 (no Material dependency) and Coil 3.3 for images and SVG, and declares `INTERNET`. Packages are `com.nulldull.grid` and `com.nulldull.grid.compose`.
+Requirements: `nulldull-grid-core` targets Java 17 bytecode (Kotlin 2.2, kotlinx.serialization 1.9, kotlinx.coroutines 1.10, ICU4J, `org.jetbrains:markdown`). `nulldull-grid-compose` needs minSdk 24 and compileSdk 36, uses Compose BOM 2025.08.00 (no Material dependency) and Coil 3.3 for images and SVG, and declares `INTERNET`. Packages are `com.nulldull.grid` and `com.nulldull.grid.compose`.
 
 ```kotlin
 val grid = GridClient(

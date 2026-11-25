@@ -71,7 +71,8 @@ result["pool"], result["items"], result["nextCursor"]
 
 # Every page, following cursors
 for summary in grid.iterate_pages("my-blog", q="launch"):
-    print(summary["title"], (summary.get("cover") or {}).get("url"))
+    cover = summary.get("cover")
+    print(summary["title"], cover["url"] if cover else None)
 
 # One page with its document and asset manifest
 page = grid.get_page("my-blog", "hello-world")
