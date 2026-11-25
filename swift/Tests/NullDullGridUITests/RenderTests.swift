@@ -140,6 +140,30 @@ final class RenderTests: XCTestCase {
     XCTAssertEqual(raw, "<script>alert(1)</script>", "HTML stays literal text")
   }
 
+  func testPublishedPageResolvesOnlyParsedMarkdownLinks() throws {
+    let data = try Data(contentsOf: Self.fixtures.appendingPathComponent("../grid/page-links.json"))
+    let page = try JSONDecoder().decode(PublicGridPage.self, from: data)
+    let view = PublishedGridPageView(page: page, resolvePageLink: { target, anchor in
+      "/" + target.slug + (anchor.map { "#" + $0 } ?? "")
+    })
+    guard case .builtin(let node) = page.document.nodes[0] else { return XCTFail("missing text") }
+    let resolve = { (link: GridPageLink) in link.resolvedURL(in: view.content.pageTargets, using: view.content.resolvePageLink) }
+    let blocks = GridMarkdown.parse(node.text, pageURL: resolve)
+    guard case .paragraph(let first) = blocks[0], case .list(_, let items, _) = blocks[1],
+      case .paragraph(let list) = items[0].blocks[0], case .table(_, _, let rows) = blocks[2] else {
+      return XCTFail("missing formatted blocks")
+    }
+    XCTAssertEqual(first.first?.link?.absoluteString, "/getting-started#intro")
+    XCTAssertNil(first.first(where: { $0.text.contains("Missing") })?.link)
+    XCTAssertEqual(list.first?.link?.absoluteString, "/getting-started#list")
+    XCTAssertEqual(rows[0][0].first?.link?.absoluteString, "/getting-started")
+    guard case .paragraph(let inert) = GridMarkdown.parse(node.text)[0] else { return XCTFail() }
+    XCTAssertTrue(inert.allSatisfy { $0.link == nil })
+    let source = "<grid-page:v1:~1> and `[code](grid-page:v1:~1)` and [web](https://example.org)"
+    guard case .paragraph(let runs) = GridMarkdown.parse(source, pageURL: resolve)[0] else { return XCTFail() }
+    XCTAssertEqual(runs.compactMap { $0.link?.absoluteString }, ["/getting-started", "https://example.org/"])
+  }
+
   func testCustomNodesOnlyRunRegisteredComponents() {
     let registry = GridCustomNodeRegistry().register("callout") { _ in Text("trusted") }
     XCTAssertNotNil(registry.renderer(for: "callout"))

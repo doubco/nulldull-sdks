@@ -73,6 +73,7 @@ struct GridTextStyle {
 /// optional drop cap and optional fit-to-box sizing.
 @available(iOS 16, macOS 13, tvOS 16, *)
 struct GridTextView: View {
+  var pageURL: (GridPageLink) -> URL? = { _ in nil }
   let node: GridBuiltinNode
   let contentSized: Bool
   /// The box's content size (inside borders); its height is ignored when content-sized.
@@ -83,7 +84,7 @@ struct GridTextView: View {
 
   var body: some View {
     let padding = CGFloat(node.appearance.padding ?? 8)
-    let blocks = GridMarkdown.parse(node.text)
+    let blocks = GridMarkdown.parse(node.text, pageURL: node.pageLinkVersion == 1 ? pageURL : nil)
     var style = GridTextStyle(
       family: node.fontFamily ?? .sans, descriptor: descriptor, size: CGFloat(node.fontSize) * typeScale,
       lineHeight: CGFloat(node.lineHeight ?? 1.2), align: node.align, color: color,

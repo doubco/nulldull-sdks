@@ -1,0 +1,130 @@
+[
+  {
+    "input": "",
+    "href": null
+  },
+  {
+    "input": "/",
+    "href": "/"
+  },
+  {
+    "input": "/local/path#intro",
+    "href": "/local/path#intro"
+  },
+  {
+    "input": "/a?x=1",
+    "href": "/a?x=1"
+  },
+  {
+    "input": "relative",
+    "href": null
+  },
+  {
+    "input": "./relative",
+    "href": null
+  },
+  {
+    "input": "#anchor",
+    "href": null
+  },
+  {
+    "input": "//example.org",
+    "href": null
+  },
+  {
+    "input": "/\\example.org",
+    "href": null
+  },
+  {
+    "input": "https://example.org/a\\b",
+    "href": null
+  },
+  {
+    "input": "https://example.org/a\nb",
+    "href": null
+  },
+  {
+    "input": "/hello world",
+    "href": null
+  },
+  {
+    "input": "/a b",
+    "href": null
+  },
+  {
+    "input": "/a﻿b",
+    "href": null
+  },
+  {
+    "input": "https://example.org/a%20b",
+    "href": "https://example.org/a%20b"
+  },
+  {
+    "input": "https://user:pw@example.org/",
+    "href": null
+  },
+  {
+    "input": "https://user@example.org",
+    "href": null
+  },
+  {
+    "input": "https://@Example.org",
+    "href": "https://example.org/"
+  },
+  {
+    "input": "http://EXAMPLE.org:80",
+    "href": "http://example.org/"
+  },
+  {
+    "input": "HTTPS:example.ORG/one/../two#intro",
+    "href": "https://example.org/two#intro"
+  },
+  {
+    "input": "https:///example.org",
+    "href": "https://example.org/"
+  },
+  {
+    "input": "https://[::1]:443/a",
+    "href": "https://[::1]/a"
+  },
+  {
+    "input": "https://[::::]",
+    "href": null
+  },
+  {
+    "input": "https://[fe80::1%25en0]",
+    "href": null
+  },
+  {
+    "input": "https://127.1",
+    "href": "https://127.0.0.1/"
+  },
+  {
+    "input": "https://example.123",
+    "href": null
+  },
+  {
+    "input": "https://256.0.0.1",
+    "href": null
+  },
+  {
+    "input": "https://example.org:65536",
+    "href": null
+  },
+  {
+    "input": "file:///tmp/a",
+    "href": null
+  },
+  {
+    "input": "data:text/plain,x",
+    "href": null
+  },
+  {
+    "input": "javascript:void(0)",
+    "href": null
+  },
+  {
+    "input": "mailto:x@example.org",
+    "href": null
+  }
+]

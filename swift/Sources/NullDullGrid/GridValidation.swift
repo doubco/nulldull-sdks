@@ -205,6 +205,14 @@ public enum GridValidator {
     node.borderStyle = borderStyle
     node.strokeStyle = strokeStyle
     node.link = link
+    if let version = n["pageLinkVersion"] {
+      guard kind == .text, version == .number(1) else { throw GridValidationError("Invalid formatted page link version.") }
+      node.pageLinkVersion = 1
+    }
+    if let value = n["pageLink"] {
+      guard link?.isEmpty != false else { throw GridValidationError("Choose a URL or a Grid page.") }
+      node.pageLink = try GridPageLink(json: value)
+    }
     node.url = url
     node.rotation = rotation
     node.lineHeight = lineHeight

@@ -6,6 +6,7 @@ import SwiftUI
 /// One node: opacity, rotation, background, border, radius, content and whole-node link.
 @available(iOS 16, macOS 13, tvOS 16, *)
 struct GridNodeView: View {
+  var pageURL: (GridPageLink) -> URL? = { _ in nil }
   var fontNames: [GridFontFamily: String] = [:]
   let placed: GridPlacedNode
   let foreground: Color
@@ -80,7 +81,7 @@ struct GridNodeView: View {
     case .text:
       let _ = store.revision
       GridTextView(
-        node: node, contentSized: placed.isContentSized, boxSize: size, color: color,
+        pageURL: pageURL, node: node, contentSized: placed.isContentSized, boxSize: size, color: color,
         descriptor: fontURL.flatMap { store.font($0) } ?? fontNames[node.fontFamily ?? .sans].map {
           CTFontDescriptorCreateWithNameAndSize($0 as CFString, 0)
         }, typeScale: typeScale)
@@ -126,7 +127,8 @@ struct GridNodeView: View {
 
   @ViewBuilder
   func link(_ node: GridBuiltinNode) -> some View {
-    if let href = GridURL.safeHref(node.link), let url = URL(string: href) {
+    let url = node.pageLink.map(pageURL) ?? GridURL.safeHref(node.link).flatMap { URL(string: $0) }
+    if let url {
       GridLinkButton(url: url) { Color.clear.contentShape(Rectangle()) }
         .accessibilityLabel(Text(node.name))
     }

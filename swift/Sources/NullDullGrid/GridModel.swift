@@ -152,6 +152,8 @@ public struct GridBuiltinNode: Hashable, Sendable {
   public var strokeStyle: GridStrokeStyle?
   /// Normalized http(s) URL, or an empty string.
   public var link: String?
+  public var pageLink: GridPageLink?
+  public var pageLinkVersion: Int?
   public var url: String?
   public var rotation: Double?
   public var lineHeight: Double?
@@ -463,6 +465,8 @@ extension GridBuiltinNode {
     if let strokeStyle { object["strokeStyle"] = .string(strokeStyle.rawValue) }
     if let link { object["link"] = .string(link) }
     if let url { object["url"] = .string(url) }
+    if let pageLinkVersion { object["pageLinkVersion"] = .number(Double(pageLinkVersion)) }
+    if let pageLink { object["pageLink"] = pageLink.json }
     if let rotation { object["rotation"] = .number(rotation) }
     if let lineHeight { object["lineHeight"] = .number(lineHeight) }
     if let fontAssetId { object["fontAssetId"] = fontAssetId.map(JSONValue.string) ?? .null }

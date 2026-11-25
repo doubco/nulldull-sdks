@@ -53,7 +53,7 @@ indirect enum GridBlock: Hashable, Sendable {
 /// HTML is never interpreted and images are never fetched (their alt text is shown).
 @available(iOS 16, macOS 13, tvOS 16, *)
 enum GridMarkdown {
-  static func parse(_ source: String) -> [GridBlock] {
+  static func parse(_ source: String, pageURL: ((GridPageLink) -> URL?)? = nil) -> [GridBlock] {
     let options = AttributedString.MarkdownParsingOptions(
       allowsExtendedAttributes: false, interpretedSyntax: .full, failurePolicy: .returnPartiallyParsedIfPossible)
     guard let attributed = try? AttributedString(markdown: source, options: options) else {
@@ -62,7 +62,7 @@ enum GridMarkdown {
     let root = Node(kind: nil, identity: -1)
     for run in attributed.runs {
       let components = Array((run.presentationIntent?.components ?? []).reversed())
-      let inline = makeInline(String(attributed[run.range].characters), run)
+      let inline = makeInline(String(attributed[run.range].characters), run, pageURL: pageURL)
       if components.isEmpty {
         // Block HTML carries no block intent: keep it as literal text.
         if let last = root.children.last, last.kind == nil {
@@ -100,7 +100,7 @@ enum GridMarkdown {
     }
   }
 
-  static func makeInline(_ text: String, _ run: AttributedString.Runs.Run) -> GridInline {
+  static func makeInline(_ text: String, _ run: AttributedString.Runs.Run, pageURL: ((GridPageLink) -> URL?)?) -> GridInline {
     let intent = run.inlinePresentationIntent ?? []
     var inline = GridInline(text: text)
     // Soft line breaks stay visible: the web renderer uses `white-space: pre-wrap`.
@@ -109,7 +109,10 @@ enum GridMarkdown {
     inline.italic = intent.contains(.emphasized)
     inline.code = intent.contains(.code)
     inline.strike = intent.contains(.strikethrough)
-    if let link = run.link, let href = GridURL.safeHref(link.absoluteString) { inline.link = URL(string: href) }
+    if let destination = run.link?.absoluteString {
+      if let link = GridPageLink(destination: destination) { inline.link = pageURL?(link) }
+      else if let href = GridURL.safeHref(destination) { inline.link = URL(string: href) }
+    }
     return inline
   }
 

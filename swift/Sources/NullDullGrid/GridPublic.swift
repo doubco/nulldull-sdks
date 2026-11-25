@@ -49,24 +49,28 @@ public struct PublicGridPage: Hashable, Sendable, Codable {
   public var summary: PublicGridPageSummary
   public var document: GridDocument
   public var assets: [PublicGridAsset]
+  public var pageTargets: [String: PublishedGridPageTarget]
 
   public var id: String { summary.id }
   public var title: String { summary.title }
   public var slug: String { summary.slug }
   public var cover: PublicGridCover? { summary.cover }
 
-  public init(summary: PublicGridPageSummary, document: GridDocument, assets: [PublicGridAsset]) {
+  public init(summary: PublicGridPageSummary, document: GridDocument, assets: [PublicGridAsset],
+    pageTargets: [String: PublishedGridPageTarget] = [:]) {
+    self.pageTargets = pageTargets
     self.summary = summary
     self.document = document
     self.assets = assets
   }
 
-  enum Keys: String, CodingKey { case document, assets }
+  enum Keys: String, CodingKey { case document, assets, pageTargets }
 
   public init(from decoder: Decoder) throws {
     summary = try PublicGridPageSummary(from: decoder)
     let container = try decoder.container(keyedBy: Keys.self)
     document = try container.decode(GridDocument.self, forKey: .document)
+    pageTargets = try container.decodeIfPresent([String: PublishedGridPageTarget].self, forKey: .pageTargets) ?? [:]
     assets = try container.decode([PublicGridAsset].self, forKey: .assets)
   }
 
@@ -74,6 +78,7 @@ public struct PublicGridPage: Hashable, Sendable, Codable {
     try summary.encode(to: encoder)
     var container = encoder.container(keyedBy: Keys.self)
     try container.encode(document, forKey: .document)
+    if !pageTargets.isEmpty { try container.encode(pageTargets, forKey: .pageTargets) }
     try container.encode(assets, forKey: .assets)
   }
 

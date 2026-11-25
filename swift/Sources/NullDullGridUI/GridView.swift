@@ -39,6 +39,8 @@ public struct GridCustomNodeRegistry {
 /// and follows it as it narrows or widens (rotation, window resizing, split view).
 @available(iOS 16, macOS 13, tvOS 16, *)
 public struct GridView: View {
+  let pageTargets: [String: PublishedGridPageTarget]
+  let resolvePageLink: GridPageLinkResolver?
   let document: GridDocument
   let resolveAsset: (String) -> URL?
   let width: CGFloat?
@@ -62,6 +64,7 @@ public struct GridView: View {
   ///     as the embed appears, or `.tap` after the viewer taps a local poster. Ignored when `embed:` is set.
   public init(
     document: GridDocument,
+    pageTargets: [String: PublishedGridPageTarget] = [:], resolvePageLink: GridPageLinkResolver? = nil,
     resolveAsset: @escaping (String) -> URL? = { _ in nil },
     width: CGFloat? = nil,
     initialWidth: CGFloat = 390,
@@ -75,6 +78,8 @@ public struct GridView: View {
     label: String? = nil,
     dynamicType: GridDynamicType = .contentFlowText
   ) {
+    self.pageTargets = pageTargets
+    self.resolvePageLink = resolvePageLink
     self.document = document
     self.resolveAsset = resolveAsset
     self.width = width
@@ -92,6 +97,7 @@ public struct GridView: View {
   public var body: some View {
     let viewport = Self.viewport(width: width, measured: measured, initialWidth: initialWidth)
     let canvas = GridCanvasView(
+      pageURL: { $0.resolvedURL(in: pageTargets, using: resolvePageLink) },
       document: document, viewport: viewport, override: override, asset: safeAsset, theme: theme,
       customNodes: customNodes, embed: embed, messages: messages, dynamicType: dynamicType)
     Group {
@@ -144,14 +150,15 @@ public struct PublishedGridPageView: View {
   let content: GridView
 
   public init(
-    page: PublicGridPage, width: CGFloat? = nil, initialWidth: CGFloat = 390, theme: GridTheme = GridTheme(),
+    page: PublicGridPage, resolvePageLink: GridPageLinkResolver? = nil, width: CGFloat? = nil, initialWidth: CGFloat = 390, theme: GridTheme = GridTheme(),
     customNodes: GridCustomNodeRegistry = GridCustomNodeRegistry(), embed: ((GridBuiltinNode) -> AnyView)? = nil,
     embedLoading: GridEmbedLoading = .immediate, messages: GridMessages = GridMessages(),
     dynamicType: GridDynamicType = .contentFlowText
   ) {
     let assets = page.assetURLs
     content = GridView(
-      document: page.document, resolveAsset: { assets[$0].flatMap(URL.init(string:)) }, width: width,
+      document: page.document, pageTargets: page.pageTargets, resolvePageLink: resolvePageLink,
+      resolveAsset: { assets[$0].flatMap(URL.init(string:)) }, width: width,
       initialWidth: initialWidth, theme: theme, customNodes: customNodes, embed: embed, embedLoading: embedLoading,
       messages: messages,
       label: page.title, dynamicType: dynamicType)
@@ -163,6 +170,7 @@ public struct PublishedGridPageView: View {
 /// The canvas for one viewport width.
 @available(iOS 16, macOS 13, tvOS 16, *)
 struct GridCanvasView: View {
+  var pageURL: (GridPageLink) -> URL? = { _ in nil }
   let document: GridDocument
   let viewport: CGFloat
   let override: GridActiveLayout?
@@ -188,7 +196,7 @@ struct GridCanvasView: View {
     let canvas = GridCanvasLayout(document: document, viewport: Double(viewport), active: active) {
       ForEach(Array(preview.nodes.enumerated()), id: \.element.node.id) { index, placed in
         GridNodeView(
-          fontNames: theme.fontNames, placed: placed, foreground: foreground, asset: asset, fontURL: fontURL(placed.node, fonts), customNodes: customNodes,
+          pageURL: pageURL, fontNames: theme.fontNames, placed: placed, foreground: foreground, asset: asset, fontURL: fontURL(placed.node, fonts), customNodes: customNodes,
           embed: embed, messages: messages, typeScale: placed.isFlowing && placed.node.isText ? scale : 1)
           .accessibilitySortPriority(Double(preview.nodes.count - index))
       }
