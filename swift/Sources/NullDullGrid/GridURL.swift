@@ -50,7 +50,9 @@ public struct GridURL: Hashable, Sendable {
     return spaced.removingPercentEncoding ?? spaced
   }
 
-  public init?(parsing input: String) {
+  public init?(parsing input: String) { self.init(parsing: input, pageRoute: false) }
+
+  init?(parsing input: String, pageRoute: Bool) {
     // Strip leading/trailing C0 controls and spaces; drop tabs and newlines anywhere.
     var scalars = Array(input.unicodeScalars)
     while let first = scalars.first, first.value <= 0x20 { scalars.removeFirst() }
@@ -71,7 +73,7 @@ public struct GridURL: Hashable, Sendable {
     if let at = authority.lastIndex(of: "@") {
       let userinfo = authority[..<at]
       // Any username or password makes the URL unsafe (an empty "@" is allowed).
-      if userinfo.contains(where: { $0 != ":" }) { return nil }
+      if userinfo.contains(where: { $0 != ":" }) || (pageRoute && userinfo.count > 1) { return nil }
       authority = authority[authority.index(after: at)...]
     }
 

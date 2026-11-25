@@ -143,9 +143,13 @@ final class RenderTests: XCTestCase {
   func testPublishedPageResolvesOnlyParsedMarkdownLinks() throws {
     let data = try Data(contentsOf: Self.fixtures.appendingPathComponent("../grid/page-links.json"))
     let page = try JSONDecoder().decode(PublicGridPage.self, from: data)
+    var renderedAnchors = Set<String>()
     let view = PublishedGridPageView(page: page, resolvePageLink: { target, anchor in
-      "/" + target.slug + (anchor.map { "#" + $0 } ?? "")
-    })
+      renderedAnchors.insert(anchor ?? "")
+      return "/" + target.slug + (anchor.map { "#" + $0 } ?? "")
+    }, width: 390)
+    XCTAssertNotNil(ImageRenderer(content: view).cgImage)
+    XCTAssertEqual(renderedAnchors, ["intro", "list", "chapter", ""])
     guard case .builtin(let node) = page.document.nodes[0] else { return XCTFail("missing text") }
     let resolve = { (link: GridPageLink) in link.resolvedURL(in: view.content.pageTargets, using: view.content.resolvePageLink) }
     let blocks = GridMarkdown.parse(node.text, pageURL: resolve)
@@ -159,6 +163,9 @@ final class RenderTests: XCTestCase {
     XCTAssertEqual(rows[0][0].first?.link?.absoluteString, "/getting-started")
     guard case .paragraph(let inert) = GridMarkdown.parse(node.text)[0] else { return XCTFail() }
     XCTAssertTrue(inert.allSatisfy { $0.link == nil })
+    let refs = "[Full][ref], [ref][] and [ref].\n\n[ref]: <grid-page:v1:~1#intro>\n[ref]: grid-page:v1:~2"
+    guard case .paragraph(let references) = GridMarkdown.parse(refs, pageURL: resolve)[0] else { return XCTFail() }
+    XCTAssertEqual(references.filter { $0.link != nil }.map(\.text), ["Full", "ref", "ref"])
     let source = "<grid-page:v1:~1> and `[code](grid-page:v1:~1)` and [web](https://example.org)"
     guard case .paragraph(let runs) = GridMarkdown.parse(source, pageURL: resolve)[0] else { return XCTFail() }
     XCTAssertEqual(runs.compactMap { $0.link?.absoluteString }, ["/getting-started", "https://example.org/"])

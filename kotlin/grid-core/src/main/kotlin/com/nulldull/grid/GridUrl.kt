@@ -38,7 +38,7 @@ public object GridUrl {
         val host = authority.substringAfterLast('@')
         if ('@' in authority && authority.substringBeforeLast('@') !in listOf("", ":")) return null
         if (host.startsWith('[') && ('%' in host || runCatching { java.net.URI("$scheme://$host/").host }.getOrNull() == null)) return null
-        val href = safe("$scheme://$host" + rest.substring(authority.length)) ?: return null
+        val href = normalizeHttp("$scheme://$host" + rest.substring(authority.length), pageRoute = true) ?: return null
         if (host.startsWith('[')) return href
         val domain = href.substringAfter("://").takeWhile { it !in ":/?#" }
         val labels = domain.removeSuffix(".").split('.')
@@ -94,7 +94,9 @@ public object GridUrl {
      * dot segments resolved, unsafe characters percent-encoded). Returns null for other
      * schemes, missing hosts, or user info.
      */
-    public fun normalizeHttp(input: String): String? {
+    public fun normalizeHttp(input: String): String? = normalizeHttp(input, pageRoute = false)
+
+    private fun normalizeHttp(input: String, pageRoute: Boolean): String? {
         val value = input.trim { it <= ' ' }.filterNot { it == '\t' || it == '\n' || it == '\r' }
         val colon = value.indexOf(':')
         if (colon <= 0) return null
@@ -109,6 +111,8 @@ public object GridUrl {
         if ('@' in authority) return null
         val (rawHost, port) = splitPort(authority) ?: return null
         val host = normalizeHost(rawHost) ?: return null
+        // IDN mapping can turn Unicode punctuation into an ASCII authority delimiter.
+        if (pageRoute && !rawHost.startsWith('[') && host.any { it <= ' ' || it == '\u007F' || it in "#%/:<>?@[\\]^|" }) return null
         val portPart = when {
             port == null -> ""
             (scheme == "http" && port == 80) || (scheme == "https" && port == 443) -> ""

@@ -50,6 +50,14 @@ class PageLinkTest {
         assertEquals(listOf("/manual/en/getting-started", "https://example.org/"), runs.filterIsInstance<MdInline.Link>().map { it.href })
     }
 
+    @Test fun fullCollapsedAndShortcutReferencesUseTheFirstDefinition() {
+        val markdown = "[Full][ref], [ref][] and [ref].\n\n[ref]: <grid-page:v1:~1#intro>\n[ref]: grid-page:v1:~2"
+        val paragraph = GridMarkdown.parse(markdown, page.pageTargets, route).single() as MdBlock.Paragraph
+        val links = paragraph.inlines.filterIsInstance<MdInline.Link>()
+        assertEquals(listOf("Full", "ref", "ref"), links.map { GridMarkdown.plainText(it.children) })
+        assertTrue(links.all { it.href == "/manual/en/getting-started#intro" })
+    }
+
     @Test fun aliasGrammarAndSafeOutput() {
         for (invalid in listOf("~0", "~01", "~65", "guide", "~1#", "~1#a#b", "~1#no/space", "~1#" + "a".repeat(129))) {
             assertNull(GridPageLink.parse("grid-page:v1:$invalid"))

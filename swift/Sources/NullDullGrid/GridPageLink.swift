@@ -51,18 +51,19 @@ public struct GridPageLink: Hashable, Sendable {
       !href.isEmpty, !href.contains("\\"), !href.unicodeScalars.contains(where: { $0.properties.isWhitespace || $0 == "\u{FEFF}" })
     else { return nil }
     if href.hasPrefix("/") { return href.hasPrefix("//") ? nil : URL(string: href) }
-    return GridURL(parsing: href)?.pageURL
+    return GridURL(parsing: href, pageRoute: true)?.pageURL
   }
 }
 
 private extension GridURL {
   /// Browsers validate bracketed literals and parse hosts ending in a number as IPv4.
   var pageURL: URL? {
+    guard let url, let canonicalHost = url.host else { return nil }
     if host.hasPrefix("[") {
       var address = in6_addr()
       guard host.hasSuffix("]"), inet_pton(AF_INET6, String(host.dropFirst().dropLast()), &address) == 1 else { return nil }
     } else {
-      let domain = host.hasSuffix(".") ? String(host.dropLast()) : host
+      let domain = canonicalHost.hasSuffix(".") ? String(canonicalHost.dropLast()) : canonicalHost
       let last = domain.split(separator: ".", omittingEmptySubsequences: false).last ?? ""
       let numeric = !last.isEmpty && last.utf8.allSatisfy { (48...57).contains($0) }
       let hex = last.hasPrefix("0x") && last.dropFirst(2).allSatisfy { $0.isASCII && $0.isHexDigit }

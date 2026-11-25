@@ -26,7 +26,7 @@ public sealed interface MdBlock {
     public data class Html(val text: String) : MdBlock
 }
 
-/** Inline Markdown. Links carry only a safe http(s) href; unsafe links become plain text. */
+/** Inline links carry a checked external URL or a customer-resolved page route. */
 public sealed interface MdInline {
     public data class Text(val text: String) : MdInline
     public data class Strong(val children: List<MdInline>) : MdInline

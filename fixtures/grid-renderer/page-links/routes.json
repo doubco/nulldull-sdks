@@ -126,5 +126,25 @@
   {
     "input": "mailto:x@example.org",
     "href": null
+  },
+  {
+    "input": "https://::@example.org",
+    "href": null
+  },
+  {
+    "input": "https://user＠example.org",
+    "href": null
+  },
+  {
+    "input": "https://example.１２３",
+    "href": null
+  },
+  {
+    "input": "https://a／b",
+    "href": null
+  },
+  {
+    "input": "https://badhost",
+    "href": null
   }
 ]
