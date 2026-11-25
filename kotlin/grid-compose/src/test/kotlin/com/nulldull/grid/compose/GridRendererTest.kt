@@ -16,6 +16,8 @@ import androidx.compose.ui.test.onNodeWithTag
 import androidx.compose.ui.test.onNodeWithText
 import androidx.compose.ui.test.performFirstLinkClick
 import androidx.compose.ui.text.LinkAnnotation
+import com.nulldull.grid.GridUrl
+import kotlinx.serialization.json.*
 import com.nulldull.grid.GridJson
 import com.nulldull.grid.client.PublicGridPage
 import androidx.compose.ui.test.performClick
@@ -111,6 +113,49 @@ class GridRendererTest {
         compose.onNodeWithText("grid-page:v1:~1 and grid-page:v1:~2").assertExists()
         compose.onAllNodes(link("grid-page:v1:~1", "/handbook/tr/new")).assertCountEquals(0)
         compose.onNodeWithText("Read the guide").assertExists()
+    }
+
+    @Test
+    fun androidResolvesEverySharedRouteIncludingJvmDeclines() {
+        val routes = GridJson.parse(File(System.getProperty("grid.fixtures"), "page-links/routes.json").readText()).jsonArray
+        for (route in routes.map { it.jsonObject }) {
+            val input = route.getValue("input").jsonPrimitive.content
+            val href = route.getValue("href").jsonPrimitive.contentOrNull
+            assertEquals(href, GridUrl.safePageHref(input), input)
+            if (route["external"]?.jsonPrimitive?.boolean == true) assertEquals(href, GridUrl.safe(input), input)
+        }
+    }
+
+    @Test
+    fun androidOpensTheCanonicalHostFromRenderedExternalAndResolvedLinks() {
+        val json = File(System.getProperty("grid.fixtures"), "../grid/page-links.json").readText()
+        val page = GridJson.format.decodeFromString<PublicGridPage>(
+            json.replace("[Inline](grid-page:v1:~1#intro) and [Missing](grid-page:v1:~2).",
+                "[External](https://faß.de/external) and [Resolved](grid-page:v1:~1)."),
+        )
+        val legacy = File(System.getProperty("grid.fixtures"), "page-links/legacy.json").readText()
+        val external = GridJson.format.decodeFromString<PublicGridPage>(
+            legacy.replace("https://example.org/legacy", "https://faß.de/tile"),
+        )
+        val opened = mutableListOf<String>()
+        val showing = mutableStateOf(page)
+        compose.setContent {
+            PublishedGridPage(showing.value, resolvePageLink = { _, _ -> "https://faß.de/resolved" },
+                onOpenUrl = { opened += it })
+        }
+        val canonical = "https://xn--fa-hia.de"
+        val paragraph = compose.onNodeWithText("External and Resolved.")
+        paragraph.performFirstLinkClick { (it.item as? LinkAnnotation.Url)?.url == "$canonical/external" }
+        paragraph.performFirstLinkClick { (it.item as? LinkAnnotation.Url)?.url == "$canonical/resolved" }
+        compose.onNode(SemanticsMatcher("resolved tile") { node ->
+            node.config.getOrElse(SemanticsProperties.Text) { emptyList() }.any { text ->
+                text.text == "Read the guide" && text.getLinkAnnotations(0, text.length).isNotEmpty()
+            }
+        }).performFirstLinkClick()
+        compose.runOnIdle { showing.value = external }
+        val label = external.document.nodes[1].name
+        compose.onNode(SemanticsMatcher.expectValue(SemanticsProperties.ContentDescription, listOf(label))).performClick()
+        assertEquals(listOf("$canonical/external", "$canonical/resolved", "$canonical/resolved", "$canonical/tile"), opened)
     }
 
     @Test
