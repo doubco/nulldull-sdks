@@ -177,6 +177,27 @@ final class RenderTests: XCTestCase {
     XCTAssertEqual(runs.compactMap { $0.link?.absoluteString }, ["/getting-started", "https://example.org/"])
   }
 
+  func testAnchoredPageLinksPreserveLabelsCodeAndExternalFragments() throws {
+    let token = "grid-page:v1:~64#part_2"
+    let outside = "https://example.com/path#grid-page:v1:~64#part_2"
+    let externalHref = try XCTUnwrap(try AttributedString(markdown: "[Web](\(outside))").runs.first?.link?.absoluteString)
+    let source = "**Styled** [Open](\(token)), <\(token)>, `[literal](\(token))`, [Web](\(outside)), [Read][r].\n\n[r]: <grid-page:v1:~1#list>"
+    var resolved: [GridPageLink] = []
+    guard case .paragraph(let runs) = GridMarkdown.parse(source, pageURL: { link in
+      resolved.append(link)
+      return URL(string: "/guide#" + (link.anchor ?? ""))
+    }, protectPageFragments: true).first else { return XCTFail("missing paragraph") }
+    let inline = try XCTUnwrap(GridPageLink(entryId: "~64", anchor: "part_2"))
+    let reference = try XCTUnwrap(GridPageLink(entryId: "~1", anchor: "list"))
+    XCTAssertEqual(resolved, [inline, inline, reference])
+    XCTAssertEqual(runs.compactMap { $0.link?.absoluteString }, ["/guide#part_2", "/guide#part_2", externalHref, "/guide#list"])
+    XCTAssertEqual(runs.map(\.text).joined(), "Styled Open, \(token), [literal](\(token)), Web, Read.")
+    XCTAssertTrue(runs.contains { $0.bold && $0.text == "Styled" })
+    XCTAssertTrue(runs.contains { $0.code && $0.link == nil && $0.text == "[literal](\(token))" })
+    guard case .paragraph(let inert) = GridMarkdown.parse(source).first else { return XCTFail("missing paragraph") }
+    XCTAssertEqual(inert.compactMap { $0.link?.absoluteString }, [externalHref])
+  }
+
   func testCustomNodesOnlyRunRegisteredComponents() {
     let registry = GridCustomNodeRegistry().register("callout") { _ in Text("trusted") }
     XCTAssertNotNil(registry.renderer(for: "callout"))

@@ -53,16 +53,34 @@ indirect enum GridBlock: Hashable, Sendable {
 /// HTML is never interpreted and images are never fetched (their alt text is shown).
 @available(iOS 16, macOS 13, tvOS 16, *)
 enum GridMarkdown {
-  static func parse(_ source: String, pageURL: ((GridPageLink) -> URL?)? = nil) -> [GridBlock] {
+  // Foundation’s Markdown URL handling depends on the OS that runs the app.
+  static let needsFragmentProtection: Bool = {
+    let destination = "grid-page:v1:~1#intro"
+    let sample = try? AttributedString(markdown: "[probe](\(destination))")
+    return sample?.runs.first?.link?.absoluteString != destination
+  }()
+
+  static func parse(
+    _ source: String, pageURL: ((GridPageLink) -> URL?)? = nil,
+    protectPageFragments: Bool = needsFragmentProtection
+  ) -> [GridBlock] {
     let options = AttributedString.MarkdownParsingOptions(
       allowsExtendedAttributes: false, interpretedSyntax: .full, failurePolicy: .returnPartiallyParsedIfPossible)
-    guard let attributed = try? AttributedString(markdown: source, options: options) else {
+    guard let original = try? AttributedString(markdown: source, options: options) else {
       return [.paragraph([GridInline(text: source)])]
     }
+    let fragmentMarker = protectPageFragments && pageURL != nil && source.contains("grid-page:v1:~") && source.contains("#")
+      ? ":nd" + UUID().uuidString + ":" : nil
+    let attributed = fragmentMarker.map { restoringPageLinks(in: original, source: source, options: options, marker: $0) } ?? original
     let root = Node(kind: nil, identity: -1)
     for run in attributed.runs {
       let components = Array((run.presentationIntent?.components ?? []).reversed())
-      let inline = makeInline(String(attributed[run.range].characters), run, pageURL: pageURL)
+      let text = String(attributed[run.range].characters)
+      var destination = run.link?.absoluteString
+      if let fragmentMarker, let href = destination, href.hasPrefix("grid-page:v1:~") {
+        destination = href.replacingOccurrences(of: fragmentMarker, with: "#")
+      }
+      let inline = makeInline(text, run, destination: destination, pageURL: pageURL)
       if components.isEmpty {
         // Block HTML carries no block intent: keep it as literal text.
         if let last = root.children.last, last.kind == nil {
@@ -89,6 +107,35 @@ enum GridMarkdown {
     return blocks(root.children, depth: 0)
   }
 
+  /// Older Foundation Markdown parsers lose anchored opaque Grid links. Ask the same parser
+  /// which runs are links with the delimiter temporarily masked, then copy just those link
+  /// attributes onto the original text. External URLs, visible literals and styling stay intact.
+  private static func restoringPageLinks(
+    in original: AttributedString, source: String, options: AttributedString.MarkdownParsingOptions, marker: String
+  ) -> AttributedString {
+    let masked = source.replacingOccurrences(
+      of: #"(grid-page:v1:~(?:[1-9]|[1-5][0-9]|6[0-4]))#(?=[A-Za-z0-9._~-])"#,
+      with: "$1" + marker, options: .regularExpression)
+    guard masked != source, let parsed = try? AttributedString(markdown: masked, options: options) else { return original }
+
+    let characters = original.characters
+    var cursor = characters.startIndex
+    var result = AttributedString()
+    for run in parsed.runs {
+      let text = String(parsed[run.range].characters).replacingOccurrences(of: marker, with: "#")
+      guard let end = characters.index(cursor, offsetBy: text.count, limitedBy: characters.endIndex),
+        characters[cursor..<end].elementsEqual(text) else { return original }
+      var slice = AttributedString(original[cursor..<end])
+      if let url = run.link, url.absoluteString.contains(marker),
+        GridPageLink(destination: url.absoluteString.replacingOccurrences(of: marker, with: "#")) != nil {
+        slice.link = url
+      }
+      result.append(slice)
+      cursor = end
+    }
+    return cursor == characters.endIndex ? result : original
+  }
+
   final class Node {
     let kind: PresentationIntent.Kind?
     let identity: Int
@@ -100,7 +147,7 @@ enum GridMarkdown {
     }
   }
 
-  static func makeInline(_ text: String, _ run: AttributedString.Runs.Run, pageURL: ((GridPageLink) -> URL?)?) -> GridInline {
+  static func makeInline(_ text: String, _ run: AttributedString.Runs.Run, destination: String?, pageURL: ((GridPageLink) -> URL?)?) -> GridInline {
     let intent = run.inlinePresentationIntent ?? []
     var inline = GridInline(text: text)
     // Soft line breaks stay visible: the web renderer uses `white-space: pre-wrap`.
@@ -109,7 +156,7 @@ enum GridMarkdown {
     inline.italic = intent.contains(.emphasized)
     inline.code = intent.contains(.code)
     inline.strike = intent.contains(.strikethrough)
-    if let destination = run.link?.absoluteString {
+    if let destination {
       if let link = GridPageLink(destination: destination) { inline.link = pageURL?(link) }
       else if let href = GridURL.safeHref(destination) { inline.link = URL(string: href) }
     }
