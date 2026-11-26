@@ -97,8 +97,24 @@ final class WidthTests: XCTestCase {
     init<V: View>(_ root: V) { view = NSHostingView(rootView: root) }
     #else
     let controller: UIViewController
+    let window: UIWindow
     var view: UIView { controller.view }
-    init<V: View>(_ root: V) { controller = UIHostingController(rootView: root) }
+    init<V: View>(_ root: V) {
+      controller = UIHostingController(rootView: root)
+      if let scene = UIApplication.shared.connectedScenes.compactMap({ $0 as? UIWindowScene }).first {
+        window = UIWindow(windowScene: scene)
+      } else {
+        window = UIWindow(frame: CGRect(x: 0, y: 0, width: 900, height: 300))
+      }
+      // Geometry callbacks and stateful nodes need a mounted UIKit hierarchy. Resize the child
+      // hosting view independently of the simulated screen.
+      let parent = UIViewController()
+      window.rootViewController = parent
+      parent.addChild(controller)
+      parent.view.addSubview(controller.view)
+      controller.didMove(toParent: parent)
+      window.isHidden = false
+    }
     #endif
 
     func layout(width: CGFloat) {
