@@ -143,9 +143,13 @@ final class ScrollStateTests: XCTestCase {
 
     host.layout(width: 800)
     XCTAssertEqual(scrollViews(host.view).count, 2)
-    XCTAssertEqual(origin.x, 28, accuracy: 0.5, "the fitting canvas is centred, back at its start")
+    // A persistent vertical scrollbar takes width from the outer scroll view’s clip view.
+    // GridView centres the 764 pt canvas inside that viewport. The node starts at its 10 pt padding.
+    let viewportWidth = try XCTUnwrap(scrollViews(host.view).first).contentView.bounds.width
+    let centredOrigin = (viewportWidth - 764) / 2 + 10
+    XCTAssertEqual(origin.x, centredOrigin, accuracy: 0.5, "the fitting canvas is centred, back at its start")
     try scroll(dx: 40)
-    XCTAssertEqual(origin.x, 28, accuracy: 0.5, "a fitting canvas does not scroll")
+    XCTAssertEqual(origin.x, centredOrigin, accuracy: 0.5, "a fitting canvas does not scroll")
     let top = origin.y
     try scroll(dy: 50)
     XCTAssertEqual(origin.y, top - 50, accuracy: 0.5, "vertical scrolling over the canvas moves the page")
