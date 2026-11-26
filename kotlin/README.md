@@ -6,7 +6,7 @@ The official NullDull SDK for Kotlin and Android. It reads NullDull with **works
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** Version `0.4.0` is in preparation. The SDK only reads data.
+> **Early access.** Version `0.4.0` was released on 26 November 2026, with Kotlin Grid `0.3.0`. Both are on Maven Central. The SDK only reads data.
 
 Kotlin/JVM library with `suspend` functions and `Flow` pagination. Java 11 bytecode, usable from Android (minSdk 24) and any JVM 11+. Dependencies: OkHttp 4, kotlinx.serialization JSON and kotlinx.coroutines.
 
@@ -206,7 +206,7 @@ When a Free workspace has used its monthly public requests, Grid delivery answer
 
 Two further artifacts render Grid documents natively on Android. They are versioned separately from `nulldull-sdk` and do not depend on it.
 
-> **Alpha.** The Grid renderer artifacts are in early access. The following coordinates are for the prepared `0.3.0` release.
+> **Alpha.** The Grid renderer artifacts are in early access. The following coordinates are for Kotlin Grid `0.3.0`.
 
 | Artifact | Kind | Contents |
 | --- | --- | --- |
@@ -241,7 +241,7 @@ fun Article(slug: String) {
 }
 ```
 
-### Routing Grid page links (prepared for Kotlin Grid 0.3.0)
+### Routing Grid page links (Kotlin Grid 0.3.0)
 
 The resolver receives the target's stable `entryId`, current pool, slug and locale, and the link's optional anchor. Return a credential-free HTTP(S) URL for the platform URI handler, or a path beginning with one slash for your own navigation handler.
 

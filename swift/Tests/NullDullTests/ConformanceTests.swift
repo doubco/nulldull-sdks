@@ -35,7 +35,7 @@ struct ConformanceTests {
             #expect(multimap(request) == expected.query)
             let key = testCase.key == "public" ? publicKey : privateKey
             #expect(request.value(forHTTPHeaderField: "Authorization") == "Bearer \(key)")
-            #expect(request.value(forHTTPHeaderField: "User-Agent") == "nulldull-sdk-swift/0.4.0")
+            #expect(request.value(forHTTPHeaderField: "User-Agent") == "nulldull-sdk-swift/0.4.1")
             let accept = testCase.call.method.hasSuffix("downloadAsset") ? "*/*" : "application/json"
             #expect(request.value(forHTTPHeaderField: "Accept") == accept)
         }

@@ -85,7 +85,7 @@ struct HeaderTests {
         let requests = h.transport.requests
         #expect(requests[0].value(forHTTPHeaderField: "Authorization") == "Bearer \(privateKey)")
         #expect(requests[0].value(forHTTPHeaderField: "Accept") == "application/json")
-        #expect(requests[0].value(forHTTPHeaderField: "User-Agent") == "nulldull-sdk-swift/0.4.0 my-app/2.0")
+        #expect(requests[0].value(forHTTPHeaderField: "User-Agent") == "nulldull-sdk-swift/0.4.1 my-app/2.0")
         #expect(requests[1].value(forHTTPHeaderField: "Accept") == "*/*")
         #expect(requests[0].httpMethod == "GET")
         #expect(requests[0].httpShouldHandleCookies == false)
@@ -95,7 +95,7 @@ struct HeaderTests {
     }
 
     @Test func versionIsSDKVersion() {
-        #expect(nullDullSDKVersion == "0.4.0")
+        #expect(nullDullSDKVersion == "0.4.1")
     }
 }
 

@@ -6,7 +6,7 @@ Official client libraries for reading NullDull with **workspace API keys**:
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs (JSON, World, Xcode String Catalog, `.strings`/`.stringsdict`, Android `strings.xml`) at build time.
 
-> **Early access.** NullDull and these SDKs are in early access. Version `0.1.0` may still change before `1.0`. The SDKs only read data; they never write.
+> **Early access.** NullDull and these SDKs are in early access. Version `0.4.0` may still change before `1.0`. The SDKs only read data; they never write.
 
 Documentation: <https://nulldull.com/docs>
 
@@ -29,21 +29,21 @@ Memory and Locale calls also need your **workspace ID**, because a key cannot lo
 | React | [`react/`](react) | `@nulldull/react` | `npm install @nulldull/react @nulldull/sdk` |
 | Python | [`python/`](python) | `nulldull` | `pip install nulldull` |
 | Go | [`go/`](go) | `github.com/doubco/nulldull-sdks/go` | `go get github.com/doubco/nulldull-sdks/go@latest` |
-| Swift | [`swift/`](swift) | `NullDull` (Swift Package Manager) | `.package(url: "https://github.com/doubco/nulldull-sdks", from: "0.1.0")` |
-| Kotlin / Android | [`kotlin/`](kotlin) | `com.nulldull:nulldull-sdk` | `implementation("com.nulldull:nulldull-sdk:0.1.0")` |
+| Swift | [`swift/`](swift) | `NullDull` (Swift Package Manager) | `.package(url: "https://github.com/doubco/nulldull-sdks", from: "0.4.1")` |
+| Kotlin / Android | [`kotlin/`](kotlin) | `com.nulldull:nulldull-sdk` | `implementation("com.nulldull:nulldull-sdk:0.4.0")` |
 
 ### Grid renderers (alpha)
 
-Native renderers for Grid documents, for apps that show published pages without a web view. They are in early access (alpha) and separate from the SDK packages above. They were first released in `0.2.0` on 20 November 2026; the current release is Swift tag `0.3.0` and Kotlin Grid artifacts `0.2.0`, which have their own version.
+Native renderers for Grid documents, for apps that show published pages without a web view. They are in early access (alpha) and separate from the SDK packages above. They were first released in `0.2.0` on 20 November 2026; the Swift release tag is now `0.4.1`. Kotlin SDK 0.4.0 and Kotlin Grid 0.3.0 are on Maven Central.
 
 | Platform | Package | Install |
 | --- | --- | --- |
-| SwiftUI (iOS 16, macOS 13, tvOS 16, visionOS 1) | `NullDullGrid`, `NullDullGridUI` (Swift Package Manager) | `.package(url: "https://github.com/doubco/nulldull-sdks", from: "0.3.0")` |
-| Jetpack Compose (Android minSdk 24) | `com.nulldull:nulldull-grid-compose` (with `com.nulldull:nulldull-grid-core`) | `implementation("com.nulldull:nulldull-grid-compose:0.2.0")` |
+| SwiftUI (iOS 16, macOS 13, tvOS 16, visionOS 1) | `NullDullGrid`, `NullDullGridUI` (Swift Package Manager) | `.package(url: "https://github.com/doubco/nulldull-sdks", from: "0.4.1")` |
+| Jetpack Compose (Android minSdk 24) | `com.nulldull:nulldull-grid-compose` (with `com.nulldull:nulldull-grid-core`) | `implementation("com.nulldull:nulldull-grid-compose:0.3.0")` |
 
 See the Grid renderer sections of [`swift/README.md`](swift/README.md#grid-renderer-alpha) and [`kotlin/README.md`](kotlin/README.md#grid-renderer-alpha).
 
-The prepared 0.4.0 workspace SDKs expose `pageTargets` on page detail responses. Swift Grid 0.4.0 and Kotlin Grid 0.3.0 add a `resolvePageLink` hook. Pass it to `PublishedGridPageView` or `PublishedGridPage` to route a published target using its current coordinates and the link’s optional anchor. Both SDK guides include a routing example.
+The 0.4.0 workspace SDKs expose `pageTargets` on page detail responses. Swift Grid 0.4.0 and Kotlin Grid 0.3.0 add a `resolvePageLink` hook. Pass it to `PublishedGridPageView` or `PublishedGridPage` to route a published target using its current coordinates and the link’s optional anchor. Both SDK guides include a routing example. Use Swift 0.4.1 or later: on macOS 15.8.2, Swift Grid 0.4.0 renders anchored Markdown page links as inert text.
 
 Each directory has its own README with a quick start for Grid, Memory and Locale, errors and pagination. All six implement [`SPEC.md`](SPEC.md) and pass the same conformance fixtures.
 

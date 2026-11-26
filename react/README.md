@@ -2,7 +2,7 @@
 
 React hooks for [NullDull](https://nulldull.com), on top of [`@nulldull/sdk`](../node). Read published Grid pages in your site or app, and read Memory and Locale formats in internal tools, with workspace API keys.
 
-> **Early access.** Version 0.4.0 is in preparation. The hooks only read data.
+> **Early access.** Version 0.4.0 was released on 26 November 2026. The hooks only read data.
 
 - One provider, one hook per read call, each returning `{ data, error, isLoading, refetch }`.
 - Paginated hooks add `fetchNextPage`, `hasNextPage` and `isFetchingNextPage`.

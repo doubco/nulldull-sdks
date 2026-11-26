@@ -6,7 +6,7 @@ The official NullDull SDK for Node.js and browsers. It reads NullDull with **wor
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** Version 0.4.0 is in preparation. The SDK only reads data.
+> **Early access.** Version 0.4.0 was released on 26 November 2026. The SDK only reads data.
 
 ESM and CommonJS, full TypeScript types, zero runtime dependencies. Runs on Node.js 18+, modern browsers, Deno, Bun and Cloudflare Workers (anything with `fetch`).
 

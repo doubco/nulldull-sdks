@@ -6,7 +6,7 @@ The official NullDull SDK for Python. It reads NullDull with **workspace API key
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** Version 0.4.0 is in preparation. The SDK only reads data.
+> **Early access.** Version 0.4.0 was released on 26 November 2026. The SDK only reads data.
 
 Sync and asyncio clients, full type hints (`py.typed`), one runtime dependency ([httpx](https://www.python-httpx.org)). Python 3.9+.
 

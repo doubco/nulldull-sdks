@@ -6,7 +6,7 @@ The official NullDull SDK for Go. It reads NullDull with **workspace API keys**:
 - **Memory**: read-only access to documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs at build time.
 
-> **Early access.** Version 0.4.0 is in preparation. The SDK only reads data.
+> **Early access.** Version 0.4.0 was released on 26 November 2026. The SDK only reads data.
 
 Standard library only. Go 1.23 or newer (iterators use `iter.Seq2`).
 

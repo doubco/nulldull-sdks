@@ -6,7 +6,7 @@ The Swift client for reading NullDull with **workspace API keys**:
 - **Memory**: read-only documents, folders, search, tags and assets.
 - **Locale**: export translation catalogs (`.xcstrings`, `.strings`, JSON, Android XML, …) at build time.
 
-> **Early access.** NullDull and this SDK are in early access. Version `0.1.0` may still change before `1.0`. The SDK only reads data; it never writes.
+> **Early access.** NullDull and this SDK are in early access. Version `0.4.1` may still change before `1.0`. The SDK only reads data; it never writes.
 
 - Swift 5.9+ (builds cleanly in Swift 6 language mode with strict concurrency; every public type is `Sendable`)
 - iOS 15, macOS 12, tvOS 15, watchOS 8, visionOS 1
@@ -21,7 +21,7 @@ Swift Package Manager, in `Package.swift`:
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.1.0"),
+    .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.4.1"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: [
@@ -30,7 +30,7 @@ targets: [
 ]
 ```
 
-In Xcode: **File → Add Package Dependencies…**, enter `https://github.com/doubco/nulldull-sdks`, choose version `0.1.0` (Up to Next Minor is safest while the API is `0.x`), and add the `NullDull` library to your target.
+In Xcode: **File → Add Package Dependencies…**, enter `https://github.com/doubco/nulldull-sdks`, choose version `0.4.1` (Up to Next Minor is safest while the API is `0.x`), and add the `NullDull` library to your target.
 
 ## Keys
 
@@ -204,7 +204,7 @@ You can also pass your own `URLSession` with `session:`; redirects are still ref
 
 The same package also has two products that render Grid documents natively. They are separate from the `NullDull` SDK product and do not depend on it.
 
-> **Alpha.** The Grid renderer products are in early access and their API may change in any `0.x` release. They were first released in tag `0.2.0` on 20 November 2026; the current release is tag `0.3.0` (22 November 2026).
+> **Alpha.** The Grid renderer products are in early access and their API may change in any `0.x` release. They were first released in tag `0.2.0` on 20 November 2026; the current release is tag `0.4.1` (26 November 2026).
 
 | Product | Contents | Frameworks | Platforms |
 | --- | --- | --- | --- |
@@ -215,7 +215,7 @@ Building the Grid products needs Xcode 16 or later (Swift 6 toolchain). The `Nul
 
 ```swift
 dependencies: [
-    .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.3.0"),
+    .package(url: "https://github.com/doubco/nulldull-sdks", from: "0.4.1"),
 ],
 targets: [
     .target(name: "MyApp", dependencies: [
@@ -255,7 +255,9 @@ struct ArticleView: View {
 
 `GridView` and `PublishedGridPageView` only draw a page you have already loaded; they have no loading or error state of their own. API failures throw `GridPublicError` with `status`, `code`, `detail`, `reason`, `renewsAt` (ISO 8601) and `retryAfter` (seconds). When the workspace has used its monthly public requests (Free plan), every read fails with `429` and `isPublicRequestsPaused` until `renewsAt`, the start of the next UTC month, or a few minutes after an upgrade; the client never retries, so show your own calm notice. Equality compares `status` and `code` only.
 
-### Routing Grid page links (prepared for Swift 0.4.0)
+### Routing Grid page links (Swift 0.4.0)
+
+Use 0.4.1 or later: on macOS 15.8.2, Swift Grid 0.4.0 renders anchored Markdown page links as inert text. Version 0.4.1 fixes this.
 
 Pass a resolver when the app knows the routes for published pages. It receives the target's stable `entryId`, current pool, slug and locale, and the link's optional anchor.
 

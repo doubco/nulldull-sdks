@@ -2,12 +2,21 @@
 
 All NullDull SDKs share one version, the repository's release tag; the Kotlin Grid renderer artifacts have their own version, given in each entry. This project follows [Semantic Versioning](https://semver.org); `0.x` releases may contain breaking changes in minor versions.
 
-## 0.4.0 (unreleased)
+## 0.4.1 (26 November 2026)
 
-Swift Grid and the workspace SDKs are prepared at `0.4.0`. The separately versioned Kotlin Grid core and Compose artifacts are prepared at `0.3.0`.
+Swift only: the Swift package tag is `0.4.1`. The other SDKs and the Kotlin Grid artifacts are unchanged.
+
+- **Fix for Swift Grid.** Markdown page links with an anchor, such as `[Pricing](/plans#pricing)`, work again on macOS 15. In 0.4.0 the system Markdown parser on that release dropped their destinations, so they rendered as inert text. Links without an anchor and structured node links were not affected.
+- The Grid UI tests mount their host view before measuring layout.
+
+## 0.4.0 (26 November 2026)
+
+The workspace SDK release and Swift package tag are `0.4.0`. Kotlin SDK 0.4.0 and Kotlin Grid 0.3.0 are on Maven Central.
+
+On macOS 15.8.2, Swift Grid 0.4.0 renders anchored Markdown page links as inert text. Unanchored page links and structured node links passed the same compatibility check. Fixed in Swift 0.4.1.
 
 - SwiftUI and Compose resolve published node and formatted Markdown page links through the host's `resolvePageLink(target, anchor)`. Links follow the target’s current pool, slug and locale. Missing targets, declined routes and unsafe URLs render as inert labels. Active routes use the platform link accessibility and tap handlers.
-- Page detail models expose `pageTargets` in Swift, Kotlin, Node, Python and Go. React’s `useGridPage` inherits the Node type. The Go release tag for this version is `go/v0.4.0` when published.
+- Page detail models expose `pageTargets` in Swift, Kotlin, Node, Python and Go. React’s `useGridPage` inherits the Node type. The Go module tag is `go/v0.4.0`.
 - Kotlin Grid preserves the 0.2.0 JVM constructors, copy methods, default arguments and component order for published pages and built-in nodes. Copying a page or node from a previously compiled app retains its page links. Existing Compose renderer overloads still accept the trailing `onOpenUrl` lambda.
 - **Security fix for Kotlin Grid.** In Grid 0.2.0, an external link to `faß.de` could open `fass.de`. Android now uses platform UTS 46 for external links and page-link resolver output, opening `xn--fa-hia.de`. Core-only JVM apps leave ambiguous internationalized links inert. Neither artifact adds a runtime dependency.
 - Swift retains the 0.3.0 page and view initializer names for callers using them as functions. Go retains the original 14-field `GridPage` struct and reads typed bindings through `PageTargets()` and `PageTarget(alias)`.
